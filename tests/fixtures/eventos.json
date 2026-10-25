@@ -1,0 +1,132 @@
+[
+  {
+    "hora": "08:00",
+    "deporte": "Fútbol",
+    "competicion": "Premier League",
+    "local": "Arsenal",
+    "visitante": "Liverpool",
+    "canales": [
+      "Movistar+"
+    ]
+  },
+  {
+    "hora": "09:00",
+    "deporte": "Tenis",
+    "competicion": "ATP 500 Semifinal",
+    "local": "Alcaraz",
+    "visitante": "Sinner",
+    "canales": [
+      "Movistar+"
+    ]
+  },
+  {
+    "hora": "11:00",
+    "deporte": "Baloncesto",
+    "competicion": "Liga Endesa",
+    "local": "Estudiantes",
+    "visitante": "Valencia",
+    "canales": [
+      "Movistar+"
+    ]
+  },
+  {
+    "hora": "13:00",
+    "deporte": "Fútbol",
+    "competicion": "Premier League",
+    "local": "Arsenal",
+    "visitante": "Chelsea",
+    "canales": [
+      "Movistar+"
+    ]
+  },
+  {
+    "hora": "15:00",
+    "deporte": "Fútbol",
+    "competicion": "LaLiga EA Sports",
+    "local": "At. Madrid",
+    "visitante": "Real Madrid",
+    "canales": [
+      "Movistar+"
+    ]
+  },
+  {
+    "hora": "17:00",
+    "deporte": "Fútbol",
+    "competicion": "Champions League Semifinal",
+    "local": "Liverpool",
+    "visitante": "Arsenal",
+    "canales": [
+      "Movistar+"
+    ]
+  },
+  {
+    "hora": "17:15",
+    "deporte": "Fútbol",
+    "competicion": "LaLiga EA Sports",
+    "local": "FC Barcelona",
+    "visitante": "Valencia",
+    "canales": [
+      "Movistar+"
+    ]
+  },
+  {
+    "hora": "20:00",
+    "deporte": "Fútbol",
+    "competicion": "Premier League",
+    "local": "Aston Villa",
+    "visitante": "Chelsea",
+    "canales": [
+      "Movistar+"
+    ]
+  },
+  {
+    "hora": "22:00",
+    "deporte": "Baloncesto",
+    "competicion": "NBA",
+    "local": "Celtics",
+    "visitante": "Warriors",
+    "canales": [
+      "Movistar+"
+    ]
+  },
+  {
+    "hora": "PD",
+    "deporte": "Tenis",
+    "competicion": "ATP 500",
+    "local": "Alcaraz",
+    "visitante": "Djokovic",
+    "canales": [
+      "Movistar+"
+    ]
+  },
+  {
+    "hora": "18:00",
+    "deporte": "Fútbol",
+    "competicion": "Liga F Femenina",
+    "local": "Barcelona",
+    "visitante": "Real Madrid",
+    "canales": [
+      "Movistar+"
+    ]
+  },
+  {
+    "hora": "18:00",
+    "deporte": "Fútbol",
+    "competicion": "Primera Federación",
+    "local": "Equipo A",
+    "visitante": "Equipo B",
+    "canales": [
+      "Movistar+"
+    ]
+  },
+  {
+    "hora": "16:00",
+    "deporte": "Automovilismo",
+    "competicion": "Fórmula 1 Carrera",
+    "local": "",
+    "visitante": "",
+    "canales": [
+      "DAZN"
+    ]
+  }
+]

@@ -1,0 +1,64 @@
+name: Resumen deportivo diario
+run-name: Resumen deportivo · ${{ inputs.modo || 'ambos' }}
+
+on:
+  schedule:
+    - cron: '30 8 * * *'
+      timezone: Europe/Madrid
+  workflow_dispatch:
+    inputs:
+      modo:
+        description: Qué quieres recibir
+        type: choice
+        required: true
+        default: ambos
+        options:
+          - ambos
+          - eventos
+          - camiseta
+
+permissions:
+  contents: read
+
+concurrency:
+  group: resumen-deportivo
+  cancel-in-progress: false
+
+jobs:
+  resumen:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      TZ: Europe/Madrid
+      PYTHONUTF8: '1'
+    steps:
+      - name: Descargar el proyecto
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - name: Preparar Python
+        uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+        with:
+          python-version: '3.12'
+          cache: pip
+      - name: Instalar dependencias
+        run: python -m pip install -r requirements.txt
+      - name: Comprobar el proyecto sin consultas ni correos
+        run: python -m unittest discover -s tests -v
+      - name: Generar y enviar resumen
+        id: envio
+        env:
+          MODO: ${{ inputs.modo || 'ambos' }}
+          FOOTBALL_API_KEY: ${{ secrets.FOOTBALL_API_KEY }}
+          SMTP_USERNAME: ${{ secrets.SMTP_USERNAME }}
+          SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
+          EMAIL_TO: ${{ secrets.EMAIL_TO }}
+        run: python -m resumen --modo "$MODO" --enviar --salida vista_previa
+      - name: Indicar resultado
+        if: always()
+        env:
+          RESULTADO_ENVIO: ${{ steps.envio.outcome }}
+        run: |
+          echo '### Resumen deportivo' >> "$GITHUB_STEP_SUMMARY"
+          echo "Estado del paso de envío: $RESULTADO_ENVIO" >> "$GITHUB_STEP_SUMMARY"
+          echo 'Horario diario: 08:30 Europe/Madrid. Un fallo parcial también marca error.' >> "$GITHUB_STEP_SUMMARY"

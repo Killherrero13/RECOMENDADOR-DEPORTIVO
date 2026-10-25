@@ -1,0 +1,76 @@
+{
+  "puntuaciones": [
+    {
+      "hora": "09:00",
+      "local": "Alcaraz",
+      "score": 12.0,
+      "channel": "Movistar+"
+    },
+    {
+      "hora": "11:00",
+      "local": "Estudiantes",
+      "score": 15.5,
+      "channel": "Movistar+"
+    },
+    {
+      "hora": "13:00",
+      "local": "Arsenal",
+      "score": 9.144,
+      "channel": "Movistar+"
+    },
+    {
+      "hora": "15:00",
+      "local": "At. Madrid",
+      "score": 11.96,
+      "channel": "Movistar+"
+    },
+    {
+      "hora": "16:00",
+      "local": "",
+      "score": 4.5,
+      "channel": "DAZN"
+    },
+    {
+      "hora": "17:00",
+      "local": "Liverpool",
+      "score": 14.104,
+      "channel": "Movistar+"
+    },
+    {
+      "hora": "17:15",
+      "local": "FC Barcelona",
+      "score": 9.4876,
+      "channel": "Movistar+"
+    },
+    {
+      "hora": "20:00",
+      "local": "Aston Villa",
+      "score": 9.084,
+      "channel": "Movistar+"
+    },
+    {
+      "hora": "22:00",
+      "local": "Celtics",
+      "score": 11.8,
+      "channel": "Movistar+"
+    }
+  ],
+  "plan": {
+    "imprescindible": "11:00",
+    "mañana": "09:00",
+    "mediodía": "13:00",
+    "tarde": "15:00"
+  },
+  "seleccionados": [
+    "09:00",
+    "11:00",
+    "13:00",
+    "15:00"
+  ],
+  "alternativas": [
+    "17:00",
+    "17:15",
+    "20:00",
+    "22:00"
+  ]
+}

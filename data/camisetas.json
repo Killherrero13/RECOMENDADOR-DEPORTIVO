@@ -1,0 +1,322 @@
+[
+  {
+    "Equipo": "Ajax",
+    "Modelo": "2024 tercera",
+    "Jugador": ""
+  },
+  {
+    "Equipo": "Alemania",
+    "Modelo": "Eurocopa 2020",
+    "Jugador": ""
+  },
+  {
+    "Equipo": "Alemania",
+    "Modelo": 2026,
+    "Jugador": "Wirtz"
+  },
+  {
+    "Equipo": "Argentina",
+    "Modelo": 2026,
+    "Jugador": "Messi"
+  },
+  {
+    "Equipo": "Arsenal",
+    "Modelo": "Temporada 2023/24 - Visitante (Verde)",
+    "Jugador": ""
+  },
+  {
+    "Equipo": "Aston Villa",
+    "Modelo": "Temporada 2017/18 - Local",
+    "Jugador": ""
+  },
+  {
+    "Equipo": "Aston Villa",
+    "Modelo": "Temporada 2021/22 - Visitante",
+    "Jugador": ""
+  },
+  {
+    "Equipo": "Atlético de Madrid",
+    "Modelo": "Segunda 2025",
+    "Jugador": "Griezmann"
+  },
+  {
+    "Equipo": "Atlético de Madrid",
+    "Modelo": "Primera 2026",
+    "Jugador": ""
+  },
+  {
+    "Equipo": "Atlético Mineiro",
+    "Modelo": "Temporada 2020",
+    "Jugador": ""
+  },
+  {
+    "Equipo": "Bélgica",
+    "Modelo": "Eurocopa 2020 - Local",
+    "Jugador": ""
+  },
+  {
+    "Equipo": "Borussia Dortmund",
+    "Modelo": "Temporada 2018/19 - Local",
+    "Jugador": ""
+  },
+  {
+    "Equipo": "Cagliari",
+    "Modelo": 2024,
+    "Jugador": ""
+  },
+  {
+    "Equipo": "Casablanca",
+    "Modelo": "",
+    "Jugador": ""
+  },
+  {
+    "Equipo": "Celtic de Glasgow",
+    "Modelo": "Temporada 2019/20 - Local",
+    "Jugador": ""
+  },
+  {
+    "Equipo": "Chelsea",
+    "Modelo": "Temporada 2021/22 - Local",
+    "Jugador": ""
+  },
+  {
+    "Equipo": "Colo Colo",
+    "Modelo": "",
+    "Jugador": ""
+  },
+  {
+    "Equipo": "Crystal Palace",
+    "Modelo": "Temporada 2023/24",
+    "Jugador": ""
+  },
+  {
+    "Equipo": "Escocia",
+    "Modelo": "Eurocopa 2020 - Local",
+    "Jugador": ""
+  },
+  {
+    "Equipo": "España",
+    "Modelo": "Primera Roja",
+    "Jugador": ""
+  },
+  {
+    "Equipo": "España",
+    "Modelo": "Segunda Amarilla",
+    "Jugador": "Lamine Yamal"
+  },
+  {
+    "Equipo": "España",
+    "Modelo": "Segunda Crema 2026",
+    "Jugador": "Marcos Llorente"
+  },
+  {
+    "Equipo": "Everton",
+    "Modelo": "Temporada 23/24",
+    "Jugador": ""
+  },
+  {
+    "Equipo": "FC Bayern",
+    "Modelo": "Temporada 2021/22 - Alternativa",
+    "Jugador": ""
+  },
+  {
+    "Equipo": "FC Bayern",
+    "Modelo": "Temporada 2022/23 - Local",
+    "Jugador": ""
+  },
+  {
+    "Equipo": "FC Porto",
+    "Modelo": "Camiseta Ultras",
+    "Jugador": ""
+  },
+  {
+    "Equipo": "Fenerbahce",
+    "Modelo": "Temporada 2022/23 - Local",
+    "Jugador": ""
+  },
+  {
+    "Equipo": "Fiorentina",
+    "Modelo": "Temporada 2014/15 - Local",
+    "Jugador": ""
+  },
+  {
+    "Equipo": "Inter Miami",
+    "Modelo": "Segunda 2026",
+    "Jugador": ""
+  },
+  {
+    "Equipo": "Italia",
+    "Modelo": "Mundial 2014 - Local",
+    "Jugador": "Pirlo"
+  },
+  {
+    "Equipo": "Juventus",
+    "Modelo": "Segunda 2026",
+    "Jugador": ""
+  },
+  {
+    "Equipo": "Las Palmas",
+    "Modelo": 2026,
+    "Jugador": ""
+  },
+  {
+    "Equipo": "Liverpool",
+    "Modelo": "Temporada 20222/23 - Local",
+    "Jugador": ""
+  },
+  {
+    "Equipo": "Manchester City",
+    "Modelo": "Temporada 2022/23 - Local",
+    "Jugador": ""
+  },
+  {
+    "Equipo": "Manchester United",
+    "Modelo": "Temporada 2023/24 - Local",
+    "Jugador": ""
+  },
+  {
+    "Equipo": "Marruecos",
+    "Modelo": "Local",
+    "Jugador": ""
+  },
+  {
+    "Equipo": "Marruecos",
+    "Modelo": "Segunda blanca",
+    "Jugador": ""
+  },
+  {
+    "Equipo": "Milan",
+    "Modelo": "Temporada 2013/14 - Local",
+    "Jugador": ""
+  },
+  {
+    "Equipo": "Milan",
+    "Modelo": "Retro",
+    "Jugador": "Ronaldinho"
+  },
+  {
+    "Equipo": "Napoles",
+    "Modelo": "Temporada 2013/14 - Visitante",
+    "Jugador": ""
+  },
+  {
+    "Equipo": "Newcastle",
+    "Modelo": "Temporada 23/24",
+    "Jugador": ""
+  },
+  {
+    "Equipo": "Nigeria",
+    "Modelo": "Mundial 2018",
+    "Jugador": ""
+  },
+  {
+    "Equipo": "Orlando",
+    "Modelo": "Temporada 2026/27 - Local",
+    "Jugador": "Griezmann"
+  },
+  {
+    "Equipo": "Paris Saint Germain",
+    "Modelo": "Temporada 2021/22 - Local",
+    "Jugador": ""
+  },
+  {
+    "Equipo": "Porto",
+    "Modelo": "Segunda 2025",
+    "Jugador": ""
+  },
+  {
+    "Equipo": "Portugal",
+    "Modelo": "Segunda azul",
+    "Jugador": ""
+  },
+  {
+    "Equipo": "Rangers",
+    "Modelo": "Temporada 2011/12 - Local",
+    "Jugador": ""
+  },
+  {
+    "Equipo": "Real Betis FC",
+    "Modelo": "Temporada 2022/23 - Local",
+    "Jugador": ""
+  },
+  {
+    "Equipo": "Rep Irlanda",
+    "Modelo": 2026,
+    "Jugador": ""
+  },
+  {
+    "Equipo": "Roma",
+    "Modelo": "Temporada 2018/19 - Local",
+    "Jugador": ""
+  },
+  {
+    "Equipo": "Senegal",
+    "Modelo": 2026,
+    "Jugador": ""
+  },
+  {
+    "Equipo": "Sevilla",
+    "Modelo": 2025,
+    "Jugador": ""
+  },
+  {
+    "Equipo": "Southampton",
+    "Modelo": "Temporada 2018/19 - Local",
+    "Jugador": ""
+  },
+  {
+    "Equipo": "Sporting Lisboa",
+    "Modelo": 2024,
+    "Jugador": "Gyokeres"
+  },
+  {
+    "Equipo": "Tigres",
+    "Modelo": 2026,
+    "Jugador": "Correa"
+  },
+  {
+    "Equipo": "Union Belin",
+    "Modelo": "Temporada 23-24 - Champions",
+    "Jugador": ""
+  },
+  {
+    "Equipo": "Valencia",
+    "Modelo": "Temporada 2022/23 - Visitante",
+    "Jugador": ""
+  },
+  {
+    "Equipo": "Valencia",
+    "Modelo": "Temporada 2023/24 - Local",
+    "Jugador": ""
+  },
+  {
+    "Equipo": "Venezia",
+    "Modelo": "Temporada 2022/23 - Local",
+    "Jugador": ""
+  },
+  {
+    "Equipo": "Vitoria Guimarães",
+    "Modelo": 2025,
+    "Jugador": ""
+  },
+  {
+    "Equipo": "Roma",
+    "Modelo": "Segunda",
+    "Jugador": "Dybala"
+  },
+  {
+    "Equipo": "Napoles",
+    "Modelo": "Primera",
+    "Jugador": ""
+  },
+  {
+    "Equipo": "Tanzania",
+    "Modelo": "",
+    "Jugador": ""
+  },
+  {
+    "Equipo": "Zanzibar",
+    "Modelo": "",
+    "Jugador": ""
+  }
+]

@@ -1,0 +1,89 @@
+"""Descarga y extracción HTML; la recomendación está en eventos.py."""
+import logging
+import re
+import time
+from datetime import datetime
+
+import requests
+from bs4 import BeautifulSoup
+
+from .config import MADRID_TZ
+from .eventos import recomendar_eventos
+
+URL = 'https://www.futbolenlatv.es/deporte'
+logger = logging.getLogger(__name__)
+
+class ErrorEventos(Exception):
+    pass
+
+def descargar_html():
+    for intento in range(3):
+        try:
+            response = requests.get(URL, headers={'User-Agent': 'Mozilla/5.0'}, timeout=(5,20))
+        except (requests.Timeout, requests.ConnectionError):
+            if intento < 2:
+                logger.warning('Descarga de eventos interrumpida; reintento %s/2.', intento + 1)
+                time.sleep(2 ** intento)
+                continue
+            raise ErrorEventos('No se pudo conectar con la web de eventos tras tres intentos.') from None
+        except requests.RequestException:
+            raise ErrorEventos('Fallo al descargar la web de eventos.') from None
+        if 500 <= response.status_code <= 599 and intento < 2:
+            logger.warning('Web de eventos HTTP %s; reintento %s/2.', response.status_code, intento + 1)
+            time.sleep(2 ** intento)
+            continue
+        if response.status_code != 200:
+            raise ErrorEventos(f'Web de eventos HTTP {response.status_code}.')
+        # La web declara UTF-8. Evita la interpretación ISO-8859-1 por defecto de requests.
+        response.encoding = 'utf-8'
+        return response.text
+
+def extraer_eventos(html, fecha):
+    soup = BeautifulSoup(html, 'html.parser')
+    table = soup.find('table', class_='tablaPrincipal')
+    if table is None:
+        raise ErrorEventos('No se encontró tablaPrincipal; puede haber cambiado la web o bloqueado el acceso.')
+    header = table.find('tr', class_='cabeceraTabla')
+    dates = re.findall(r'\b\d{2}/\d{2}/\d{4}\b', header.get_text(' ', strip=True) if header else '')
+    try:
+        published = datetime.strptime(dates[0], '%d/%m/%Y').date()
+    except (IndexError, ValueError):
+        raise ErrorEventos('No se pudo comprobar la fecha de la tabla de eventos.') from None
+    if published != fecha:
+        raise ErrorEventos(f'La web muestra {published.isoformat()}, pero se esperaba {fecha.isoformat()}.')
+    events = []
+    for row in table.find_all('tr'):
+        if 'cabeceraTabla' in row.get('class', []):
+            continue
+        hora_td = row.find('td', class_='hora')
+        if hora_td is None:
+            continue
+        detalles_td = row.find('td', class_='detalles')
+        local_td = row.find('td', class_='local')
+        visitante_td = row.find('td', class_='visitante')
+        canales_td = row.find('td', class_='canales')
+        img = detalles_td.find('img') if detalles_td else None
+        deporte = (img.get('title') or img.get('alt')) if img else None
+        events.append({
+            'hora': hora_td.get_text(strip=True),
+            'deporte': deporte,
+            'competicion': detalles_td.get_text(' ', strip=True) if detalles_td else '',
+            'local': local_td.get_text(strip=True) if local_td else '',
+            'visitante': visitante_td.get_text(strip=True) if visitante_td else '',
+            'canales': [li.get_text(strip=True) for li in canales_td.find_all('li')] if canales_td else [],
+        })
+    if not events or not any(e['deporte'] for e in events):
+        raise ErrorEventos('La tabla no contiene eventos reconocibles; no se interpretará como un día sin recomendaciones.')
+    logger.info('Extraídos %s eventos para %s de la primera tabla.', len(events), fecha)
+    return events
+
+def generar_resultado_eventos(ahora=None):
+    ahora = ahora or datetime.now(MADRID_TZ)
+    if ahora.tzinfo is None:
+        raise ErrorEventos('La fecha de consulta debe incluir zona horaria.')
+    fecha = ahora.astimezone(MADRID_TZ).date()
+    events = extraer_eventos(descargar_html(), fecha)
+    result = recomendar_eventos(events)
+    logger.info('Eventos filtrados: %s; seleccionados: %s; alternativas: %s.',
+                len(result['filtrados']), len(result['seleccionados']), len(result['alternativas']))
+    return {'fecha': fecha.isoformat(), 'extraidos': len(events), **result}

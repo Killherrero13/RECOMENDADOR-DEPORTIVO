@@ -72,6 +72,9 @@ def extraer_eventos(html, fecha):
             'visitante': visitante_td.get_text(strip=True) if visitante_td else '',
             'canales': [li.get_text(strip=True) for li in canales_td.find_all('li')] if canales_td else [],
         })
+        descripcion_td = row.find('td', class_='eventoUnaColumna')
+        if descripcion_td:
+            events[-1]['descripcion'] = descripcion_td.get_text(' ', strip=True)
     if not events or not any(e['deporte'] for e in events):
         raise ErrorEventos('La tabla no contiene eventos reconocibles; no se interpretará como un día sin recomendaciones.')
     logger.info('Extraídos %s eventos para %s de la primera tabla.', len(events), fecha)

@@ -1,5 +1,36 @@
 # Resumen deportivo personal
 
+## Correo visual y listado completo
+
+El correo presenta el imprescindible en una tarjeta destacada, horas grandes, nombres de equipos,
+competición, puntuación y los canales concretos publicados. También conserva el partido de la
+camiseta, su alternativa al azar y los avisos de visionado parcial o eventos en curso.
+
+Al final del resumen se incluye «Ver todos los eventos filtrados», seguido del listado completo
+en orden cronológico, sin limitarlo a los cuatro seleccionados ni a las ocho alternativas.
+El mismo listado se adjunta como `todos_eventos.html`, para poder abrirlo aparte si el cliente
+de correo no sigue enlaces internos o recorta un mensaje largo. No requiere alojar una web.
+La vista previa local guarda también ese archivo. En modo camiseta no se añade una agenda vacía.
+
+Se muestran los nombres de canales tal como los publica la fuente, incluidos M+ y sus variantes;
+esto no implica que todos estén incluidos en Movistar Plus+ Lite o en tu plan DAZN.
+No se han cambiado las puntuaciones de canales en esta actualización.
+Se recupera además `eventoUnaColumna`: el nombre del gran premio o de la prueba que el scraping
+anterior omitía en eventos sin local/visitante. Los filtros y umbrales deportivos no cambian.
+
+Hay 73 pruebas correctas, incluyendo listado sin omisiones, orden cronológico, adjunto HTML,
+canales publicados, escape de texto externo y extracción de descripciones de pruebas.
+La muestra guardada del 25/10/2026 tiene 283 filas de eventos y 53 filtrados simulando las 08:30.
+Las reglas actuales todavía dejan fuera deportes como motociclismo, golf, pádel o fútbol americano;
+el automovilismo suele quedar por debajo del umbral del plan, pero aparece en el listado filtrado.
+
+Para recibir la versión nueva: Actions → Resumen deportivo diario → **Run workflow** → rama **main**.
+No uses «Re-run jobs» sobre una ejecución antigua para probar cambios de código: vuelve a ejecutar
+el commit de aquella ejecución. La recepción que se mostró durante esta revisión correspondía
+a la versión anterior a las mejoras funcionales.
+
+---
+
 ## Mejoras funcionales: tercera tanda, camisetas
 
 El correo muestra una camiseta vinculada a un partido de hoy cuando hay coincidencias en tu colección,

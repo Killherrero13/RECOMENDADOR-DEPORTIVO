@@ -40,7 +40,9 @@ class EventosTests(unittest.TestCase):
         ns = {'html':html, 'BeautifulSoup':BeautifulSoup}
         exec(compile(ast.Module(body=nodes,type_ignores=[]),'<scraping original>','exec'),ns)
         actual = extraer_eventos(html,date(2026,10,25))
-        self.assertEqual(actual,ns['events'])
+        self.assertEqual([{k:v for k,v in e.items() if k != 'descripcion'} for e in actual],ns['events'])
+        carrera = next(e for e in actual if e['competicion']=='F1 Academy')
+        self.assertIn('G.P. Estados Unidos',carrera['descripcion'])
         self.assertEqual(len(actual),283)
         new = recomendar_eventos(actual,ahora=datetime(2026,10,25,8,30,tzinfo=MADRID_TZ))
         self.assertEqual(len(new['filtrados']),53)

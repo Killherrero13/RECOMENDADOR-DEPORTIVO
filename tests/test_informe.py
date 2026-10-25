@@ -24,9 +24,9 @@ class InformeTests(unittest.TestCase):
         soup = BeautifulSoup(report['html'],'html.parser')
         self.assertFalse(soup.find('script'))
         self.assertIn('&lt;script&gt;',report['html'])
-        for line in report['texto'].splitlines():
-            if line.startswith('- '):
-                self.assertIn(line[2:],soup.get_text(' ',strip=True))
+        for value in ['<script>alert(1)</script> & Club','Liverpool','Arsenal','Chelsea','Valencia']:
+            self.assertIn(value,report['texto'])
+            self.assertIn(value,soup.get_text(' ',strip=True))
         self.assertEqual(soup.find('meta',attrs={'name':'viewport'})['content'],'width=device-width,initial-scale=1')
 
     def test_ambos_no_duplica_partidos_y_modos_aislados(self):

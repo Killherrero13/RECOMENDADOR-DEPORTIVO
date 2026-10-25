@@ -1,11 +1,13 @@
 """Contenido compartido para HTML de correo y texto, sin plantillas externas."""
-from html import escape
 from pathlib import Path
+from .horarios import orden_inicio
+from .diseno_correo import crear_html, listado_completo, pagina
 
 def linea_evento(event):
-    title = event['competicion'] if event['deporte'] == 'Automovilismo' else f"{event['local']} vs {event['visitante']} · {event['competicion']}"
+    title = ((event.get('descripcion') or event['competicion']) + ' · ' + event['competicion']) if not event.get('local') else f"{event['local']} vs {event['visitante']} · {event['competicion']}"
     hora = event['inicio'].strftime('%d/%m %H:%M') if 'inicio' in event else event['hora']
-    texto = f"{hora} · {title} · {event.get('channel') or 'Sin canal preferido'} · {event['score']:.1f} puntos"
+    canales = ' · '.join(event.get('canales') or [event.get('channel') or 'Canal no indicado'])
+    texto = f"{hora} · {title} · {canales} · {event['score']:.1f} puntos"
     if 'fin_estimado' in event:
         texto += f" · Fin estimado: {event['fin_estimado']:%d/%m %H:%M}"
     if event.get('en_curso'):
@@ -53,6 +55,9 @@ def contenido(resultado):
         sections.append(('Información', ['Alternativas ordenadas por puntuación. Horarios de Europe/Madrid.',
                          'Los finales y solapamientos se calculan con duraciones estimadas; pueden variar.',
                          'Fuente de la agenda: futbolenlatv.es.']))
+        todos = sorted(events.get('filtrados', []), key=orden_inicio)
+        sections.append((f'Todos los eventos filtrados ({len(todos)})', [linea_evento(e) for e in todos]
+                         or ['No hay eventos que superen los filtros y la disponibilidad.']))
     return sections
 
 def describir_camiseta(item):
@@ -72,24 +77,15 @@ def generar_informe(resultado):
         subject = '[CON ERRORES] ' + subject
     sections = contenido(resultado)
     plain = subject + '\n\n' + '\n\n'.join(title + '\n' + '\n'.join('- ' + line for line in lines) for title, lines in sections) + '\n'
-    cards = []
-    for title, lines in sections:
-        color = '#fff5e6' if title == 'Avisos de ejecución' else '#ffffff'
-        items = ''.join(f'<p style="margin:10px 0;line-height:1.65;overflow-wrap:anywhere;">{escape(line)}</p>' for line in lines)
-        cards.append(f'<div style="background:{color};border:1px solid #dfe5ed;border-radius:12px;padding:18px;margin:0 0 16px;">'
-                     f'<h2 style="font-size:18px;margin:0 0 12px;color:#152b46;">{escape(title)}</h2>{items}</div>')
-    html = ('<!doctype html><html lang="es"><head><meta charset="utf-8">'
-            '<meta name="viewport" content="width=device-width,initial-scale=1">'
-            f'<title>{escape(subject)}</title></head>'
-            '<body style="margin:0;background:#f3f6fa;color:#243247;font:16px Arial,sans-serif;">'
-            '<div style="max-width:620px;margin:auto;padding:24px 14px;">'
-            '<p style="font-size:12px;letter-spacing:2px;color:#53657e;">TU DÍA DE DEPORTE</p>'
-            f'<h1 style="font-size:26px;line-height:1.3;margin:8px 0 24px;">{escape(subject)}</h1>'
-            + ''.join(cards) + '<p style="font-size:12px;color:#53657e;">Resumen deportivo personal</p></div></body></html>')
-    return {'asunto': subject, 'texto': plain, 'html': html}
+    todos = sorted((resultado['eventos'] or {}).get('filtrados', []), key=orden_inicio)
+    html = crear_html(subject, sections, resultado, todos)
+    listado = pagina(f'Todos los eventos filtrados — {day}/{month}/{year}', listado_completo(todos)) if resultado['eventos'] is not None else None
+    return {'asunto': subject, 'texto': plain, 'html': html, 'listado_html':listado}
 
 def guardar_informe(informe, carpeta):
     carpeta = Path(carpeta)
     carpeta.mkdir(parents=True, exist_ok=True)
     for nombre, value in [('resumen.html', informe['html']), ('resumen.txt', informe['texto'])]:
         (carpeta / nombre).write_text(value, encoding='utf-8')
+    if informe.get('listado_html'):
+        (carpeta/'todos_eventos.html').write_text(informe['listado_html'],encoding='utf-8')

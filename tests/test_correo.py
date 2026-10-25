@@ -42,7 +42,11 @@ class CorreoTests(unittest.TestCase):
     def test_mensaje_multipart_utf8(self):
         with patch.dict(os.environ, ENV, clear=True):
             message = crear_mensaje(self.report, obtener_config_correo())
-        self.assertEqual(message.get_content_type(),'multipart/alternative')
+        self.assertEqual(message.get_content_type(),'multipart/mixed')
+        adjuntos = list(message.iter_attachments())
+        self.assertEqual(len(adjuntos),1)
+        self.assertEqual(adjuntos[0].get_filename(),'todos_eventos.html')
+        self.assertEqual(adjuntos[0].get_content().strip(),self.report['listado_html'].strip())
         self.assertEqual(message.get_body(preferencelist=('plain',)).get_content().strip(), self.report['texto'].strip())
         self.assertEqual(message.get_body(preferencelist=('html',)).get_content().strip(), self.report['html'].strip())
         self.assertEqual(str(message['To']), ENV['EMAIL_TO'])

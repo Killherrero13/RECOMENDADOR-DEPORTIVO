@@ -21,6 +21,9 @@ def crear_mensaje(informe, config):
     mensaje['Message-ID'] = make_msgid()
     mensaje.set_content(informe['texto'], charset='utf-8')
     mensaje.add_alternative(informe['html'], subtype='html', charset='utf-8')
+    if informe.get('listado_html'):
+        mensaje.add_attachment(informe['listado_html'], subtype='html', charset='utf-8',
+                               filename='todos_eventos.html')
     return mensaje
 
 def enviar_informe(informe):

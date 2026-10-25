@@ -1,5 +1,32 @@
 # Resumen deportivo personal
 
+## Mejoras funcionales: primera tanda
+
+Se han corregido las fases de eliminatorias, el bonus duplicado de Estudiantes, los alias de
+equipos y el reconocimiento de competiciones. La calidad de un partido cuenta sus participantes
+en lugar de etiquetas coincidentes. Se conservan todos los eventos seleccionados en el plan y
+las alternativas se ordenan por puntuación antes de limitarse a ocho.
+
+Las preferencias indicadas por el usuario y el estado de cada mejora están en `PREFERENCIAS.md`.
+El horario de disponibilidad, los nuevos pesos deportivos, los canales concretos y la recomendación
+de camiseta por evento todavía no se han aplicado. El envío diario sigue a las 08:30.
+
+Hay 49 pruebas. Las siete pruebas de referencia mantienen congelado el comportamiento original;
+las pruebas del recomendador actual comprueban ya las correcciones aprobadas, sin exigir que
+se reproduzcan los errores originales. Las secciones de migración siguientes se conservan como
+registro histórico; las referencias a alternativas por hora corresponden a aquella versión.
+
+Para probar el nuevo resumen sin enviar correo:
+
+```powershell
+.\.venv\Scripts\python.exe -m resumen --modo eventos --salida vista_previa
+```
+
+Desde GitHub, ejecutar manualmente «Resumen deportivo diario» en modo `eventos` envía un
+correo real con la nueva lógica. No es necesario cambiar secretos ni la configuración horaria.
+
+---
+
 ## GitHub Actions: ejecución diaria y desde el móvil
 
 Repositorio: https://github.com/Killherrero13/RECOMENDADOR-DEPORTIVO

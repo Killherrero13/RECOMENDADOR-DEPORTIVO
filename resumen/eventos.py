@@ -1,6 +1,8 @@
 """Filtros, puntuaciones y agenda originales, sin consultas al importar."""
 from copy import deepcopy
 from datetime import time
+import re
+import unicodedata
 
 from .preferencias_eventos import (
     EVENT_DURATION,
@@ -76,26 +78,26 @@ def nba_affinity_score(local, visitante):
     return score
 
 def football_team_affinity(event):
-    local = event["local"].lower()
-    visitante = event["visitante"].lower()
+    local = normalize_team_name(event["local"])
+    visitante = normalize_team_name(event["visitante"])
 
     affinities = []
 
     for team, value in FOOTBALL_TEAM_AFFINITY.items():
-        if team in local:
+        if team_matches(team, local):
             affinities.append(value)
-        if team in visitante:
+        if team_matches(team, visitante):
             affinities.append(value)
 
     return max(affinities) if affinities else 0
 
 def football_derby_bonus(event):
-    local = event["local"].lower()
-    visitante = event["visitante"].lower()
+    local = normalize_team_name(event["local"])
+    visitante = normalize_team_name(event["visitante"])
 
     for (team1, team2), bonus in FOOTBALL_DERBIES.items():
-        if (team1 in local and team2 in visitante) or \
-           (team2 in local and team1 in visitante):
+        if (team_matches(team1, local) and team_matches(team2, visitante)) or \
+           (team_matches(team2, local) and team_matches(team1, visitante)):
             return bonus
 
     return 0
@@ -104,9 +106,7 @@ def knockout_bonus(event):
     comp = event["competicion"].lower()
     bonus = 0
 
-    if "final" in comp:
-        bonus = 2.5
-    elif "semifinal" in comp:
+    if re.search(r'\bsemi[ -]?final', comp):
         bonus = 2.0
     elif any(x in comp for x in ["cuartos", "quarter", "playoffs"]):
         bonus = 1.5
@@ -114,11 +114,13 @@ def knockout_bonus(event):
         bonus = 1.0
     elif any(x in comp for x in ["1/16", "round of 32"]):
         bonus = 0.8
+    elif re.search(r'\bfinal(?:es)?\b', comp):
+        bonus = 2.5
 
     # Ajuste por ida / vuelta
-    if "vuelta" in comp:
+    if re.search(r'\bvuelta\b', comp):
         bonus += 0.7
-    elif "ida" in comp:
+    elif re.search(r'\bida\b', comp):
         bonus += 0.3
 
     return bonus
@@ -161,10 +163,9 @@ def event_key(e):
     )
 
 def football_match_quality_bonus(local, visitante):
-    big_count = 0
-    for team in BIG_FOOTBALL_TEAMS:
-        if team in local or team in visitante:
-            big_count += 1
+    # Cuenta equipos participantes, no cuántas etiquetas coinciden con un nombre.
+    big_count = sum(any(team_matches(team, name) for team in BIG_FOOTBALL_TEAMS)
+                    for name in (local, visitante))
 
     if big_count == 2:
         return 3.0 # Doubled from 1.5
@@ -173,18 +174,33 @@ def football_match_quality_bonus(local, visitante):
     return 0
 
 def normalize_team_name(name):
-    name = name.lower()
-    replacements = {
-        "at. madrid": "atletico madrid",
-        "atlético madrid": "atletico madrid",
-        "atletico de madrid": "atletico madrid",
-        "fc barcelona": "fc barcelona",
-        "barça": "fc barcelona",
-        "psg": "psg",
-    }
-    for k, v in replacements.items():
-        name = name.replace(k, v)
-    return name
+    name = normalize_text(name)
+    name = re.sub(r'[^\w\s]', ' ', name)
+    name = ' '.join(name.split())
+    return TEAM_ALIASES.get(name, name)
+
+def normalize_text(text):
+    return ''.join(c for c in unicodedata.normalize('NFD', text.casefold())
+                   if unicodedata.category(c) != 'Mn')
+
+TEAM_ALIASES = {
+    'at madrid': 'atletico madrid', 'atletico de madrid': 'atletico madrid',
+    'club atletico de madrid': 'atletico madrid',
+    'barca': 'fc barcelona', 'barcelona': 'fc barcelona',
+    'manchester utd': 'manchester united', 'man utd': 'manchester united',
+    'fc bayern': 'bayern munich', 'fc bayern munchen': 'bayern munich',
+    'bayern munchen': 'bayern munich', 'bayern': 'bayern munich',
+    'paris saint germain': 'psg', 'paris saint germain fc': 'psg',
+    'inter': 'inter milan', 'internazionale': 'inter milan',
+    'milan': 'ac milan', 'napoles': 'napoli',
+}
+
+def team_matches(team, name):
+    return re.search(r'(?<!\w)' + re.escape(normalize_team_name(team)) + r'(?!\w)',
+                     normalize_team_name(name)) is not None
+
+def normalize_competition(name):
+    return re.sub(r'\bla\s+liga\b', 'laliga', normalize_text(name))
 
 def select_preferred_channel(canales):
     """
@@ -223,7 +239,7 @@ def select_preferred_channel(canales):
 def calculate_score(e):
     score = 0
     deporte = e["deporte"]
-    comp = e["competicion"].lower()
+    comp = normalize_competition(e["competicion"])
     local = e["local"].lower()
     visitante = e["visitante"].lower()
     hora = hour_to_min(e["hora"]) // 60
@@ -242,11 +258,15 @@ def calculate_score(e):
             score += 4.5 # Increased base score for Champions League
         elif "copa africana de naciones" in comp:
             score += 4.0 # Specific bonus for Africa Cup of Nations
-        elif any(x in comp for x in ["copa américa", "eurocopa"]):
+        elif any(x in comp for x in ["copa america", "eurocopa"]):
             score += 4.5 # Specific bonus for Copa América and Eurocopa
         elif "copa del mundo" in comp or "world cup" in comp:
             score += 5.0 # Specific bonus for World Cup
         # Top 5 leagues, with specific checks for second divisions
+        elif "serie a brasil" in comp:
+            score += 1.5
+        elif "hypermotion" in comp:
+            score += 1.8
         elif any(x in comp for x in ["laliga", "ea sports", "premier", "bundesliga", "serie a", "ligue 1"]):
             if "hypermotion" in comp: # LaLiga Hypermotion (Spanish second division)
                 score += 1.8
@@ -255,7 +275,7 @@ def calculate_score(e):
             else: # Top tier of these leagues
                 score += 2.5
         # Other decent leagues
-        elif any(x in comp for x in ["eredevisie", "serie a brasil", "jupiler pro league", "liga portuguesa", "scottish premiership"]):
+        elif any(x in comp for x in ["eredivisie", "jupiler pro league", "liga portuguesa", "scottish premiership"]):
             score += 1.5
         # Cup competitions (national cups)
         elif any(x in comp.lower() for x in ["fa cup", "copa del rey", "emirates", "copa de francia", "coupe de france", "coppa"]):
@@ -268,7 +288,7 @@ def calculate_score(e):
             score += 2
 
         # Bonus for 'España' (Spain) if playing
-        if "españa" in local or "españa" in visitante:
+        if "espana" in local or "espana" in visitante:
             score += 3.0
 
         score += football_match_quality_bonus(local, visitante)
@@ -296,8 +316,6 @@ def calculate_score(e):
 
         if "endesa" in comp or "acb" in comp or "euroliga" in comp:
             score += 2.5
-        if "estudiantes" in local or "estudiantes" in visitante:
-            score += 4
         if "estudiantes" in local or "estudiantes" in visitante:
             score += 4
         if "minicopa" in comp:
@@ -407,13 +425,19 @@ def build_daily_plan(events):
 
         h = hour_to_min(e["hora"])
         if h < 12 * 60:
-            plan["mañana"] = e
+            franja = "mañana"
         elif h < 15 * 60:
-            plan["mediodía"] = e
+            franja = "mediodía"
         elif h < 20 * 60:
-            plan["tarde"] = e
+            franja = "tarde"
         else:
-            plan["noche"] = e
+            franja = "noche"
+        indice = 2
+        clave = franja
+        while clave in plan:
+            clave = f'{franja} ({indice})'
+            indice += 1
+        plan[clave] = e
 
     return plan, selected
 
@@ -423,7 +447,7 @@ def recomendar_eventos(events):
     filtered_events = []
     for e in events:
         deporte = e["deporte"]
-        comp = e["competicion"].lower()
+        comp = normalize_competition(e["competicion"])
         local = e["local"].lower()
         visitante = e["visitante"].lower()
         canales = " ".join(e["canales"]).lower()
@@ -444,9 +468,9 @@ def recomendar_eventos(events):
         if deporte == "Fútbol":
             if "u23" in comp or is_lower_division_football(e):
                 continue
-            if not any(x in comp for x in ALLOWED_FOOTBALL_COMPETITIONS):
+            if not any(normalize_competition(x) in comp for x in ALLOWED_FOOTBALL_COMPETITIONS):
                 continue
-            if any(x in comp for x in EXCLUDED_FOOTBALL_COMPETITIONS):
+            if any(normalize_competition(x) in comp for x in EXCLUDED_FOOTBALL_COMPETITIONS):
                 continue
             filtered_events.append(e)
             continue
@@ -461,7 +485,7 @@ def recomendar_eventos(events):
                 is_relevant_baloncesto = True
             if "estudiantes" in local or "estudiantes" in visitante:
                 is_relevant_baloncesto = True
-            if "españa" in local or "españa" in visitante:
+            if "espana" in local or "espana" in visitante:
                 is_relevant_baloncesto = True
             if any(t in local for t in TOP_NCAA) or any(t in visitante for t in TOP_NCAA):
                 is_relevant_baloncesto = True
@@ -471,7 +495,7 @@ def recomendar_eventos(events):
             continue
     
         if deporte == "Balonmano":
-            if local == "españa" or visitante == "españa":
+            if local == "espana" or visitante == "espana":
                 filtered_events.append(e)
             continue
     
@@ -486,6 +510,6 @@ def recomendar_eventos(events):
     visible_plan_keys = {event_key(e) for e in daily_plan.values()}
     other_top_events = [e for e in filtered_events
                         if event_key(e) not in visible_plan_keys and e['score'] >= 6.5]
-    other_top_events.sort(key=lambda e: (hour_to_min(e['hora']), -e['score']))
+    other_top_events.sort(key=lambda e: (-e['score'], hour_to_min(e['hora'])))
     return {'filtrados': filtered_events, 'plan': daily_plan,
             'seleccionados': selected_events, 'alternativas': other_top_events[:MAX_OTHER_EVENTS]}

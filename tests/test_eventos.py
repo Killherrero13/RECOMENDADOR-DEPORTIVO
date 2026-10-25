@@ -13,14 +13,15 @@ from resumen.eventos import recomendar_eventos
 from resumen.fuente_eventos import ErrorEventos, descargar_html, extraer_eventos
 
 class EventosTests(unittest.TestCase):
-    def test_algoritmo_completo_coincide_con_original(self):
+    def test_resultado_mejorado_y_entrada_sin_modificar(self):
         events = json.loads((ROOT/'tests/fixtures/eventos.json').read_text(encoding='utf-8'))
         original_input = copy.deepcopy(events)
-        old = ejecutar_eventos(copy.deepcopy(events))
         new = recomendar_eventos(events)
-        for actual, original in [('filtrados','filtered_events'), ('plan','daily_plan'),
-                                 ('seleccionados','selected_events'), ('alternativas','other_top_events')]:
-            self.assertEqual(new[actual], old[original])
+        self.assertEqual(new['plan']['imprescindible']['local'], 'At. Madrid')
+        self.assertAlmostEqual(new['plan']['imprescindible']['score'],17.7976)
+        self.assertEqual(len(new['plan']),len(new['seleccionados']))
+        self.assertEqual([e['score'] for e in new['alternativas']],
+                         sorted([e['score'] for e in new['alternativas']],reverse=True))
         self.assertEqual(events, original_input)
 
     def test_dia_sin_recomendaciones(self):
@@ -40,11 +41,13 @@ class EventosTests(unittest.TestCase):
         actual = extraer_eventos(html,date(2026,10,25))
         self.assertEqual(actual,ns['events'])
         self.assertEqual(len(actual),283)
-        old = ejecutar_eventos(copy.deepcopy(actual))
         new = recomendar_eventos(actual)
-        self.assertEqual(new['filtrados'],old['filtered_events'])
-        self.assertEqual(new['plan'],old['daily_plan'])
-        self.assertEqual(new['alternativas'],old['other_top_events'])
+        self.assertEqual(len(new['filtrados']),53)
+        self.assertEqual(new['plan']['imprescindible']['local'],'FC Barcelona')
+        inter = next(e for e in new['filtrados'] if e['local']=='Inter Milan')
+        self.assertAlmostEqual(inter['score'],7.62)
+        estudiantes = next(e for e in new['filtrados'] if e['visitante']=='Movistar Estudiantes')
+        self.assertEqual(estudiantes['score'],5)
 
     def test_estructura_invalida_y_fecha_incorrecta(self):
         for html in ('<html>Acceso denegado</html>', '<table class="tablaPrincipal"></table>',

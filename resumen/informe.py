@@ -34,7 +34,7 @@ def contenido(resultado):
         agenda = [f'{franja.capitalize()}: {linea_evento(e)}' for franja, e in plan.items() if franja != 'imprescindible']
         sections.append(('Plan principal del día', agenda or ['Sin otros eventos en el plan.']))
         sections.append(('Alternativas', [linea_evento(e) for e in events['alternativas']] or ['Sin alternativas que alcancen el umbral.']))
-        sections.append(('Información', ['Alternativas en el orden original por hora. Horarios de Europe/Madrid.', 'Fuente de la agenda: futbolenlatv.es.']))
+        sections.append(('Información', ['Alternativas ordenadas por puntuación. Horarios de Europe/Madrid.', 'Fuente de la agenda: futbolenlatv.es.']))
     return sections
 
 def generar_informe(resultado):

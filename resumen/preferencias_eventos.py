@@ -249,7 +249,8 @@ ALLOWED_FOOTBALL_COMPETITIONS = [
     "supercopa", "scottish premiership", "copa africana de naciones",
     "cham", "europa league", "champions league", "conference league", "fifa",
     "liga portuguesa", "coppa italia", "primera division argentina", "serie a brasil",
-    "jupiler pro league", "nations league"
+    "jupiler pro league", "nations league", "eurocopa", "copa america",
+    "copa del mundo", "world cup"
 ]
 
 EXCLUDED_FOOTBALL_COMPETITIONS = [

@@ -1,5 +1,19 @@
 # Resumen deportivo personal
 
+## Tus plataformas destacadas
+
+DAZN y sus canales aparecen con etiqueta amarilla y ✓; el canal general Movistar Plus+,
+con etiqueta azul y ✓. Se aplica al resumen, al listado completo y al adjunto.
+En texto también se añade ✓. Es el acceso declarado por el usuario, no una consulta a sus cuentas.
+M+ LALIGA, Liga de Campeones, Vamos y Deportes se muestran de forma neutra: no se presume
+que pertenezcan a la suscripción del canal general. Los demás eventos siguen disponibles.
+Este cambio es visual y no altera las puntuaciones.
+
+Por decisión del usuario, se mantiene la API football-data y `FOOTBALL_API_KEY` para complementar
+la agenda al asociar camisetas con los partidos de hoy.
+
+---
+
 ## Correo visual y listado completo
 
 El correo presenta el imprescindible en una tarjeta destacada, horas grandes, nombres de equipos,

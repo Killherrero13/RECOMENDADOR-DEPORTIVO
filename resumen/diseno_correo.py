@@ -1,5 +1,6 @@
 """HTML de correo con tablas de presentación, estilos inline y sin recursos remotos."""
 from html import escape
+from .canales import plataforma_destacada
 
 FUENTE = 'https://www.futbolenlatv.es/deporte'
 ICONOS = {'Fútbol':'⚽', 'Baloncesto':'🏀', 'Tenis':'🎾', 'Automovilismo':'🏁', 'Balonmano':'🤾'}
@@ -10,8 +11,17 @@ def texto(valor):
 def etiqueta(valor, color='#eaf0f6', tinta='#3e526b'):
     return f'<span style="display:inline-block;padding:4px 8px;margin:2px 4px 2px 0;border-radius:6px;background:{color};color:{tinta};font-size:12px;line-height:1.4;">{texto(valor)}</span>'
 
-def canales(evento):
-    return ' · '.join(evento.get('canales') or [evento.get('channel') or 'Canal no indicado'])
+def canales_html(evento):
+    badges = []
+    for canal in evento.get('canales') or [evento.get('channel') or 'Canal no indicado']:
+        plataforma = plataforma_destacada(canal)
+        if plataforma == 'DAZN':
+            badges.append(etiqueta('✓ ' + canal, '#f3ff27', '#172b43'))
+        elif plataforma == 'Movistar Plus+':
+            badges.append(etiqueta('✓ ' + canal, '#0072c6', '#ffffff'))
+        else:
+            badges.append(etiqueta(canal))
+    return ' '.join(badges)
 
 def tarjeta_evento(evento, destacado=False, franja=''):
     tinta = '#ffffff' if destacado else '#172b43'
@@ -43,7 +53,7 @@ def tarjeta_evento(evento, destacado=False, franja=''):
             f'<div style="font-size:13px;line-height:1.5;color:{secundaria};margin-top:7px;">{texto(evento["competicion"])}</div>'
             f'<div style="margin-top:10px;">{badge}</div></td></tr></table>'
             f'<p style="color:{tinta};font-size:13px;line-height:1.6;margin:16px 0 0;padding-top:12px;border-top:1px solid {"#3c536b" if destacado else "#edf1f5"};">'
-            f'<strong>TV</strong> · {texto(canales(evento))}</p>'
+            f'<strong>TV</strong><br>{canales_html(evento)}</p>'
             + (f'<p style="font-size:12px;line-height:1.6;color:{secundaria};margin:8px 0 0;">{texto(" · ".join([s for s in [fin, *estado] if s]))}</p>' if fin or estado else '')
             + '</td></tr></table>')
 
@@ -57,7 +67,7 @@ def listado_completo(eventos):
                      '<td valign="top" style="padding:13px 0;border-bottom:1px solid #e4eaf1;overflow-wrap:anywhere;">'
                      f'<strong style="font-size:14px;">{texto(nombre)}</strong><br>'
                      f'<span style="font-size:12px;color:#52647a;">{texto(e["deporte"])} · {texto(e["competicion"])}</span><br>'
-                     f'<span style="font-size:12px;line-height:1.6;">TV · {texto(canales(e))}</span><br>'
+                     f'<span style="font-size:12px;line-height:1.6;">{canales_html(e)}</span><br>'
                      f'<span style="font-size:11px;color:#1b6948;">{e["score"]:.1f} puntos</span>'
                      + (f'<br><span style="font-size:11px;color:#8a5217;">Visionado parcial hasta {e["fin_vision"]:%H:%M}</span>' if e.get('vision_parcial') else '')
                      + ('<br><span style="font-size:11px;color:#8a5217;">En curso</span>' if e.get('en_curso') else '')
@@ -75,7 +85,8 @@ def pagina(asunto, cuerpo):
             f'<h1 style="font-size:27px;line-height:1.3;margin:10px 0 22px;">{texto(asunto)}</h1>'
             + cuerpo + f'<p style="font-size:12px;line-height:1.7;color:#61718a;margin:24px 0;">Horarios de Madrid · '
             f'<a href="{FUENTE}" style="color:#1b6948;">Consultar la agenda de origen</a><br>'
-            'Los canales publicados no garantizan que estén incluidos en tu suscripción.</p>'
+            '✓ Plataformas destacadas según tu acceso: DAZN y canal Movistar Plus+.<br>'
+            'Otros canales M+ pueden requerir un paquete diferente.</p>'
             '</div></body></html>')
 
 def crear_html(asunto, secciones, resultado, todos):

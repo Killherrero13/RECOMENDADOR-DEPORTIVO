@@ -51,11 +51,13 @@ No hay restricción de repeticiones ni historial solicitado en esta primera mejo
 - Eliminar el bonus duplicado de Estudiantes no equivale a eliminarlo como equipo de interés:
   de momento conserva un único bonus original de cuatro puntos.
 
-## Televisión — pendiente
+## Televisión — destacado visual implementado; ajuste de puntuación pendiente
 
-- DAZN y Movistar Plus+ Lite, según lo indicado por el usuario.
+- DAZN prácticamente completo y canal Movistar Plus+, según el acceso declarado por el usuario.
+- DAZN se destaca con una etiqueta amarilla y Movistar Plus+ con una azul, ambas con ✓.
+- M+ LALIGA, Liga de Campeones, Vamos o Deportes no se marcan automáticamente como incluidos.
 - No excluir automáticamente eventos por el canal: puede disponer de otras formas de verlos.
-- No asumir que todo canal de Movistar ni todo contenido de DAZN está incluido en su suscripción.
+- El destacado sigue la declaración del usuario; no verifica derechos contra el proveedor.
 - Mostrar el canal concreto y distinguir accesibilidad conocida de la que debe comprobarse.
 
 ## Tanda 1 implementada
@@ -71,5 +73,6 @@ No hay restricción de repeticiones ni historial solicitado en esta primera mejo
 
 La tanda 2 añade selección de agenda por interés, duraciones por deporte y disponibilidad con fechas.
 La tanda 3 añade las dos opciones de camiseta y el partido asociado.
-Pendiente después: ajuste de favoritos/deportes/canales, explicación breve de las
-recomendaciones y evaluación de retirar football-data.
+Pendiente después: ajuste de favoritos/deportes/puntuación de canales y explicación breve de las
+recomendaciones. Se mantiene football-data por decisión expresa del usuario: complementa la agenda
+para vincular las camisetas a los partidos del día. No se plantea retirar la API ni su secreto.

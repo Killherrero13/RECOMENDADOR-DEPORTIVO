@@ -2,11 +2,12 @@
 from pathlib import Path
 from .horarios import orden_inicio
 from .diseno_correo import crear_html, listado_completo, pagina
+from .canales import canal_texto
 
 def linea_evento(event):
     title = ((event.get('descripcion') or event['competicion']) + ' · ' + event['competicion']) if not event.get('local') else f"{event['local']} vs {event['visitante']} · {event['competicion']}"
     hora = event['inicio'].strftime('%d/%m %H:%M') if 'inicio' in event else event['hora']
-    canales = ' · '.join(event.get('canales') or [event.get('channel') or 'Canal no indicado'])
+    canales = ' · '.join(canal_texto(c) for c in event.get('canales') or [event.get('channel') or 'Canal no indicado'])
     texto = f"{hora} · {title} · {canales} · {event['score']:.1f} puntos"
     if 'fin_estimado' in event:
         texto += f" · Fin estimado: {event['fin_estimado']:%d/%m %H:%M}"

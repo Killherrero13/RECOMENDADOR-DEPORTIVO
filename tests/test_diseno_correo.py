@@ -9,6 +9,7 @@ from resumen.__main__ import demostracion
 from resumen.informe import generar_informe, guardar_informe
 from resumen.correo import crear_mensaje
 from resumen.config import ConfigCorreo
+from resumen.canales import plataforma_destacada
 
 class DisenoCorreoTests(unittest.TestCase):
     def setUp(self):
@@ -39,11 +40,22 @@ class DisenoCorreoTests(unittest.TestCase):
 
     def test_conserva_canales_mas_en_lugar_de_ocultarlos(self):
         e=self.result['eventos']['plan']['imprescindible']
-        e['canales']=['M+ Vamos (8 y 50)','DAZN LaLiga (M55 O113)']
+        e['canales']=['M+ Vamos (8 y 50)','DAZN LaLiga (M55 O113)', 'Movistar Plus+ (M7): VER PARTIDO']
         e['channel']=None
         report=generar_informe(self.result)
         self.assertIn('M+ Vamos (8 y 50)',BeautifulSoup(report['html'],'html.parser').get_text())
         self.assertIn('DAZN LaLiga (M55 O113)',report['texto'])
+        for canal in ['DAZN','DAZN F1 (M70 O104)','DAZN LaLiga']:
+            self.assertEqual(plataforma_destacada(canal),'DAZN')
+        for canal in ['Movistar Plus+','Movistar Plus','Movistar+','Movistar Plus+ (M7): VER PARTIDO']:
+            self.assertEqual(plataforma_destacada(canal),'Movistar Plus+')
+        for canal in ['M+ LALIGA','M+ Liga de Campeones','M+ Vamos (8 y 50)','Movistar Deportes','Movistar Plus+ Fútbol','NBA League Pass']:
+            self.assertIsNone(plataforma_destacada(canal))
+        self.assertIn('✓ DAZN LaLiga',report['texto'])
+        self.assertIn('✓ Movistar Plus+',report['texto'])
+        self.assertNotIn('✓ M+ Vamos',report['texto'])
+        self.assertIn('#f3ff27',report['html'])
+        self.assertIn('#0072c6',report['html'])
 
     def test_lista_sin_eventos_y_modo_camiseta_sin_adjunto(self):
         result=demostracion('eventos')

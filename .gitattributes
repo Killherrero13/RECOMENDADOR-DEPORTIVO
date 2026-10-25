@@ -1,0 +1,2 @@
+# Las referencias se verifican byte a byte también en Windows.
+referencia/*.py -text

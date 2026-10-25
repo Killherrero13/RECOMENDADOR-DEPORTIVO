@@ -1,8 +1,11 @@
 """Filtros, puntuaciones y agenda originales, sin consultas al importar."""
 from copy import deepcopy
 from datetime import time
+from datetime import datetime
 import re
 import unicodedata
+from .config import MADRID_TZ
+from .horarios import intervalo, orden_inicio, preparar_horario
 
 from .preferencias_eventos import (
     EVENT_DURATION,
@@ -37,7 +40,8 @@ def is_female(e):
 def valid_time(hora):
     try:
         h, m = map(int, hora.split(":"))
-        return time(9, 0) <= time(h, m) <= time(23, 30)
+        time(h, m)
+        return True  # La disponibilidad se evalúa con fecha y final estimado.
     except ValueError:
         # Handle cases where hora is not in 'HH:MM' format, e.g., 'PD'
         return False
@@ -56,12 +60,10 @@ def channel_score(canales):
     return score
 
 def can_add_event(event, selected):
-    start = hour_to_min(event["hora"])
-    end = start + EVENT_DURATION
+    start, end = intervalo(event)
 
     for e in selected:
-        s = hour_to_min(e["hora"])
-        e_end = s + EVENT_DURATION
+        s, e_end = intervalo(e)
         overlap = min(end, e_end) - max(start, s)
         if overlap > MAX_OVERLAP:
             return False
@@ -155,6 +157,7 @@ def tennis_affinity_bonus(event):
 
 def event_key(e):
     return (
+        e.get('fecha'),
         e["hora"],
         e["deporte"],
         e.get("competicion"),
@@ -372,7 +375,6 @@ def build_daily_plan(events):
     top_events = [
         e for e in events
         if e["score"] >= 7
-        and DAY_START <= hour_to_min(e["hora"]) <= DAY_END
     ]
 
     if not top_events:
@@ -385,14 +387,8 @@ def build_daily_plan(events):
     # --------------------------------------------------
     selected = [must_watch]
 
-    for e in events:
+    for e in sorted(top_events, key=lambda e: (-e['score'], orden_inicio(e))):
         if e is must_watch:
-            continue
-
-        start = hour_to_min(e["hora"])
-
-        # Respeta horario diario
-        if start < DAY_START or start > DAY_END:
             continue
 
         # Umbral mínimo
@@ -412,7 +408,7 @@ def build_daily_plan(events):
     # --------------------------------------------------
     # 3️⃣ Orden cronológico para presentación
     # --------------------------------------------------
-    selected.sort(key=lambda e: hour_to_min(e["hora"]))
+    selected.sort(key=orden_inicio)
 
     # --------------------------------------------------
     # 4️⃣ Construir plan visual
@@ -424,7 +420,9 @@ def build_daily_plan(events):
             continue
 
         h = hour_to_min(e["hora"])
-        if h < 12 * 60:
+        if h < 6 * 60 + 30:
+            franja = "madrugada"
+        elif h < 12 * 60:
             franja = "mañana"
         elif h < 15 * 60:
             franja = "mediodía"
@@ -441,9 +439,12 @@ def build_daily_plan(events):
 
     return plan, selected
 
-def recomendar_eventos(events):
+def recomendar_eventos(events, ahora=None, fecha=None):
     # La copia evita añadir score/channel a los datos de entrada del llamante.
     events = deepcopy(events)
+    if ahora is not None and ahora.tzinfo is None:
+        raise ValueError('La hora de ejecución debe incluir zona horaria.')
+    fecha = fecha or (ahora or datetime.now(MADRID_TZ)).astimezone(MADRID_TZ).date()
     filtered_events = []
     for e in events:
         deporte = e["deporte"]
@@ -456,6 +457,8 @@ def recomendar_eventos(events):
     
     
         if is_female(e) or not valid_time(e["hora"]):
+            continue
+        if not preparar_horario(e, fecha, ahora):
             continue
     
         if deporte in {"Fútbol Sala", "Waterpolo", "Hockey Patines", "Atletismo", "Rugby U", "Boxeo", "Ishockey", "Béisbol"}:
@@ -504,12 +507,15 @@ def recomendar_eventos(events):
                 filtered_events.append(e)
     for e in filtered_events:
         e['score'] = calculate_score(e)
+        # La madrugada y el visionado incompleto son opciones secundarias, no exclusiones.
+        e['ajuste_horario'] = -(1.0 if e['madrugada'] else 0) - (0.5 if e['vision_parcial'] else 0)
+        e['score'] += e['ajuste_horario']
         e['channel'] = select_preferred_channel(e['canales'])
-    filtered_events.sort(key=lambda e: e['hora'])
+    filtered_events.sort(key=orden_inicio)
     daily_plan, selected_events = build_daily_plan(filtered_events)
     visible_plan_keys = {event_key(e) for e in daily_plan.values()}
     other_top_events = [e for e in filtered_events
                         if event_key(e) not in visible_plan_keys and e['score'] >= 6.5]
-    other_top_events.sort(key=lambda e: (-e['score'], hour_to_min(e['hora'])))
+    other_top_events.sort(key=lambda e: (-e['score'], orden_inicio(e)))
     return {'filtrados': filtered_events, 'plan': daily_plan,
             'seleccionados': selected_events, 'alternativas': other_top_events[:MAX_OTHER_EVENTS]}

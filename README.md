@@ -1,5 +1,31 @@
 # Resumen deportivo personal
 
+## Mejoras funcionales: segunda tanda
+
+La agenda respeta tu disponibilidad desde las 06:30 hasta las 00:00, ampliando las noches de
+viernes y sábado hasta las 01:00 del sábado/domingo. Incluye la tabla del día siguiente si
+está publicada; si falta, lo indica en el correo en lugar de inventar la cobertura nocturna.
+
+Cada evento incluye fecha y final estimado. Si excede tu hora límite pero puedes ver al menos
+30 minutos, aparece marcado como visionado parcial con la hora de corte. La madrugada pierde
+un punto y el visionado parcial medio punto; siguen siendo candidatos si su interés es alto.
+Al ejecutar manualmente se descartan los terminados y se señalan los eventos en curso.
+
+El plan fija el imprescindible y recorre los candidatos restantes de mayor a menor puntuación,
+comprobando solapamientos con duraciones estimadas por deporte. La presentación se mantiene
+cronológica; las alternativas siguen ordenadas por puntuación. No se garantiza la combinación
+con la mayor suma global de puntos, y las duraciones reales pueden variar.
+
+Hay 57 pruebas: se comprueban también el cruce de medianoche, viernes/sábado/domingo,
+los límites de disponibilidad, el visionado parcial, la lectura de la tabla de mañana y los
+solapamientos por deporte. La selección de camiseta y los nuevos pesos deportivos/canales
+todavía están pendientes; consulta `PREFERENCIAS.md` para ver el estado completo.
+
+Prueba sin envío: `python -m resumen --modo eventos --salida vista_previa`.
+Desde Actions, el modo `eventos` envía el resumen real con la nueva agenda y tus secretos actuales.
+
+---
+
 ## Mejoras funcionales: primera tanda
 
 Se han corregido las fases de eliminatorias, el bonus duplicado de Estudiantes, los alias de

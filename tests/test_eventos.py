@@ -2,7 +2,7 @@ import ast
 import copy
 import json
 import unittest
-from datetime import date
+from datetime import date, datetime
 from unittest.mock import Mock, patch
 
 import requests
@@ -10,6 +10,7 @@ from bs4 import BeautifulSoup
 
 from referencia import ROOT, ejecutar_eventos
 from resumen.eventos import recomendar_eventos
+from resumen.config import MADRID_TZ
 from resumen.fuente_eventos import ErrorEventos, descargar_html, extraer_eventos
 
 class EventosTests(unittest.TestCase):
@@ -41,7 +42,7 @@ class EventosTests(unittest.TestCase):
         actual = extraer_eventos(html,date(2026,10,25))
         self.assertEqual(actual,ns['events'])
         self.assertEqual(len(actual),283)
-        new = recomendar_eventos(actual)
+        new = recomendar_eventos(actual,ahora=datetime(2026,10,25,8,30,tzinfo=MADRID_TZ))
         self.assertEqual(len(new['filtrados']),53)
         self.assertEqual(new['plan']['imprescindible']['local'],'FC Barcelona')
         inter = next(e for e in new['filtrados'] if e['local']=='Inter Milan')

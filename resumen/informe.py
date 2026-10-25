@@ -4,7 +4,17 @@ from pathlib import Path
 
 def linea_evento(event):
     title = event['competicion'] if event['deporte'] == 'Automovilismo' else f"{event['local']} vs {event['visitante']} · {event['competicion']}"
-    return f"{event['hora']} · {title} · {event.get('channel') or 'Sin canal preferido'} · {event['score']:.1f} puntos"
+    hora = event['inicio'].strftime('%d/%m %H:%M') if 'inicio' in event else event['hora']
+    texto = f"{hora} · {title} · {event.get('channel') or 'Sin canal preferido'} · {event['score']:.1f} puntos"
+    if 'fin_estimado' in event:
+        texto += f" · Fin estimado: {event['fin_estimado']:%d/%m %H:%M}"
+    if event.get('en_curso'):
+        texto += ' · En curso'
+    if event.get('vision_parcial'):
+        texto += f" · Visionado parcial: hasta {event['fin_vision']:%H:%M}"
+    if event.get('madrugada'):
+        texto += ' · Opción de madrugada'
+    return texto
 
 def contenido(resultado):
     sections = []
@@ -28,13 +38,17 @@ def contenido(resultado):
             sections.append(('⚽ Partidos del día', lines or ['No hay partidos que cumplan el filtro horario en los datos disponibles.']))
     events = resultado['eventos']
     if events is not None:
+        if events.get('avisos'):
+            sections.append(('Cobertura de la agenda', events['avisos']))
         plan = events['plan']
         imprescindible = plan.get('imprescindible')
         sections.append(('📺 Imprescindible', [linea_evento(imprescindible)] if imprescindible else ['Ningún evento alcanza el umbral del plan.']))
         agenda = [f'{franja.capitalize()}: {linea_evento(e)}' for franja, e in plan.items() if franja != 'imprescindible']
         sections.append(('Plan principal del día', agenda or ['Sin otros eventos en el plan.']))
         sections.append(('Alternativas', [linea_evento(e) for e in events['alternativas']] or ['Sin alternativas que alcancen el umbral.']))
-        sections.append(('Información', ['Alternativas ordenadas por puntuación. Horarios de Europe/Madrid.', 'Fuente de la agenda: futbolenlatv.es.']))
+        sections.append(('Información', ['Alternativas ordenadas por puntuación. Horarios de Europe/Madrid.',
+                         'Los finales y solapamientos se calculan con duraciones estimadas; pueden variar.',
+                         'Fuente de la agenda: futbolenlatv.es.']))
     return sections
 
 def generar_informe(resultado):

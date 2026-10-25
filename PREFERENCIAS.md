@@ -9,15 +9,23 @@ y una alternativa al azar. Si no hay candidata vinculada, mostrar solo la altern
 Se adopta la opción de mostrar ambas cuando sea posible, de entre las opciones indicadas por el usuario.
 No hay restricción de repeticiones ni historial solicitado en esta primera mejora.
 
-## Horario y agenda — pendiente
+## Horario y agenda — implementado en la tanda 2
 
 - Entre semana: desde las 06:30 hasta las 00:00.
-- Fines de semana: mismo horario, con margen para eventos nocturnos hasta la 01:00;
-  la madrugada no es la opción preferida. NBA es un ejemplo de excepción interesante.
-- Hay que representar fechas y final estimado, no solo la hora de inicio, antes de implementar
-  la ventana que cruza medianoche. Un partido de las 00:30 pertenece a una fecha concreta.
+- La ampliación nocturna se interpreta como las noches de viernes y sábado, hasta las 01:00
+  del sábado/domingo. La noche del domingo acaba a las 00:00 del lunes.
+- Cada evento lleva fecha y final estimado. La tabla del día siguiente se consulta en el mismo
+  HTML cuando la jornada permite esa ampliación; si no está disponible, se avisa en el resumen.
+- Se exige un mínimo de 30 minutos disponibles. Si no cabe el evento completo, se marca
+  «Visionado parcial: hasta…»; nunca se presenta como si pudieras verlo entero.
+- La madrugada resta 1 punto y el visionado parcial 0,5: pueden recomendarse, pero son secundarios
+  frente a una opción de interés similar que sí puedas ver completa durante el día.
+- La selección recorre candidatos por puntuación tras fijar el imprescindible. Mantiene el máximo
+  de cuatro eventos y hasta 30 minutos de solapamiento. No promete el óptimo global de puntuación.
+- Duraciones estimadas: fútbol 120 min, baloncesto 120 min, NBA 150 min, tenis 150 min,
+  automovilismo 180 min, balonmano 90 min y otros 120 min.
 - La programación de envío se mantiene a las 08:30 Europe/Madrid; la vista de eventos pasados
-  debe tenerse en cuenta al aplicar la nueva disponibilidad.
+  se tiene en cuenta. Se excluyen los terminados; los que aún dejan 30 minutos se indican «En curso».
 
 ## Intereses — pendientes de ajuste específico
 
@@ -46,5 +54,6 @@ No hay restricción de repeticiones ni historial solicitado en esta primera mejo
 - Todos los eventos seleccionados se conservan en el plan aunque compartan franja.
 - Las ocho alternativas se eligen por puntuación, con hora como desempate.
 
-Pendiente después: selección de agenda por interés, duraciones por deporte, preferencias
-anteriores, explicación breve de las recomendaciones y evaluación de retirar football-data.
+La tanda 2 añade selección de agenda por interés, duraciones por deporte y disponibilidad con fechas.
+Pendiente después: camisetas, ajuste de favoritos/deportes/canales, explicación breve de las
+recomendaciones y evaluación de retirar football-data.

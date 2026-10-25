@@ -2,7 +2,7 @@
 import logging
 import re
 import time
-from datetime import datetime
+from datetime import datetime, timedelta
 
 import requests
 from bs4 import BeautifulSoup
@@ -77,13 +77,40 @@ def extraer_eventos(html, fecha):
     logger.info('Extraídos %s eventos para %s de la primera tabla.', len(events), fecha)
     return events
 
+def extraer_jornada(html, fecha):
+    events = [{**e, 'fecha': fecha.isoformat()} for e in extraer_eventos(html, fecha)]
+    avisos = []
+    manana = fecha + timedelta(days=1)
+    if manana.weekday() in (5, 6):
+        soup = BeautifulSoup(html, 'html.parser')
+        tabla_manana = None
+        for table in soup.find_all('table', class_='tablaPrincipal'):
+            header = table.find('tr', class_='cabeceraTabla')
+            dates = re.findall(r'\b\d{2}/\d{2}/\d{4}\b', header.get_text(' ', strip=True) if header else '')
+            if dates and dates[0] == manana.strftime('%d/%m/%Y'):
+                tabla_manana = table
+                break
+        if tabla_manana is None:
+            avisos.append('La web todavía no publica la tabla de mañana; no se ha podido comprobar la madrugada del fin de semana.')
+        else:
+            try:
+                siguientes = extraer_eventos(str(tabla_manana), manana)
+                # El filtrado posterior comprueba la hora y cuánto tiempo se puede ver.
+                events.extend({**e, 'fecha': manana.isoformat()} for e in siguientes
+                              if e['hora'].split(':')[0] == '00')
+            except ErrorEventos:
+                avisos.append('No se pudo interpretar la tabla de mañana; la cobertura de madrugada es incompleta.')
+    for aviso in avisos:
+        logger.warning('%s', aviso)
+    return events, avisos
+
 def generar_resultado_eventos(ahora=None):
     ahora = ahora or datetime.now(MADRID_TZ)
     if ahora.tzinfo is None:
         raise ErrorEventos('La fecha de consulta debe incluir zona horaria.')
     fecha = ahora.astimezone(MADRID_TZ).date()
-    events = extraer_eventos(descargar_html(), fecha)
-    result = recomendar_eventos(events)
+    events, avisos = extraer_jornada(descargar_html(), fecha)
+    result = recomendar_eventos(events, ahora=ahora, fecha=fecha)
     logger.info('Eventos filtrados: %s; seleccionados: %s; alternativas: %s.',
                 len(result['filtrados']), len(result['seleccionados']), len(result['alternativas']))
-    return {'fecha': fecha.isoformat(), 'extraidos': len(events), **result}
+    return {'fecha': fecha.isoformat(), 'extraidos': len(events), 'avisos': avisos, **result}

@@ -28,7 +28,7 @@ def demostracion(modo):
                       ('13:00', 'Premier League', 'Arsenal', 'Chelsea'),
                       ('18:00', 'LaLiga EA Sports', 'FC Barcelona', 'Valencia'),
                       ('18:30', 'Champions League', 'Liverpool', 'Arsenal')]]
-        result['eventos'] = {'fecha': result['fecha'], 'extraidos': len(events), **recomendar_eventos(events)}
+        result['eventos'] = {'fecha': result['fecha'], 'extraidos': len(events), **recomendar_eventos(events, ahora=ahora)}
     return result
 
 def main():

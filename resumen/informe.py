@@ -25,13 +25,17 @@ def contenido(resultado):
     shirt = resultado['camiseta']
     if shirt is not None:
         item = shirt['camiseta']
-        description = item['Equipo']
-        if item['Modelo']:
-            description += f" · {item['Modelo']}"
-        if item['Jugador']:
-            description += f" · {item['Jugador']}"
-        sections.append(('👕 Camiseta recomendada', [description,
-                         'Partido asociado: sin asociación; la selección actual es aleatoria.']))
+        lines = [describir_camiseta(item)]
+        match = shirt.get('partido_asociado')
+        if match:
+            lines.append(f"Partido: {match['home']} vs {match['away']} · {match['hora']:%d/%m %H:%M} · {match['competition']}")
+        else:
+            lines.append('Elección al azar, sin partido asociado en los datos disponibles.')
+        if shirt.get('motivo'):
+            lines.append(shirt['motivo'])
+        sections.append(('👕 Camiseta recomendada', lines))
+        if shirt.get('recomendada') is not None and shirt.get('aleatoria') is not None:
+            sections.append(('👕 Alternativa al azar', [describir_camiseta(shirt['aleatoria'])]))
         # Con agenda disponible, no repetimos la lista de football-data.
         if resultado['eventos'] is None:
             lines = [f"{p['hora']:%H:%M} · {p['home']} vs {p['away']} · {p['competition']}" for p in shirt['partidos']]
@@ -50,6 +54,14 @@ def contenido(resultado):
                          'Los finales y solapamientos se calculan con duraciones estimadas; pueden variar.',
                          'Fuente de la agenda: futbolenlatv.es.']))
     return sections
+
+def describir_camiseta(item):
+    description = item['Equipo']
+    if item['Modelo']:
+        description += f" · {item['Modelo']}"
+    if item['Jugador']:
+        description += f" · {item['Jugador']}"
+    return description
 
 def generar_informe(resultado):
     year, month, day = resultado['fecha'].split('-')

@@ -1,5 +1,36 @@
 # Resumen deportivo personal
 
+## Mejoras funcionales: tercera tanda, camisetas
+
+El correo muestra una camiseta vinculada a un partido de hoy cuando hay coincidencias en tu colección,
+con rival, hora y competición, más una alternativa al azar. Si no hay coincidencias, muestra solo
+la aleatoria. La alternativa es de otro equipo siempre que la colección lo permita.
+
+Se priorizan Atlético y Aston Villa si juegan; después, el interés del partido y su hora.
+El modelo se elige al azar entre las camisetas de ese equipo. No hay historial entre días,
+por lo que una camiseta puede repetirse.
+
+En modo `ambos` se aprovechan también los eventos de fútbol de la agenda, aunque no aparezcan
+en el plan principal. En modo `camiseta` se usa la API como antes. Si falla una fuente, se intenta
+aprovechar la otra; si no hay partidos disponibles, se conserva la elección al azar y el aviso de error.
+Se mantiene `FOOTBALL_API_KEY`: no necesitas cambiar los secretos de GitHub.
+
+Las 64 prendas siguen intactas. `data/alias_camisetas.json` relaciona nombres como «Sporting Lisboa»
+y «Sporting CP», o «FC Porto» y «Porto», sin confundir clubes distintos como Celtic y Boston Celtics.
+No se asignan a otro club los nombres ambiguos «Casablanca» u «Orlando» sin confirmación.
+
+Hay 67 pruebas correctas, incluidas asociación, alias, alternativas, partidos cancelados o antiguos,
+y fallos de fuentes. La prueba ficticia está disponible sin credenciales ni envío:
+
+```powershell
+python -m resumen --modo ambos --sin-conexion --salida vista_previa
+```
+
+Para probarlo por correo desde GitHub: Actions → Resumen deportivo diario → Run workflow → `ambos`.
+El horario diario permanece a las 08:30 de Madrid.
+
+---
+
 ## Mejoras funcionales: segunda tanda
 
 La agenda respeta tu disponibilidad desde las 06:30 hasta las 00:00, ampliando las noches de

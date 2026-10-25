@@ -11,6 +11,7 @@ from .correo import ErrorCorreo, enviar_informe
 from .ejecucion import ejecutar
 from .eventos import recomendar_eventos
 from .informe import generar_informe, guardar_informe
+from .seleccion_camisetas import recomendar_camisetas
 
 def demostracion(modo):
     ahora = datetime(2026, 10, 25, 9, tzinfo=MADRID_TZ)
@@ -18,7 +19,9 @@ def demostracion(modo):
               'eventos': None, 'errores': {}, 'demostracion': True}
     if modo in ('ambos', 'camiseta'):
         matches = [{'home': 'Equipo de ejemplo', 'away': 'Rival de ejemplo',
-                    'hora': ahora.replace(hour=18), 'competition': 'Competición ficticia'}]
+                    'hora': ahora.replace(hour=18), 'competition': 'Competición ficticia'},
+                   {'home':'At. Madrid', 'away':'Real Madrid', 'hora':ahora.replace(hour=21),
+                    'competition':'LaLiga EA Sports (ejemplo ficticio)'}]
         shirt, matches = seleccionar_camiseta(cargar_coleccion(), matches, random.Random(42))
         result['camiseta'] = {'fecha': result['fecha'], 'camiseta': shirt, 'partidos': matches}
     if modo in ('ambos', 'eventos'):
@@ -29,6 +32,9 @@ def demostracion(modo):
                       ('18:00', 'LaLiga EA Sports', 'FC Barcelona', 'Valencia'),
                       ('18:30', 'Champions League', 'Liverpool', 'Arsenal')]]
         result['eventos'] = {'fecha': result['fecha'], 'extraidos': len(events), **recomendar_eventos(events, ahora=ahora)}
+    if result['camiseta'] is not None:
+        result['camiseta'].update(recomendar_camisetas(cargar_coleccion(), result['camiseta']['partidos'],
+                                                     [], ahora, random.Random(42)))
     return result
 
 def main():

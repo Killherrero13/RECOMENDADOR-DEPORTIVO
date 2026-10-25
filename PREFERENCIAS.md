@@ -2,12 +2,27 @@
 
 Confirmadas por el usuario el 25/10/2026. Este documento distingue lo acordado de lo ya implementado.
 
-## Camisetas — pendiente de la siguiente tanda
+## Camisetas — implementado en la tanda 3
 
 Mostrar una camiseta vinculada a un evento del equipo cuando exista una candidata en la colección,
 y una alternativa al azar. Si no hay candidata vinculada, mostrar solo la alternativa al azar.
 Se adopta la opción de mostrar ambas cuando sea posible, de entre las opciones indicadas por el usuario.
 No hay restricción de repeticiones ni historial solicitado en esta primera mejora.
+
+- Se cruzan los partidos de hoy de football-data con los eventos de fútbol disponibles en la agenda,
+  aunque no superen el umbral del plan deportivo. En modo `camiseta` solo se consulta football-data.
+- Se priorizan camisetas de Atlético y Aston Villa si juegan; entre las candidatas se elige por
+  puntuación del evento y después por hora. Con varias camisetas del equipo, el modelo se elige al azar.
+- La alternativa se elige de otro equipo cuando hay prendas disponibles; si solo hay un equipo,
+  puede ser otro modelo. Si solo hay una prenda, no se duplica.
+- Solo se usan partidos de la fecha de Madrid de hoy, no los de mañana. Se mantiene el corte
+  de dos horas desde el inicio y se descartan cancelados, aplazados o suspendidos cuando la API lo informa.
+- Una caída de la API no impide aprovechar la agenda o mostrar una camiseta al azar. Se mantiene
+  el aviso del fallo y el estado de error de la ejecución.
+- Los alias específicos de la colección están en `data/alias_camisetas.json`; no se hacen
+  coincidencias aproximadas por subcadenas. Nombres ambiguos como «Casablanca» u «Orlando» no se
+  relacionan automáticamente con un club de nombre más largo; sus camisetas siguen entrando en el azar.
+- No se ha eliminado la API ni su secreto: aún complementa la cobertura de la agenda y permite el modo camiseta.
 
 ## Horario y agenda — implementado en la tanda 2
 
@@ -55,5 +70,6 @@ No hay restricción de repeticiones ni historial solicitado en esta primera mejo
 - Las ocho alternativas se eligen por puntuación, con hora como desempate.
 
 La tanda 2 añade selección de agenda por interés, duraciones por deporte y disponibilidad con fechas.
-Pendiente después: camisetas, ajuste de favoritos/deportes/canales, explicación breve de las
+La tanda 3 añade las dos opciones de camiseta y el partido asociado.
+Pendiente después: ajuste de favoritos/deportes/canales, explicación breve de las
 recomendaciones y evaluación de retirar football-data.

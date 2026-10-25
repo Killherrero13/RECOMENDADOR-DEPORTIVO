@@ -113,4 +113,5 @@ def generar_resultado_eventos(ahora=None):
     result = recomendar_eventos(events, ahora=ahora, fecha=fecha)
     logger.info('Eventos filtrados: %s; seleccionados: %s; alternativas: %s.',
                 len(result['filtrados']), len(result['seleccionados']), len(result['alternativas']))
-    return {'fecha': fecha.isoformat(), 'extraidos': len(events), 'avisos': avisos, **result}
+    return {'fecha': fecha.isoformat(), 'extraidos': len(events), 'avisos': avisos,
+            'eventos_disponibles': events, **result}

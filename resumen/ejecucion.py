@@ -2,7 +2,8 @@
 import logging
 from datetime import datetime
 
-from .camisetas import ErrorCamisetas, generar_resultado
+from .camisetas import ErrorCamisetas, generar_resultado, cargar_coleccion
+from .seleccion_camisetas import recomendar_camisetas
 from .config import ErrorConfiguracion, MADRID_TZ, obtener_api_key
 from .fuente_eventos import ErrorEventos, generar_resultado_eventos
 
@@ -30,4 +31,18 @@ def ejecutar(modo='ambos', ahora=None):
             result['errores'][nombre] = mensaje
             # No se muestra el detalle: podría contener credenciales.
             logger.error('%s (%s).', mensaje, type(error).__name__)
+    if modo in ('ambos', 'camiseta'):
+        try:
+            base = result['camiseta'] or {'fecha':result['fecha'], 'partidos':[]}
+            agenda = result['eventos'] or {}
+            eventos = agenda.get('eventos_disponibles', agenda.get('filtrados', []))
+            seleccion = recomendar_camisetas(cargar_coleccion(), base['partidos'], eventos,
+                                             ahora.astimezone(MADRID_TZ))
+            result['camiseta'] = {**base, **seleccion}
+            if 'camiseta' in result['errores']:
+                result['camiseta']['motivo'] += ' La consulta de partidos falló; la cobertura puede ser incompleta.'
+        except ErrorCamisetas as error:
+            result['camiseta'] = None
+            result['errores']['camiseta'] = str(error)
+            logger.error('camiseta: %s', error)
     return result

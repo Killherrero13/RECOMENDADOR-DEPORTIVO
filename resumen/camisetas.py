@@ -52,7 +52,8 @@ def interpretar_partidos(payload, fecha):
                                         match['competition']['name'])
             if not all(isinstance(v, str) and v.strip() for v in (home, away, competition)):
                 raise ValueError
-            result.append({'home': home, 'away': away, 'hora': local, 'competition': competition})
+            result.append({'home': home, 'away': away, 'hora': local, 'competition': competition,
+                           'status': match.get('status')})
         except (KeyError, TypeError, ValueError, AttributeError):
             raise ErrorCamisetas('La API devolvió un partido con datos incompletos o inválidos.') from None
     return result

@@ -53,7 +53,7 @@ jobs:
           SMTP_USERNAME: ${{ secrets.SMTP_USERNAME }}
           SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
           EMAIL_TO: ${{ secrets.EMAIL_TO }}
-        run: python -m resumen --modo "$MODO" --enviar --salida vista_previa
+        run: python -m resumen --modo "$MODO" --nba --enviar --salida vista_previa
       - name: Indicar resultado
         if: always()
         env:

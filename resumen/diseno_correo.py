@@ -124,6 +124,14 @@ def crear_html(asunto, secciones, resultado, todos):
     for titulo, lineas in secciones:
         if titulo in ('📺 Imprescindible','📺 Lo mejor del día') and events['plan'].get('imprescindible'):
             bloques.append(tarjeta_evento(events['plan']['imprescindible'], True))
+        elif titulo == '🏀 NBA en diferido · sin spoilers':
+            bloques.append('<h2 style="font-size:19px;margin:26px 0 14px;">🏀 NBA en diferido</h2><p style="font-size:12px;color:#61718a;">Sin marcadores, notas ni pistas sobre el desenlace. Orden alfabético.</p>')
+            for p in resultado['nba']['partidos']:
+                color = '#e6f3ec' if p['recomendacion'] == 'Ver completo' else '#fff5e6' if p['recomendacion'] == 'Resumen' else '#eaf0f6'
+                bloques.append(f'<div style="background:#ffffff;padding:16px;margin-bottom:10px;border:1px solid #dce5ef;border-radius:12px;">'
+                               f'{etiqueta(p["recomendacion"], color)}<p style="font-size:16px;line-height:1.5;margin:8px 0 0;">{texto(p["local"])} — {texto(p["visitante"])}</p></div>')
+            if not resultado['nba']['partidos']:
+                bloques.append('<p>No hay partidos finalizados y validados en esta consulta.</p>')
         elif titulo == 'Tu planning flexible':
             bloques.append('<h2 style="font-size:19px;margin:26px 0 14px;">Tu planning flexible</h2>')
             for b in events['planning']:

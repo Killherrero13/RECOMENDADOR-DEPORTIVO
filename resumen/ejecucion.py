@@ -2,6 +2,7 @@
 import logging
 from datetime import datetime
 
+from .nba import generar_nba, ErrorNBA
 from .camisetas import ErrorCamisetas, generar_resultado, cargar_coleccion
 from .seleccion_camisetas import recomendar_camisetas
 from .config import ErrorConfiguracion, MADRID_TZ, obtener_api_key
@@ -9,7 +10,7 @@ from .fuente_eventos import ErrorEventos, generar_resultado_eventos
 
 logger = logging.getLogger(__name__)
 
-def ejecutar(modo='ambos', ahora=None):
+def ejecutar(modo='ambos', ahora=None, incluir_nba=False):
     if modo not in ('ambos', 'camiseta', 'eventos'):
         raise ValueError('Modo desconocido.')
     ahora = ahora or datetime.now(MADRID_TZ)
@@ -45,4 +46,11 @@ def ejecutar(modo='ambos', ahora=None):
             result['camiseta'] = None
             result['errores']['camiseta'] = str(error)
             logger.error('camiseta: %s', error)
+    if incluir_nba and modo in ('ambos', 'eventos'):
+        try:
+            result['nba'] = generar_nba(ahora)
+        except ErrorNBA as error:
+            result['errores']['nba'] = str(error)
+        except Exception:
+            result['errores']['nba'] = 'Error inesperado en la consulta NBA; cobertura no disponible.'
     return result

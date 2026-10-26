@@ -42,6 +42,7 @@ def main():
     parser.add_argument('--modo', choices=['ambos', 'camiseta', 'eventos'], default='ambos')
     parser.add_argument('--sin-conexion', action='store_true', help='Ejemplo ficticio sin API ni credenciales.')
     parser.add_argument('--salida', type=Path, help='Carpeta donde guardar resumen.html y resumen.txt.')
+    parser.add_argument('--nba', action='store_true', help='Añade NBA en diferido sin spoilers (solo con conexión).')
     parser.add_argument('--enviar', action='store_true', help='Envía un correo mediante Gmail; sin esta opción no se envía nada.')
     args = parser.parse_args()
     logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
@@ -51,7 +52,7 @@ def main():
         except ErrorConfiguracion as error:
             logging.error('%s', error)
             return 1
-    result = demostracion(args.modo) if args.sin_conexion else ejecutar(args.modo)
+    result = demostracion(args.modo) if args.sin_conexion else ejecutar(args.modo, incluir_nba=args.nba)
     report = generar_informe(result)
     print(report['texto'])
     if args.salida:

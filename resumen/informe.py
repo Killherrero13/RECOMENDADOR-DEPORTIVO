@@ -79,6 +79,13 @@ def contenido(resultado):
         todos = sorted(events.get('filtrados', []), key=orden_inicio)
         sections.append((f'Todos los eventos filtrados ({len(todos)})', [linea_evento(e) for e in todos]
                          or ['No hay eventos que superen los filtros y la disponibilidad.']))
+    if resultado.get('nba') is not None:
+        nba = resultado['nba']
+        lineas = [f"{p['local']} — {p['visitante']} · {p['recomendacion']}" for p in nba['partidos']]
+        sections.append(('🏀 NBA en diferido · sin spoilers',
+                         lineas or ['No hay partidos finalizados y validados en esta consulta.']))
+        sections.append(('Cobertura NBA', [f"Ventana de inicio de partidos: {nba['ventana']}",
+                         f"Consultado: {nba['consultado']} · Fuente: {nba['fuente']}", *nba['avisos']]))
     return sections
 
 def describir_camiseta(item):

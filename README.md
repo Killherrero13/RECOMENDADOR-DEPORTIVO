@@ -591,3 +591,7 @@ Cuaderno independiente: `cuadernos/ScriptPartidosNBA_actualizado.ipynb`. No requ
 
 
 La NBA se presenta en un solo bloque naranja con cabecera azul oscuro, tarjetas naranjas y cobertura dentro del mismo bloque. El color es común a todos los partidos; la categoría se comunica por texto. No se muestran notas ni motivos que anticipen el desenlace.
+
+
+### Bloque visual de camisetas
+Una tarjeta independiente en morado y dorado agrupa recomendación por partido y elección al azar. Crema para la asociada al partido, lila para azar, ambas etiquetadas por texto. Si no existe partido asociado, solo se presenta elección al azar. Se conservan selección, API y detalles del partido.

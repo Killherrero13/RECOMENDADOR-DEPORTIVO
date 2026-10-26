@@ -116,13 +116,44 @@ def pagina(asunto, cuerpo):
             'Otros canales M+ pueden requerir un paquete diferente.</p>'
             '</div></body></html>')
 
+def bloque_camisetas(secciones, camiseta):
+    partes = [
+        '<div id="bloque-camisetas" style="margin:0 0 24px;border:2px solid #7660a7;border-radius:16px;overflow:hidden;background:#f5f0fb;">',
+        '<div style="background:#33234f;color:#ffffff;padding:22px;border-bottom:5px solid #d8bc72;">'
+        '<p style="margin:0 0 8px;font-size:11px;letter-spacing:2px;color:#e9d8ff;">DE TU COLECCIÓN</p>'
+        '<h2 style="font-size:23px;line-height:1.3;margin:0;">👕 Tu camiseta de hoy</h2>'
+        '<p style="font-size:12px;line-height:1.6;margin:10px 0 0;">Una elección para acompañar tu día de deporte.</p></div>'
+        '<div style="padding:16px;">'
+    ]
+    for titulo, lineas in secciones:
+        if not titulo.startswith('👕'):
+            continue
+        asociada = titulo == '👕 Camiseta recomendada' and bool(camiseta.get('partido_asociado'))
+        label = '★ RECOMENDADA POR PARTIDO' if asociada else '🎲 ELECCIÓN AL AZAR'
+        color = '#fff6df' if asociada else '#eee6f8'
+        borde = '#b58b32' if asociada else '#9477bb'
+        partes.append(f'<div class="tarjeta-camiseta" style="background:{color};color:#33234f;padding:18px;margin-bottom:12px;border:1px solid {borde};border-left:5px solid {borde};border-radius:10px;">'
+                      f'{etiqueta(label, "#33234f", "#ffffff")}')
+        for indice, linea in enumerate(lineas):
+            partes.append(f'<p style="font-size:{20 if indice == 0 else 13}px;line-height:1.6;margin:10px 0 0;'
+                          f'{"font-weight:bold;" if indice == 0 else ""}">{texto(linea)}</p>')
+        partes.append('</div>')
+    partes.append('</div></div>')
+    return ''.join(partes)
+
+
 def crear_html(asunto, secciones, resultado, todos):
     events = resultado['eventos']
     bloques = []
     if events is not None:
         bloques.append(f'<p style="margin:0 0 22px;">{etiqueta(str(len(events.get("seleccionados", []))) + " en tu plan")}{etiqueta(str(len(todos)) + " eventos filtrados")}{etiqueta("EUROPE / MADRID")}</p>')
+    camisetas_mostradas = False
     for titulo, lineas in secciones:
-        if titulo in ('📺 Imprescindible','📺 Lo mejor del día') and events['plan'].get('imprescindible'):
+        if titulo.startswith('👕'):
+            if not camisetas_mostradas:
+                bloques.append(bloque_camisetas(secciones, resultado['camiseta']))
+                camisetas_mostradas = True
+        elif titulo in ('📺 Imprescindible','📺 Lo mejor del día') and events['plan'].get('imprescindible'):
             bloques.append(tarjeta_evento(events['plan']['imprescindible'], True))
         elif titulo == '🏀 NBA en diferido · sin spoilers':
             nba = resultado['nba']

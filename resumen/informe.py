@@ -50,7 +50,7 @@ def contenido(resultado):
             lines.append('Elección al azar, sin partido asociado en los datos disponibles.')
         if shirt.get('motivo'):
             lines.append(shirt['motivo'])
-        sections.append(('👕 Camiseta recomendada', lines))
+        sections.append(('👕 Camiseta recomendada' if match else '👕 Camiseta al azar', lines))
         if shirt.get('recomendada') is not None and shirt.get('aleatoria') is not None:
             sections.append(('👕 Alternativa al azar', [describir_camiseta(shirt['aleatoria'])]))
         # Con agenda disponible, no repetimos la lista de football-data.

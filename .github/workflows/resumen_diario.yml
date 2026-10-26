@@ -3,7 +3,7 @@ run-name: Resumen deportivo · ${{ inputs.modo || 'ambos' }}
 
 on:
   schedule:
-    - cron: '30 8 * * *'
+    - cron: '0 5 * * *'
       timezone: Europe/Madrid
   workflow_dispatch:
     inputs:
@@ -61,4 +61,4 @@ jobs:
         run: |
           echo '### Resumen deportivo' >> "$GITHUB_STEP_SUMMARY"
           echo "Estado del paso de envío: $RESULTADO_ENVIO" >> "$GITHUB_STEP_SUMMARY"
-          echo 'Horario diario: 08:30 Europe/Madrid. Un fallo parcial también marca error.' >> "$GITHUB_STEP_SUMMARY"
+          echo 'Horario diario: 05:00 Europe/Madrid. Un fallo parcial también marca error.' >> "$GITHUB_STEP_SUMMARY"

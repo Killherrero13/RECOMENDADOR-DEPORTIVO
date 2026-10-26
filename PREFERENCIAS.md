@@ -39,7 +39,9 @@ No hay restricción de repeticiones ni historial solicitado en esta primera mejo
   de cuatro eventos y hasta 30 minutos de solapamiento. No promete el óptimo global de puntuación.
 - Duraciones estimadas: fútbol 120 min, baloncesto 120 min, NBA 150 min, tenis 150 min,
   automovilismo 180 min, balonmano 90 min y otros 120 min.
-- La programación de envío se mantiene a las 08:30 Europe/Madrid; la vista de eventos pasados
+- La programación se adelanta a las 05:00 Europe/Madrid, por decisión del usuario el 26/10/2026,
+  para dar margen a los retrasos de GitHub y tener el resumen al despertar. Se mantiene el lanzamiento manual como respaldo;
+  la vista de eventos pasados
   se tiene en cuenta. Se excluyen los terminados; los que aún dejan 30 minutos se indican «En curso».
 
 ## Intereses — pendientes de ajuste específico

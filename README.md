@@ -72,7 +72,7 @@ python -m resumen --modo ambos --sin-conexion --salida vista_previa
 ```
 
 Para probarlo por correo desde GitHub: Actions → Resumen deportivo diario → Run workflow → `ambos`.
-El horario diario permanece a las 08:30 de Madrid.
+El horario diario se ha adelantado a las 05:00 de Madrid para disponer del resumen al despertar.
 
 ---
 
@@ -111,7 +111,7 @@ las alternativas se ordenan por puntuación antes de limitarse a ocho.
 
 Las preferencias indicadas por el usuario y el estado de cada mejora están en `PREFERENCIAS.md`.
 El horario de disponibilidad, los nuevos pesos deportivos, los canales concretos y la recomendación
-de camiseta por evento todavía no se han aplicado. El envío diario sigue a las 08:30.
+de camiseta por evento todavía no se habían aplicado en esta tanda. El horario diario actual es las 05:00.
 
 Hay 49 pruebas. Las siete pruebas de referencia mantienen congelado el comportamiento original;
 las pruebas del recomendador actual comprueban ya las correcciones aprobadas, sin exigir que
@@ -133,9 +133,11 @@ correo real con la nueva lógica. No es necesario cambiar secretos ni la configu
 
 Repositorio: https://github.com/Killherrero13/RECOMENDADOR-DEPORTIVO
 
-El workflow «Resumen deportivo diario» ejecuta ambos procesos a las **08:30 Europe/Madrid**.
+El workflow «Resumen deportivo diario» programa ambos procesos a las **05:00 Europe/Madrid**.
 La zona horaria del propio schedule contempla invierno y verano; GitHub puede iniciar
 la ejecución con retraso. El correo llegará después de completar las consultas y el envío.
+Se adelantó desde las 08:30 el 26/10/2026 para dejar margen antes de despertarse;
+si el correo no ha llegado, sigue disponible la ejecución manual desde el móvil.
 El workflow debe estar en la rama predeterminada del repositorio para programarse.
 
 ### Configura estos cuatro secretos

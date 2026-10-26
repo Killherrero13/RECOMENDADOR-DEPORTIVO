@@ -6,6 +6,7 @@ import re
 import unicodedata
 from .config import MADRID_TZ
 from .horarios import intervalo, orden_inicio, preparar_horario
+from .categorias import categoria_tenis, bonus_categoria_tenis
 
 from .preferencias_eventos import (
     EVENT_DURATION,
@@ -196,6 +197,12 @@ TEAM_ALIASES = {
     'paris saint germain': 'psg', 'paris saint germain fc': 'psg',
     'inter': 'inter milan', 'internazionale': 'inter milan',
     'milan': 'ac milan', 'napoles': 'napoli',
+    'o lyonnais': 'lyon', 'olympique lyonnais': 'lyon', 'olympique lyon': 'lyon',
+    'o marseille': 'olympique marsella', 'olympique de marseille': 'olympique marsella',
+    'newcastle utd': 'newcastle united', 'newcastle united fc': 'newcastle united',
+    'sl benfica': 'benfica', 'sport lisboa e benfica': 'benfica',
+    'fc porto': 'porto', 'sporting cp': 'sporting lisboa',
+    'sevilla': 'sevilla fc',
 }
 
 def team_matches(team, name):
@@ -283,6 +290,10 @@ def calculate_score(e):
         # Cup competitions (national cups)
         elif any(x in comp.lower() for x in ["fa cup", "copa del rey", "emirates", "copa de francia", "coupe de france", "coppa"]):
             score += 2
+        else:
+            # Competiciones admitidas sin una regla específica: base de las ligas secundarias.
+            # No se interpreta un dato ausente como interés cero.
+            score += 1.5
 
         if "atletico madrid" in local or "atletico madrid" in visitante:
             score += 3.5
@@ -341,23 +352,13 @@ def calculate_score(e):
         # Finales y torneos grandes
         score += knockout_bonus(e)
         score += stakes_bonus(e)
-        if "grand slam" in comp:
-            score += 4
-        elif "masters 1000" in comp:
-            score += 3
-        elif "atp 500" in comp:
-            score += 2
-        elif "atp 250" in comp:
-            score += 1
+        score += bonus_categoria_tenis(e)
 
         affinity = tennis_affinity_bonus(e)
 
         if affinity > 0:
             score += affinity
-        else:
-            # Penalización si no es un partido realmente top
-            if score < 6:
-                score -= 2
+        # No tener bonus de afinidad significa neutralidad, no una penalización extra.
 
 
     elif deporte == "Automovilismo":
@@ -503,7 +504,9 @@ def recomendar_eventos(events, ahora=None, fecha=None):
             continue
     
         if deporte == "Tenis":
-            if any(p in local for p in TOP_ATP_20) or any(p in visitante for p in TOP_ATP_20):
+            categoria, _ = categoria_tenis(e)
+            if (any(p in local for p in TOP_ATP_20) or any(p in visitante for p in TOP_ATP_20)
+                or (categoria is not None and knockout_bonus(e) >= 2)):
                 filtered_events.append(e)
     for e in filtered_events:
         e['score'] = calculate_score(e)
@@ -511,6 +514,9 @@ def recomendar_eventos(events, ahora=None, fecha=None):
         e['ajuste_horario'] = -(1.0 if e['madrugada'] else 0) - (0.5 if e['vision_parcial'] else 0)
         e['score'] += e['ajuste_horario']
         e['channel'] = select_preferred_channel(e['canales'])
+        if e['deporte'] == 'Tenis':
+            e['categoria_reconocida'], e['origen_categoria'] = categoria_tenis(e)
+            e['avisos_datos'] = [] if e['categoria_reconocida'] else ['Categoría sin identificar; no se resta por falta de datos.']
     filtered_events.sort(key=orden_inicio)
     daily_plan, selected_events = build_daily_plan(filtered_events)
     visible_plan_keys = {event_key(e) for e in daily_plan.values()}

@@ -23,6 +23,13 @@ def canales_html(evento):
             badges.append(etiqueta(canal))
     return ' '.join(badges)
 
+def categoria_html(evento):
+    if evento.get('categoria_reconocida'):
+        return etiqueta(evento['categoria_reconocida'])
+    if evento.get('deporte') == 'Tenis' and 'origen_categoria' in evento:
+        return etiqueta('Categoría por confirmar', '#fff1db', '#744915')
+    return ''
+
 def tarjeta_evento(evento, destacado=False, franja=''):
     tinta = '#ffffff' if destacado else '#172b43'
     secundaria = '#cbd9e8' if destacado else '#60728b'
@@ -51,7 +58,7 @@ def tarjeta_evento(evento, destacado=False, franja=''):
             f'<div style="font-size:12px;color:{secundaria};margin-bottom:7px;">{icono} {texto(evento["deporte"])}</div>'
             f'<div style="font-size:20px;font-weight:bold;line-height:1.35;">{texto(titulo)}</div>'
             f'<div style="font-size:13px;line-height:1.5;color:{secundaria};margin-top:7px;">{texto(evento["competicion"])}</div>'
-            f'<div style="margin-top:10px;">{badge}</div></td></tr></table>'
+            f'<div style="margin-top:10px;">{categoria_html(evento)} {badge}</div></td></tr></table>'
             f'<p style="color:{tinta};font-size:13px;line-height:1.6;margin:16px 0 0;padding-top:12px;border-top:1px solid {"#3c536b" if destacado else "#edf1f5"};">'
             f'<strong>TV</strong><br>{canales_html(evento)}</p>'
             + (f'<p style="font-size:12px;line-height:1.6;color:{secundaria};margin:8px 0 0;">{texto(" · ".join([s for s in [fin, *estado] if s]))}</p>' if fin or estado else '')
@@ -68,7 +75,7 @@ def listado_completo(eventos):
                      f'<strong style="font-size:14px;">{texto(nombre)}</strong><br>'
                      f'<span style="font-size:12px;color:#52647a;">{texto(e["deporte"])} · {texto(e["competicion"])}</span><br>'
                      f'<span style="font-size:12px;line-height:1.6;">{canales_html(e)}</span><br>'
-                     f'<span style="font-size:11px;color:#1b6948;">{e["score"]:.1f} puntos</span>'
+                     f'<span style="font-size:11px;color:#1b6948;">{e["score"]:.1f} puntos</span> {categoria_html(e)}'
                      + (f'<br><span style="font-size:11px;color:#8a5217;">Visionado parcial hasta {e["fin_vision"]:%H:%M}</span>' if e.get('vision_parcial') else '')
                      + ('<br><span style="font-size:11px;color:#8a5217;">En curso</span>' if e.get('en_curso') else '')
                      + '</td></tr>')

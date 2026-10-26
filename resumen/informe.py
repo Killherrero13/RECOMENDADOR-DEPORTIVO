@@ -9,6 +9,10 @@ def linea_evento(event):
     hora = event['inicio'].strftime('%d/%m %H:%M') if 'inicio' in event else event['hora']
     canales = ' · '.join(canal_texto(c) for c in event.get('canales') or [event.get('channel') or 'Canal no indicado'])
     texto = f"{hora} · {title} · {canales} · {event['score']:.1f} puntos"
+    if event.get('categoria_reconocida'):
+        texto += f" · Categoría: {event['categoria_reconocida']}"
+    elif event.get('deporte') == 'Tenis' and 'origen_categoria' in event:
+        texto += ' · Categoría por confirmar (sin penalización por datos ausentes)'
     if 'fin_estimado' in event:
         texto += f" · Fin estimado: {event['fin_estimado']:%d/%m %H:%M}"
     if event.get('en_curso'):

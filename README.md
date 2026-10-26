@@ -1,5 +1,35 @@
 # Resumen deportivo personal
 
+## Evolución del recomendador · fase 1: información incompleta
+
+Se reconocen categorías de tenis por texto explícito o catálogo verificado de torneos de 2026,
+con fuente en el calendario ATP. El catálogo incluye los cuatro Grand Slam, los nueve Masters 1000,
+los dieciséis ATP 500 y tres ATP 250. Las categorías inferidas por nombre no se reutilizan
+automáticamente en otras temporadas; hay que revisar el catálogo. Una categoría explícita
+en la fuente prevalece sobre el catálogo. WTA, Challenger, ITF y categorías juveniles no se
+confunden con el circuito ATP principal.
+
+Un jugador sin bonus personal queda neutral: se elimina la resta adicional de dos puntos.
+Una semifinal o final de torneo reconocido puede entrar aunque los jugadores no estén en la
+lista personal. No se amplían por esta vía todas las primeras rondas.
+Las competiciones de fútbol admitidas que no tenían regla de puntuación reciben una base neutral
+de 1,5 puntos, equivalente a la de las otras ligas secundarias. No se cambian los umbrales del plan,
+las puntuaciones de canales, los pesos de favoritos ni se convierte todavía la escala a notas /10.
+Se incorporan alias de Lyon, Marsella, Newcastle, Benfica, Porto, Sporting y Sevilla.
+
+El correo muestra etiquetas ATP 500, ATP 250, Masters 1000 o Grand Slam en los eventos reconocidos;
+si falta la categoría, indica «Categoría por confirmar». Los modelos y prendas de camisetas siguen intactos.
+
+80 pruebas: categorías por alias y temporada, prevalencia del dato explícito, neutralidad sin datos,
+finales con jugadores fuera de lista, base de ligas incompletas, alias y metadatos en el correo/adjunto.
+Horario mantenido: 05:00 Europe/Madrid. API football-data y ejecución manual sin cambios.
+
+Fuentes:
+- https://www.atptour.com/en/news/what-is-the-2026-atp-tour-calendar/
+- https://www.atptour.com/-/media/files/media-guide/2026/2026-atp-media-guide-full-updated.pdf
+
+---
+
 ## Tus plataformas destacadas
 
 DAZN y sus canales aparecen con etiqueta amarilla y ✓; el canal general Movistar Plus+,

@@ -78,3 +78,12 @@ La tanda 3 añade las dos opciones de camiseta y el partido asociado.
 Pendiente después: ajuste de favoritos/deportes/puntuación de canales y explicación breve de las
 recomendaciones. Se mantiene football-data por decisión expresa del usuario: complementa la agenda
 para vincular las camisetas a los partidos del día. No se plantea retirar la API ni su secreto.
+
+## Evolución del recomendador: fase 1 implementada
+
+Se corrigen categorías de tenis ausentes y alias; las competiciones de fútbol admitidas sin regla
+reciben base neutral y un jugador sin afinidad registrada deja de tener penalización adicional.
+Semifinales y finales de torneos ATP reconocidos pueden entrar aunque no haya jugadores de la lista.
+No se copian las notas del evaluador externo: se comparan reglas con los mismos ejemplos y casos de control.
+Se mantienen de momento los puntos internos y los umbrales. La escala /10 y los papeles de
+aperitivo, fondo y seguimiento se harán en fases posteriores, tras validar esta primera fase.

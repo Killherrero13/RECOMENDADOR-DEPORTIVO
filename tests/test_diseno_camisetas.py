@@ -28,3 +28,21 @@ class DisenoCamisetasTests(unittest.TestCase):
         self.assertIn('ELECCIÓN AL AZAR',bloque.get_text())
         self.assertIsNone(soup.find('script'))
         self.assertIn('Camiseta al azar',informe['texto'])
+
+    def test_orden_del_correo_y_planning_agrupado(self):
+        r = demostracion('ambos')
+        r['nba'] = {'partidos':[], 'avisos':[], 'ventana':'Ejemplo', 'consultado':'Ejemplo', 'fuente':'Ficticia'}
+        informe = generar_informe(r)
+        html = informe['html']
+        posiciones = [html.index(x) for x in ['id="bloque-camisetas"','id="bloque-nba"','TU IMPRESCINDIBLE','id="bloque-planning"','id="todos-eventos"']]
+        self.assertEqual(posiciones,sorted(posiciones))
+        soup = BeautifulSoup(html,'html.parser')
+        self.assertEqual(len(soup.select('#bloque-planning')),1)
+        self.assertNotIn('Tu plan del día',soup.get_text())
+        self.assertLess(informe['texto'].index('NBA en diferido'),informe['texto'].index('Imprescindible'))
+
+    def test_planning_vacio_se_muestra_sin_error(self):
+        r = demostracion('eventos')
+        r['eventos'].update(plan={},planning=[],seleccionados=[],alternativas=[],filtrados=[])
+        soup = BeautifulSoup(generar_informe(r)['html'],'html.parser')
+        self.assertIn('deja el día libre',soup.find(id='bloque-planning').get_text())

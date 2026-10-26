@@ -66,8 +66,7 @@ def contenido(resultado):
         titulo = ('📺 Día tranquilo' if not imprescindible else
                   '📺 Lo mejor del día' if imprescindible['score'] < 8 else '📺 Imprescindible')
         sections.append((titulo, [linea_evento(imprescindible)] if imprescindible else ['Hoy no hay citas que alcancen el umbral del plan; puedes dejar el día libre.']))
-        if events.get('planning'):
-            sections.append(('Tu planning flexible', lineas_planning(events['planning']) + ['Los huecos quedan libres. Las opciones son voluntarias y los finales estimados; no se presupone cómo irá ningún partido.']))
+        sections.append(('Tu planning flexible', lineas_planning(events.get('planning', [])) + ['Los huecos quedan libres. Las opciones son voluntarias y los finales estimados; no se presupone cómo irá ningún partido.']))
         agenda = [f'{franja.capitalize()}: {linea_evento(e)}' for franja, e in plan.items() if franja != 'imprescindible']
         sections.append(('Plan principal del día', agenda or ['Sin otros eventos en el plan.']))
         sections.append(('Alternativas', [linea_evento(e) for e in events['alternativas']] or ['Sin alternativas que alcancen el umbral.']))
@@ -86,7 +85,17 @@ def contenido(resultado):
                          lineas or ['No hay partidos finalizados y validados en esta consulta.']))
         sections.append(('Cobertura NBA', [f"Ventana de inicio de partidos: {nba['ventana']}",
                          f"Consultado: {nba['consultado']} · Fuente: {nba['fuente']}", *nba['avisos']]))
-    return sections
+    def orden(seccion):
+        titulo = seccion[0]
+        if titulo.startswith('👕'): return 10
+        if titulo.startswith('🏀') or titulo == 'Cobertura NBA': return 20
+        if titulo.startswith('📺'): return 30
+        if titulo in ('Tu planning flexible', 'Plan principal del día', 'Alternativas', 'Cobertura de la agenda'): return 40
+        if titulo == 'Información': return 50
+        if titulo.startswith('Todos los eventos filtrados'): return 60
+        if titulo == '⚽ Partidos del día': return 40
+        return 0
+    return sorted(sections, key=orden)
 
 def describir_camiseta(item):
     description = item['Equipo']

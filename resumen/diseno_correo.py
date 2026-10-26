@@ -174,27 +174,43 @@ def crear_html(asunto, secciones, resultado, todos):
         elif titulo == 'Cobertura NBA':
             continue  # La cobertura ya figura dentro del bloque NBA.
         elif titulo == 'Tu planning flexible':
-            bloques.append('<h2 style="font-size:19px;margin:26px 0 14px;">Tu planning flexible</h2>')
-            for b in events['planning']:
-                color = '#e6f3ec' if b['tipo'] == 'Cita principal' else '#fff5e6'
-                bloques.append(f'<div style="margin-bottom:10px;padding:16px;border-left:4px solid #1b6948;background:{color};border-radius:8px;">'
-                               f'<strong>{texto(b["desde"])}–{texto(b["hasta"])}</strong> · {texto(b["tipo"])}<br>'
-                               f'<strong>{texto(b["evento"])}</strong><p style="font-size:13px;line-height:1.6;margin:8px 0 0;">{texto(b["detalle"])}</p></div>')
-            bloques.append('<p style="font-size:12px;color:#61718a;">Los huecos quedan libres. Opciones voluntarias y finales estimados.</p>')
-        elif titulo == 'Plan principal del día'  and events['plan']:
-            bloques.append('<h2 style="font-size:19px;margin:26px 0 14px;">Tu plan del día</h2>')
-            for franja, e in events['plan'].items():
-                if franja != 'imprescindible':bloques.append(tarjeta_evento(e,franja=franja))
-            if len(events['plan']) == 1:bloques.append('<p style="color:#64748b;">Sin otros eventos compatibles en el plan.</p>')
-        elif titulo == 'Alternativas' and events['alternativas']:
-            bloques.append('<h2 style="font-size:19px;margin:26px 0 14px;">Otras buenas opciones</h2>')
-            bloques.extend(tarjeta_evento(e) for e in events['alternativas'])
+            bloques.append('<div id="bloque-planning" style="margin:26px 0;border:2px solid #287b79;border-radius:16px;overflow:hidden;background:#f0f8f7;">'
+                           '<div style="padding:22px;background:#153e43;color:#ffffff;border-bottom:5px solid #7bd3bc;">'
+                           '<p style="font-size:11px;letter-spacing:2px;margin:0 0 8px;color:#b5e8dc;">TU TIEMPO, A TU RITMO</p>'
+                           '<h2 style="font-size:23px;margin:0;">Tu planning diario</h2>'
+                           '<p style="font-size:12px;line-height:1.6;margin:10px 0 0;">Citas principales y opciones voluntarias, en orden de visionado.</p></div>'
+                           '<div style="padding:16px;">')
+            for b in events.get('planning', []):
+                principal = b['tipo'] == 'Cita principal'
+                color = '#ffffff' if principal else '#e0f1ec'
+                bloques.append('<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="table-layout:fixed;margin-bottom:12px;">'
+                               f'<tr><td width="68" valign="top" style="padding:16px 10px 16px 0;color:#153e43;font-size:14px;"><strong>{texto(b["desde"])}</strong>'
+                               f'<br><span style="font-size:11px;">hasta<br>{texto(b["hasta"])}</span></td>'
+                               f'<td valign="top" style="padding:16px;background:{color};border-left:4px solid #287b79;border-radius:0 10px 10px 0;overflow-wrap:anywhere;">'
+                               f'{etiqueta(b["tipo"], "#153e43" if principal else "#bde3d7", "#ffffff" if principal else "#153e43")}'
+                               f'<p style="font-size:16px;line-height:1.5;margin:10px 0 0;color:#153e43;"><strong>{texto(b["evento"])}</strong></p>'
+                               f'<p style="font-size:12px;line-height:1.65;margin:8px 0 0;color:#375a5d;">{texto(b["detalle"])}</p></td></tr></table>')
+            if not events.get('planning'):
+                bloques.append('<p style="color:#153e43;">Sin citas que reservar: deja el día libre.</p>')
+            bloques.append('<p style="font-size:12px;color:#375a5d;line-height:1.6;">Los huecos quedan libres. Opciones voluntarias y finales estimados.</p>')
+            alternativas = events.get('alternativas', [])
+            if alternativas:
+                bloques.append('<div style="border-top:1px solid #a3c8c0;margin-top:18px;padding-top:14px;"><h3 style="font-size:15px;color:#153e43;margin:0 0 12px;">Alternativas para cambiar tu plan</h3>'
+                               '<p style="font-size:12px;color:#375a5d;">No se añaden a la línea temporal. Puedes elegirlas en lugar de otra cita.</p>')
+                bloques.extend(tarjeta_evento(e) for e in alternativas)
+                bloques.append('</div>')
+            for aviso in events.get('avisos', []):
+                bloques.append(f'<p style="font-size:12px;color:#375a5d;line-height:1.6;">{texto(aviso)}</p>')
+            bloques.append('</div></div>')
+        elif titulo in ('Plan principal del día', 'Alternativas', 'Información', 'Cobertura de la agenda'):
+            continue  # Contenido agrupado en planning o listado completo.
         elif titulo.startswith('Todos los eventos filtrados'):
             bloques.append(f'<div style="margin:26px 0;padding:20px;border-radius:14px;background:#e0eee7;"><h2 style="font-size:19px;margin:0 0 10px;">¿Quieres más opciones?</h2>'
                            f'<a href="#todos-eventos" style="display:inline-block;background:#1b6948;color:#ffffff;text-decoration:none;padding:13px 16px;border-radius:8px;font-size:14px;font-weight:bold;">Ver los {len(todos)} eventos filtrados ↓</a>'
                            '<p style="font-size:12px;line-height:1.6;margin:12px 0 0;">Listado completo a continuación, también adjunto como todos_eventos.html.</p></div>'
                            f'<div id="todos-eventos" style="padding:20px;background:#ffffff;border:1px solid #dce5ef;border-radius:14px;"><h2 style="font-size:19px;margin:0 0 8px;">{texto(titulo)}</h2>'
                            '<p style="font-size:12px;color:#61718a;line-height:1.6;">Orden cronológico. Incluye todos los que pasan tus filtros y disponibilidad, aunque su puntuación no alcance el plan.</p>'
+                           + ''.join(f'<p style="font-size:12px;color:#61718a;line-height:1.6;">{texto(l)}</p>' for t, ls in secciones if t == 'Información' for l in ls)
                            + listado_completo(todos) + '</div>')
         else:
             jersey = titulo.startswith('👕')

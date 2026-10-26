@@ -595,3 +595,6 @@ La NBA se presenta en un solo bloque naranja con cabecera azul oscuro, tarjetas 
 
 ### Bloque visual de camisetas
 Una tarjeta independiente en morado y dorado agrupa recomendación por partido y elección al azar. Crema para la asociada al partido, lila para azar, ambas etiquetadas por texto. Si no existe partido asociado, solo se presenta elección al azar. Se conservan selección, API y detalles del partido.
+
+
+Orden del correo: camisetas, NBA, cita destacada, planning diario y todos los eventos filtrados. El planning se agrupa en un bloque verde petróleo con línea temporal y alternativas dentro del mismo bloque; la información general queda dentro del listado final. Los avisos de ejecución y demostración se mantienen visibles.

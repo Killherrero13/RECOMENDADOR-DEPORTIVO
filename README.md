@@ -585,6 +585,9 @@ El correo presenta una línea temporal de citas principales y opciones voluntari
 ### NBA en diferido sin spoilers
 El envío diario añade `--nba` para incluir una sección independiente en modos ambos/eventos. Consulta ESPN por fechas UTC y filtra inicios entre ayer 06:30 y hoy 06:30 Madrid, solo con final confirmado al consultar. El envío a las 05:00 puede tener partidos pendientes; no se reenvía automáticamente al finalizar. Un fallo NBA conserva las otras secciones y marca error parcial.
 
-No se publican marcadores, notas, ganadores ni pistas del desenlace; orden alfabético y etiquetas ver completo/resumen/prescindible. Conserva las 25 afinidades originales; los cinco equipos ausentes son neutrales. Clasificación neutral (0,5) hasta validar una fuente comparable; se conservan pesos y umbrales del original. Las etiquetas orientativas usan margen final y puntos totales, que no miden por sí solos emoción ni ritmo por posesiones. No alteran notas, camisetas ni planning de directos.
+No se publican marcadores, notas, ganadores ni pistas del desenlace; orden alfabético y etiquetas ver completo/resumen/puedes saltártelo. Conserva las 25 afinidades originales; los cinco equipos ausentes son neutrales. Criterio NBA v2: curva gradual de margen final (80%) y afinidad (20%), con pequeño refuerzo Celtics (+0,04). Sin clasificación ni premio por puntos totales. Umbrales internos: completo 0,74 y resumen 0,50; resto puedes saltártelo. El margen final no representa toda la evolución del encuentro. No alteran notas, camisetas ni planning de directos.
 
 Cuaderno independiente: `cuadernos/ScriptPartidosNBA_actualizado.ipynb`. No requiere claves; instalar requests/tzdata si faltan. La fuente pública puede cambiar. Mejora futura propuesta: comparar porcentajes de victorias con fecha verificada y estudiar evolución por cuartos, sin revelar esas señales en el correo.
+
+
+La NBA se presenta en un solo bloque naranja con cabecera azul oscuro, tarjetas naranjas y cobertura dentro del mismo bloque. El color es común a todos los partidos; la categoría se comunica por texto. No se muestran notas ni motivos que anticipen el desenlace.

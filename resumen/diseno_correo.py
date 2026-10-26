@@ -125,13 +125,23 @@ def crear_html(asunto, secciones, resultado, todos):
         if titulo in ('📺 Imprescindible','📺 Lo mejor del día') and events['plan'].get('imprescindible'):
             bloques.append(tarjeta_evento(events['plan']['imprescindible'], True))
         elif titulo == '🏀 NBA en diferido · sin spoilers':
-            bloques.append('<h2 style="font-size:19px;margin:26px 0 14px;">🏀 NBA en diferido</h2><p style="font-size:12px;color:#61718a;">Sin marcadores, notas ni pistas sobre el desenlace. Orden alfabético.</p>')
-            for p in resultado['nba']['partidos']:
-                color = '#e6f3ec' if p['recomendacion'] == 'Ver completo' else '#fff5e6' if p['recomendacion'] == 'Resumen' else '#eaf0f6'
-                bloques.append(f'<div style="background:#ffffff;padding:16px;margin-bottom:10px;border:1px solid #dce5ef;border-radius:12px;">'
-                               f'{etiqueta(p["recomendacion"], color)}<p style="font-size:16px;line-height:1.5;margin:8px 0 0;">{texto(p["local"])} — {texto(p["visitante"])}</p></div>')
-            if not resultado['nba']['partidos']:
+            nba = resultado['nba']
+            bloques.append('<div id="bloque-nba" style="margin:26px 0;border:2px solid #c45a12;border-radius:16px;overflow:hidden;background:#fff2e5;">'
+                           '<div style="background:#142840;padding:22px;color:#ffffff;border-bottom:5px solid #ed7b24;">'
+                           '<p style="margin:0 0 8px;font-size:11px;letter-spacing:2px;color:#ffb77e;">TU SESIÓN DE BALONCESTO</p>'
+                           '<h2 style="font-size:23px;margin:0;color:#ffffff;">🏀 NBA en diferido</h2>'
+                           '<p style="font-size:12px;line-height:1.6;margin:10px 0 0;">Sin marcadores ni notas · Orden alfabético</p></div><div style="padding:16px;">')
+            for p in nba['partidos']:
+                bloques.append(f'<div class="tarjeta-nba" style="background:#ffdfc1;color:#142840;padding:18px;margin-bottom:12px;border:1px solid #d88a4c;border-left:5px solid #c45a12;border-radius:10px;">'
+                               f'{etiqueta(p["recomendacion"], "#142840", "#ffffff")}<p style="font-size:17px;line-height:1.5;font-weight:bold;margin:12px 0 0;">{texto(p["local"])} — {texto(p["visitante"])}</p></div>')
+            if not nba['partidos']:
                 bloques.append('<p>No hay partidos finalizados y validados en esta consulta.</p>')
+            cobertura = [f"Ventana de inicio de partidos: {nba['ventana']}",
+                         f"Consultado: {nba['consultado']} · Fuente: {nba['fuente']}", *nba['avisos']]
+            bloques.append('<div style="border-top:1px solid #d88a4c;padding-top:12px;color:#513822;font-size:12px;line-height:1.7;">'
+                           + '<br>'.join(texto(l) for l in cobertura) + '</div></div></div>')
+        elif titulo == 'Cobertura NBA':
+            continue  # La cobertura ya figura dentro del bloque NBA.
         elif titulo == 'Tu planning flexible':
             bloques.append('<h2 style="font-size:19px;margin:26px 0 14px;">Tu planning flexible</h2>')
             for b in events['planning']:

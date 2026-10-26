@@ -3,7 +3,7 @@ import unittest
 from datetime import datetime
 from unittest.mock import patch, Mock
 from resumen.config import MADRID_TZ
-from resumen.nba import evaluar_partidos, generar_nba, descargar, ErrorNBA
+from resumen.nba import evaluar_partidos, generar_nba, descargar, ErrorNBA, puntuacion, categoria_nba
 from resumen.__main__ import demostracion
 from resumen.informe import generar_informe
 from resumen.ejecucion import ejecutar
@@ -42,7 +42,7 @@ class NBATests(unittest.TestCase):
             for secreto in ['103','102','127','89','score','winner','puntuacion']:
                 self.assertNotIn(secreto,informe[medio])
         self.assertIn('NBA en diferido',informe['html'])
-        self.assertIn('Prescindible',informe['texto'])
+        self.assertIn('Puedes saltártelo',informe['texto'])
 
     @patch('resumen.nba.descargar')
     def test_consulta_fechas_utc_incluye_ambos_dias(self, descargar):
@@ -71,13 +71,13 @@ class NBATests(unittest.TestCase):
 
     def test_tres_etiquetas_y_orden_alfabetico(self):
         a = partido('1',puntos=('103','102'))
-        b = partido('2',puntos=('110','105'))
+        b = partido('2',puntos=('118','110'))
         c = partido('3',puntos=('120','80'))
         a['competitions'][0]['competitors'][0]['team']['displayName'] = 'Z equipo'
         b['competitions'][0]['competitors'][0]['team']['displayName'] = 'A equipo'
         c['competitions'][0]['competitors'][0]['team']['displayName'] = 'M equipo'
         datos = evaluar_partidos([a,b,c],self.ahora)['partidos']
-        self.assertEqual([p['recomendacion'] for p in datos],['Resumen','Prescindible','Ver completo'])
+        self.assertEqual([p['recomendacion'] for p in datos],['Resumen','Puedes saltártelo','Ver completo'])
 
     @patch('resumen.nba.time.sleep')
     @patch('resumen.nba.requests.get')
@@ -87,3 +87,26 @@ class NBATests(unittest.TestCase):
         with self.assertRaises(ErrorNBA): descargar(self.ahora.date())
         self.assertEqual(get.call_count,3)
         self.assertEqual(sleep.call_count,2)
+
+    def test_curva_suave_y_sin_premio_por_anotacion(self):
+        notas = [puntuacion('Neutral A','Neutral B',100+d,100) for d in range(1,31)]
+        self.assertTrue(all(a > b for a,b in zip(notas,notas[1:])))
+        self.assertLess(max(a-b for a,b in zip(notas,notas[1:])),.06)
+        self.assertEqual(puntuacion('Celtics','Jazz',95,90),puntuacion('Celtics','Jazz',135,130))
+        self.assertEqual(categoria_nba(puntuacion('Neutral A','Neutral B',109,100)),'Resumen')
+
+    def test_favorito_puede_subir_sin_imponer_completo(self):
+        self.assertEqual(categoria_nba(puntuacion('Celtics','Jazz',105,100)),'Ver completo')
+        self.assertEqual(categoria_nba(puntuacion('Neutral A','Jazz',105,100)),'Resumen')
+        self.assertEqual(categoria_nba(puntuacion('Celtics','Jazz',130,100)),'Puedes saltártelo')
+
+    def test_todo_nba_en_un_bloque_naranja(self):
+        from bs4 import BeautifulSoup
+        r = demostracion('eventos')
+        r['nba'] = evaluar_partidos([partido()],self.ahora)
+        soup = BeautifulSoup(generar_informe(r)['html'],'html.parser')
+        bloque = soup.find(id='bloque-nba')
+        self.assertIsNotNone(bloque)
+        self.assertIn('Fuente: ESPN',bloque.get_text())
+        self.assertEqual(len(soup.select('.tarjeta-nba')),len(bloque.select('.tarjeta-nba')))
+        self.assertIn('#ffdfc1',bloque.select_one('.tarjeta-nba')['style'])

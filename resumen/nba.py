@@ -1,5 +1,6 @@
 """NBA en diferido: la salida pública no contiene marcadores ni notas."""
 import json
+import math
 import time
 from datetime import datetime, timedelta, time as hora, timezone
 from pathlib import Path
@@ -39,13 +40,16 @@ def descargar(dia):
 
 def puntuacion(local, visitante, puntos_local, puntos_visitante):
     diferencia = abs(puntos_local - puntos_visitante)
-    margen = (1 if diferencia <= 2 else .85 if diferencia <= 5 else .75 if diferencia <= 8
-              else .5 if diferencia <= 12 else .15)
+    competitividad = math.exp(-diferencia / 14)
     gustos = max(0, min(1, .5 + (AFINIDADES.get(local, 0) + AFINIDADES.get(visitante, 0)) / 4))
-    total = puntos_local + puntos_visitante
-    ritmo = 1 if total >= 230 else .7 if total >= 215 else .4 if total >= 200 else .2
-    # Clasificación ausente: contribución neutral, nunca puestos ficticios.
-    return .65 * margen + .20 * .5 + .10 * gustos + .05 * ritmo
+    favorito = .04 if 'Celtics' in (local, visitante) else 0
+    # Sin puntos totales ni clasificación ficticia; escala interna, nunca publicada.
+    return min(1, .80 * competitividad + .20 * gustos + favorito)
+
+
+def categoria_nba(nota):
+    return 'Ver completo' if nota >= .74 else 'Resumen' if nota >= .50 else 'Puedes saltártelo'
+
 
 
 def evaluar_partidos(partidos, ahora):
@@ -80,7 +84,7 @@ def evaluar_partidos(partidos, ahora):
             nombres = [t['team']['displayName'] for t in (local, visitante)]
             afinidades = [t['team']['name'] for t in (local, visitante)]
             nota = puntuacion(*afinidades, *puntos)
-            recomendacion = 'Ver completo' if nota >= .80 else 'Resumen' if nota >= .65 else 'Prescindible'
+            recomendacion = categoria_nba(nota)
             # Nunca devolver el objeto de la fuente: contiene spoilers incluso en sus enlaces.
             salida.append({'local': nombres[0], 'visitante': nombres[1],
                            'fecha': fecha.astimezone(MADRID_TZ).strftime('%d/%m %H:%M'),
@@ -89,7 +93,7 @@ def evaluar_partidos(partidos, ahora):
             invalidos += 1
     # Orden estable por nombres, nunca por margen/nota oculta.
     salida.sort(key=lambda p: (p['local'], p['visitante']))
-    avisos = ['Clasificación no incorporada: ese factor se mantiene neutral.']
+    avisos = []
     if pendientes:
         avisos.append(f'{pendientes} encuentros iniciados aún sin resultado final confirmado; no se evalúan.')
     if invalidos:

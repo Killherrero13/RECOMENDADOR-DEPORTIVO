@@ -97,3 +97,7 @@ que una final de tenis o baloncesto supere un partido ordinario de fútbol.
 Se evita llamar imprescindible a lo que no alcanza ocho. La clasificación «De fondo» es de interés,
 todavía no un tramo planificado como aperitivo ni una recomendación de segunda pantalla.
 Quedan pendientes explicación ampliada, planificación de tramos y contexto competitivo verificable.
+
+
+### Explicaciones de las recomendaciones
+Cada tarjeta, el texto y el listado adjunto muestran motivos derivados del modelo: cartel, fase, afinidad y acceso declarado. Se distingue el umbral del plan de los solapamientos con eventos elegidos (con duraciones estimadas). No se añaden noticias, forma ni clasificación sin verificar. Las notas y la selección permanecen iguales.

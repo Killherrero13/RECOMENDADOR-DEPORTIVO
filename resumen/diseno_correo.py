@@ -1,5 +1,6 @@
 """HTML de correo con tablas de presentación, estilos inline y sin recursos remotos."""
 from html import escape
+from .explicaciones import frases_explicacion
 from .canales import plataforma_destacada
 
 FUENTE = 'https://www.futbolenlatv.es/deporte'
@@ -39,6 +40,15 @@ def desglose_html(evento):
     return (f'<div style="font-size:12px;line-height:1.6;margin-top:8px;">'
             f'Interés deportivo {d["deportivo"]:.1f} · Afinidad {d["afinidad"]:+.1f}</div>')
 
+def explicacion_html(evento):
+    frases = frases_explicacion(evento)
+    if not frases:
+        return ''
+    return ('<div style="margin-top:12px;font-size:12px;line-height:1.65;">'
+            '<strong>Por qué te lo proponemos</strong><br>'
+            + '<br>'.join('• ' + texto(f) for f in frases) + '</div>')
+
+
 def tarjeta_evento(evento, destacado=False, franja=''):
     tinta = '#ffffff' if destacado else '#172b43'
     secundaria = '#cbd9e8' if destacado else '#60728b'
@@ -68,7 +78,7 @@ def tarjeta_evento(evento, destacado=False, franja=''):
             f'<div style="font-size:12px;color:{secundaria};margin-bottom:7px;">{icono} {texto(evento["deporte"])}</div>'
             f'<div style="font-size:20px;font-weight:bold;line-height:1.35;">{texto(titulo)}</div>'
             f'<div style="font-size:13px;line-height:1.5;color:{secundaria};margin-top:7px;">{texto(evento["competicion"])}</div>'
-            f'<div style="margin-top:10px;">{categoria_html(evento)} {badge}</div>{desglose_html(evento)}</td></tr></table>'
+            f'<div style="margin-top:10px;">{categoria_html(evento)} {badge}</div>{desglose_html(evento)}{explicacion_html(evento)}</td></tr></table>'
             f'<p style="color:{tinta};font-size:13px;line-height:1.6;margin:16px 0 0;padding-top:12px;border-top:1px solid {"#3c536b" if destacado else "#edf1f5"};">'
             f'<strong>TV</strong><br>{canales_html(evento)}</p>'
             + (f'<p style="font-size:12px;line-height:1.6;color:{secundaria};margin:8px 0 0;">{texto(" · ".join([s for s in [fin, *estado] if s]))}</p>' if fin or estado else '')
@@ -88,7 +98,7 @@ def listado_completo(eventos):
                      f'<span style="font-size:11px;color:#1b6948;">{texto(nota_texto(e))} · {texto(e.get("nivel", ""))}</span> {categoria_html(e)}'
                      + (f'<br><span style="font-size:11px;color:#8a5217;">Visionado parcial hasta {e["fin_vision"]:%H:%M}</span>' if e.get('vision_parcial') else '')
                      + ('<br><span style="font-size:11px;color:#8a5217;">En curso</span>' if e.get('en_curso') else '')
-                     + '</td></tr>')
+                     + explicacion_html(e) + '</td></tr>')
     return ('<table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="color:#172b43;">'
             + ''.join(filas) + '</table>' if filas else '<p>No hay eventos que superen los filtros y la disponibilidad.</p>')
 

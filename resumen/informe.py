@@ -1,5 +1,6 @@
 """Contenido compartido para HTML de correo y texto, sin plantillas externas."""
 from pathlib import Path
+from .explicaciones import frases_explicacion
 from .horarios import orden_inicio
 from .diseno_correo import crear_html, listado_completo, pagina, nota_texto
 from .canales import canal_texto
@@ -26,6 +27,9 @@ def linea_evento(event):
         texto += f" · Visionado parcial: hasta {event['fin_vision']:%H:%M}"
     if event.get('madrugada'):
         texto += ' · Opción de madrugada'
+    razones = frases_explicacion(event)
+    if razones:
+        texto += '\n  Por qué: ' + ' · '.join(razones)
     return texto
 
 def contenido(resultado):

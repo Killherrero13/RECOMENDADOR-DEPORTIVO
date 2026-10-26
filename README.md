@@ -572,3 +572,7 @@ No se ha verificado aún la API real, el HTML real, SMTP ni la ejecución en Git
 
 La extracción original se conserva como referencia. El proceso de camisetas ya se ha preparado en
 la Fase 2 descrita arriba. Las credenciales se configuran en el entorno correspondiente, nunca en este documento ni en el chat.
+
+
+### Explicaciones de las recomendaciones
+Cada tarjeta, el texto y el listado adjunto muestran motivos derivados del modelo: cartel, fase, afinidad y acceso declarado. Se distingue el umbral del plan de los solapamientos con eventos elegidos (con duraciones estimadas). No se añaden noticias, forma ni clasificación sin verificar. Las notas y la selección permanecen iguales.

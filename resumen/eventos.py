@@ -416,5 +416,7 @@ def recomendar_eventos(events, ahora=None, fecha=None):
     other_top_events = [e for e in filtered_events
                         if event_key(e) not in visible_plan_keys and e['score'] >= UMBRAL_ALTERNATIVAS]
     other_top_events.sort(key=lambda e: (-e.get('prioridad',e['score']),-e['score'], orden_inicio(e)))
+    from .explicaciones import explicar_agenda
+    explicar_agenda(filtered_events, daily_plan, event_key)
     return {'filtrados': filtered_events, 'plan': daily_plan,
             'seleccionados': selected_events, 'alternativas': other_top_events[:MAX_OTHER_EVENTS]}

@@ -101,3 +101,7 @@ Quedan pendientes explicación ampliada, planificación de tramos y contexto com
 
 ### Explicaciones de las recomendaciones
 Cada tarjeta, el texto y el listado adjunto muestran motivos derivados del modelo: cartel, fase, afinidad y acceso declarado. Se distingue el umbral del plan de los solapamientos con eventos elegidos (con duraciones estimadas). No se añaden noticias, forma ni clasificación sin verificar. Las notas y la selección permanecen iguales.
+
+
+### Planning flexible
+El correo presenta una línea temporal de citas principales y opciones voluntarias. Como máximo un aperitivo por cita, de 30 a 60 minutos, con cambio explícito aunque se deje el final sin ver. Una sola opción de fondo, sin solapamientos ni alargar la noche. Los huecos quedan libres; las notas no cambian. Los finales son estimados y no se presume el resultado del partido.

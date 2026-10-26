@@ -418,5 +418,7 @@ def recomendar_eventos(events, ahora=None, fecha=None):
     other_top_events.sort(key=lambda e: (-e.get('prioridad',e['score']),-e['score'], orden_inicio(e)))
     from .explicaciones import explicar_agenda
     explicar_agenda(filtered_events, daily_plan, event_key)
-    return {'filtrados': filtered_events, 'plan': daily_plan,
+    from .planning import crear_planning
+    flexible = crear_planning(filtered_events, selected_events, event_key)
+    return {**({'planning': flexible} if flexible else {}), 'filtrados': filtered_events, 'plan': daily_plan,
             'seleccionados': selected_events, 'alternativas': other_top_events[:MAX_OTHER_EVENTS]}

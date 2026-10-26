@@ -1,5 +1,6 @@
 """Contenido compartido para HTML de correo y texto, sin plantillas externas."""
 from pathlib import Path
+from .planning import lineas_planning
 from .explicaciones import frases_explicacion
 from .horarios import orden_inicio
 from .diseno_correo import crear_html, listado_completo, pagina, nota_texto
@@ -65,6 +66,8 @@ def contenido(resultado):
         titulo = ('📺 Día tranquilo' if not imprescindible else
                   '📺 Lo mejor del día' if imprescindible['score'] < 8 else '📺 Imprescindible')
         sections.append((titulo, [linea_evento(imprescindible)] if imprescindible else ['Hoy no hay citas que alcancen el umbral del plan; puedes dejar el día libre.']))
+        if events.get('planning'):
+            sections.append(('Tu planning flexible', lineas_planning(events['planning']) + ['Los huecos quedan libres. Las opciones son voluntarias y los finales estimados; no se presupone cómo irá ningún partido.']))
         agenda = [f'{franja.capitalize()}: {linea_evento(e)}' for franja, e in plan.items() if franja != 'imprescindible']
         sections.append(('Plan principal del día', agenda or ['Sin otros eventos en el plan.']))
         sections.append(('Alternativas', [linea_evento(e) for e in events['alternativas']] or ['Sin alternativas que alcancen el umbral.']))

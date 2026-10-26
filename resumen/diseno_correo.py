@@ -124,7 +124,15 @@ def crear_html(asunto, secciones, resultado, todos):
     for titulo, lineas in secciones:
         if titulo in ('📺 Imprescindible','📺 Lo mejor del día') and events['plan'].get('imprescindible'):
             bloques.append(tarjeta_evento(events['plan']['imprescindible'], True))
-        elif titulo == 'Plan principal del día' and events['plan']:
+        elif titulo == 'Tu planning flexible':
+            bloques.append('<h2 style="font-size:19px;margin:26px 0 14px;">Tu planning flexible</h2>')
+            for b in events['planning']:
+                color = '#e6f3ec' if b['tipo'] == 'Cita principal' else '#fff5e6'
+                bloques.append(f'<div style="margin-bottom:10px;padding:16px;border-left:4px solid #1b6948;background:{color};border-radius:8px;">'
+                               f'<strong>{texto(b["desde"])}–{texto(b["hasta"])}</strong> · {texto(b["tipo"])}<br>'
+                               f'<strong>{texto(b["evento"])}</strong><p style="font-size:13px;line-height:1.6;margin:8px 0 0;">{texto(b["detalle"])}</p></div>')
+            bloques.append('<p style="font-size:12px;color:#61718a;">Los huecos quedan libres. Opciones voluntarias y finales estimados.</p>')
+        elif titulo == 'Plan principal del día'  and events['plan']:
             bloques.append('<h2 style="font-size:19px;margin:26px 0 14px;">Tu plan del día</h2>')
             for franja, e in events['plan'].items():
                 if franja != 'imprescindible':bloques.append(tarjeta_evento(e,franja=franja))

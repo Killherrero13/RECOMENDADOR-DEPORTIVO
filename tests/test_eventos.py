@@ -18,11 +18,11 @@ class EventosTests(unittest.TestCase):
         events = json.loads((ROOT/'tests/fixtures/eventos.json').read_text(encoding='utf-8'))
         original_input = copy.deepcopy(events)
         new = recomendar_eventos(events)
-        self.assertEqual(new['plan']['imprescindible']['local'], 'At. Madrid')
-        self.assertAlmostEqual(new['plan']['imprescindible']['score'],17.7976)
+        self.assertEqual(new['plan']['imprescindible']['local'], 'Liverpool')
+        self.assertTrue(all(0 <= e['score'] <= 10 for e in new['filtrados']))
         self.assertEqual(len(new['plan']),len(new['seleccionados']))
-        self.assertEqual([e['score'] for e in new['alternativas']],
-                         sorted([e['score'] for e in new['alternativas']],reverse=True))
+        self.assertEqual([e['prioridad'] for e in new['alternativas']],
+                         sorted([e['prioridad'] for e in new['alternativas']],reverse=True))
         self.assertEqual(events, original_input)
 
     def test_dia_sin_recomendaciones(self):
@@ -50,9 +50,9 @@ class EventosTests(unittest.TestCase):
         self.assertEqual(final['categoria_reconocida'],'ATP 250')
         self.assertEqual(new['plan']['imprescindible']['local'],'FC Barcelona')
         inter = next(e for e in new['filtrados'] if e['local']=='Inter Milan')
-        self.assertAlmostEqual(inter['score'],7.62)
+        self.assertAlmostEqual(inter['score'],6.6)
         estudiantes = next(e for e in new['filtrados'] if e['visitante']=='Movistar Estudiantes')
-        self.assertEqual(estudiantes['score'],5)
+        self.assertEqual(estudiantes['score'],4.2)
 
     def test_estructura_invalida_y_fecha_incorrecta(self):
         for html in ('<html>Acceso denegado</html>', '<table class="tablaPrincipal"></table>',

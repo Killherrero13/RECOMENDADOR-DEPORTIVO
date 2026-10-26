@@ -30,6 +30,15 @@ def categoria_html(evento):
         return etiqueta('Categoría por confirmar', '#fff1db', '#744915')
     return ''
 
+def nota_texto(evento):
+    return f"{evento['score']:.1f}/10" if evento.get('escala') else f"{evento['score']:.1f} pts"
+
+def desglose_html(evento):
+    d = evento.get('desglose')
+    if not d:return ''
+    return (f'<div style="font-size:12px;line-height:1.6;margin-top:8px;">'
+            f'Interés deportivo {d["deportivo"]:.1f} · Afinidad {d["afinidad"]:+.1f}</div>')
+
 def tarjeta_evento(evento, destacado=False, franja=''):
     tinta = '#ffffff' if destacado else '#172b43'
     secundaria = '#cbd9e8' if destacado else '#60728b'
@@ -37,7 +46,8 @@ def tarjeta_evento(evento, destacado=False, franja=''):
     icono = ICONOS.get(evento['deporte'], '📺')
     titulo = (evento.get('descripcion') or evento['competicion']) if not evento.get('local') else f"{evento['local']} — {evento['visitante']}"
     fecha = evento['inicio'].strftime('%d/%m') if 'inicio' in evento else evento.get('fecha', '')[5:].replace('-', '/')
-    badge = etiqueta(f"{evento['score']:.1f} pts", '#dfae50' if destacado else '#e6f3ec', '#172b43' if destacado else '#1b6948')
+    badge = etiqueta(nota_texto(evento), '#dfae50' if destacado else '#e6f3ec', '#172b43' if destacado else '#1b6948')
+    if evento.get('nivel'):badge += etiqueta(evento['nivel'])
     estado = []
     if evento.get('en_curso'):
         estado.append('EN CURSO')
@@ -46,7 +56,7 @@ def tarjeta_evento(evento, destacado=False, franja=''):
     if evento.get('vision_parcial'):
         estado.append(f"Ver hasta {evento['fin_vision']:%H:%M} · parcial")
     fin = f"Fin estimado {evento['fin_estimado']:%d/%m %H:%M}" if 'fin_estimado' in evento else ''
-    label = 'TU IMPRESCINDIBLE' if destacado else franja.upper()
+    label = ('TU IMPRESCINDIBLE' if evento['score'] >= 8 else 'LO MEJOR DEL DÍA') if destacado else franja.upper()
     return (f'<table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="table-layout:fixed;background:{fondo};border:1px solid #dce5ef;border-radius:14px;margin-bottom:12px;">'
             f'<tr><td style="padding:20px;">'
             + (f'<p style="margin:0 0 14px;color:{secundaria};font-size:11px;font-weight:bold;letter-spacing:1.8px;">{texto(label)}</p>' if label else '')
@@ -58,7 +68,7 @@ def tarjeta_evento(evento, destacado=False, franja=''):
             f'<div style="font-size:12px;color:{secundaria};margin-bottom:7px;">{icono} {texto(evento["deporte"])}</div>'
             f'<div style="font-size:20px;font-weight:bold;line-height:1.35;">{texto(titulo)}</div>'
             f'<div style="font-size:13px;line-height:1.5;color:{secundaria};margin-top:7px;">{texto(evento["competicion"])}</div>'
-            f'<div style="margin-top:10px;">{categoria_html(evento)} {badge}</div></td></tr></table>'
+            f'<div style="margin-top:10px;">{categoria_html(evento)} {badge}</div>{desglose_html(evento)}</td></tr></table>'
             f'<p style="color:{tinta};font-size:13px;line-height:1.6;margin:16px 0 0;padding-top:12px;border-top:1px solid {"#3c536b" if destacado else "#edf1f5"};">'
             f'<strong>TV</strong><br>{canales_html(evento)}</p>'
             + (f'<p style="font-size:12px;line-height:1.6;color:{secundaria};margin:8px 0 0;">{texto(" · ".join([s for s in [fin, *estado] if s]))}</p>' if fin or estado else '')
@@ -75,7 +85,7 @@ def listado_completo(eventos):
                      f'<strong style="font-size:14px;">{texto(nombre)}</strong><br>'
                      f'<span style="font-size:12px;color:#52647a;">{texto(e["deporte"])} · {texto(e["competicion"])}</span><br>'
                      f'<span style="font-size:12px;line-height:1.6;">{canales_html(e)}</span><br>'
-                     f'<span style="font-size:11px;color:#1b6948;">{e["score"]:.1f} puntos</span> {categoria_html(e)}'
+                     f'<span style="font-size:11px;color:#1b6948;">{texto(nota_texto(e))} · {texto(e.get("nivel", ""))}</span> {categoria_html(e)}'
                      + (f'<br><span style="font-size:11px;color:#8a5217;">Visionado parcial hasta {e["fin_vision"]:%H:%M}</span>' if e.get('vision_parcial') else '')
                      + ('<br><span style="font-size:11px;color:#8a5217;">En curso</span>' if e.get('en_curso') else '')
                      + '</td></tr>')
@@ -102,7 +112,7 @@ def crear_html(asunto, secciones, resultado, todos):
     if events is not None:
         bloques.append(f'<p style="margin:0 0 22px;">{etiqueta(str(len(events.get("seleccionados", []))) + " en tu plan")}{etiqueta(str(len(todos)) + " eventos filtrados")}{etiqueta("EUROPE / MADRID")}</p>')
     for titulo, lineas in secciones:
-        if titulo == '📺 Imprescindible' and events['plan'].get('imprescindible'):
+        if titulo in ('📺 Imprescindible','📺 Lo mejor del día') and events['plan'].get('imprescindible'):
             bloques.append(tarjeta_evento(events['plan']['imprescindible'], True))
         elif titulo == 'Plan principal del día' and events['plan']:
             bloques.append('<h2 style="font-size:19px;margin:26px 0 14px;">Tu plan del día</h2>')

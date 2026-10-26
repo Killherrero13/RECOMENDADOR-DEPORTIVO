@@ -24,7 +24,7 @@ class MejorasEventosTests(unittest.TestCase):
         scores=[calculate_score(evento(name,'Real Madrid')) for name in
                 ['Atlético de Madrid','At. Madrid','Atlético Madrid','atletico madrid']]
         for score in scores:
-            self.assertAlmostEqual(score,17.7976)
+            self.assertAlmostEqual(score,9.0)
 
     def test_alias_internacionales(self):
         for names in [('Manchester United','Manchester Utd.','Man Utd'),
@@ -41,7 +41,7 @@ class MejorasEventosTests(unittest.TestCase):
     def test_estudiantes_un_unico_bonus(self):
         base=calculate_score(evento('Equipo A','Equipo B','Primera FEB',deporte='Baloncesto'))
         est=calculate_score(evento('Estudiantes','Equipo B','Primera FEB',deporte='Baloncesto'))
-        self.assertEqual(est-base,4)
+        self.assertAlmostEqual(est-base,0.6)
 
     def test_competiciones_no_se_descartan_antes_de_puntuar(self):
         for comp in ['Eurocopa','Copa América','Copa del Mundo','World Cup','Eredivisie','La Liga EA Sports']:
@@ -49,8 +49,8 @@ class MejorasEventosTests(unittest.TestCase):
                 self.assertEqual(len(recomendar_eventos([evento(comp=comp)])['filtrados']),1)
         self.assertEqual(calculate_score(evento(comp='La Liga EA Sports')),calculate_score(evento(comp='LaLiga EA Sports')))
         self.assertEqual(calculate_score(evento(comp='Eredivisie')),4.5)
-        self.assertEqual(calculate_score(evento(comp='Serie A Brasil')),4.5)
-        self.assertEqual(calculate_score(evento(comp='LaLiga Hypermotion')),4.8)
+        self.assertEqual(calculate_score(evento(comp='Serie A Brasil')),3.5)
+        self.assertEqual(calculate_score(evento(comp='LaLiga Hypermotion')),4.5)
 
     def test_ningun_seleccionado_desaparece_del_plan_ni_del_correo(self):
         events=[{**evento(local=name,hora=hora),'score':score} for name,hora,score in
@@ -77,7 +77,7 @@ class MejorasEventosTests(unittest.TestCase):
         alternatives=result['alternativas']
         self.assertEqual(len(alternatives),8)
         self.assertEqual(alternatives[0]['local'],'Atlético de Madrid')
-        self.assertEqual([e['score'] for e in alternatives],sorted([e['score'] for e in alternatives],reverse=True))
+        self.assertEqual([e['prioridad'] for e in alternatives],sorted([e['prioridad'] for e in alternatives],reverse=True))
 
 if __name__ == '__main__':
     unittest.main()

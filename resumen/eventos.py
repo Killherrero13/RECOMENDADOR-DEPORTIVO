@@ -1,4 +1,4 @@
-"""Filtros, puntuaciones y agenda originales, sin consultas al importar."""
+"""Filtrado, valoración personal y agenda, sin consultas al importar."""
 from copy import deepcopy
 from datetime import time
 from datetime import datetime
@@ -7,6 +7,7 @@ import unicodedata
 from .config import MADRID_TZ
 from .horarios import intervalo, orden_inicio, preparar_horario
 from .categorias import categoria_tenis, bonus_categoria_tenis
+from .puntuacion import valorar, UMBRAL_PLAN, UMBRAL_ALTERNATIVAS
 
 from .preferencias_eventos import (
     EVENT_DURATION,
@@ -111,7 +112,7 @@ def knockout_bonus(event):
 
     if re.search(r'\bsemi[ -]?final', comp):
         bonus = 2.0
-    elif any(x in comp for x in ["cuartos", "quarter", "playoffs"]):
+    elif any(x in comp for x in ["cuartos", "quarter"]):
         bonus = 1.5
     elif any(x in comp for x in ["octavos", "round of 16", "1/8"]):
         bonus = 1.0
@@ -119,6 +120,8 @@ def knockout_bonus(event):
         bonus = 0.8
     elif re.search(r'\bfinal(?:es)?\b', comp):
         bonus = 2.5
+    elif 'playoff' in comp:
+        bonus = 1.5
 
     # Ajuste por ida / vuelta
     if re.search(r'\bvuelta\b', comp):
@@ -246,128 +249,20 @@ def select_preferred_channel(canales):
 
     return None
 
+def evaluar_evento(e):
+    sport = e['deporte']
+    local, visitante = normalize_team_name(e['local']), normalize_team_name(e['visitante'])
+    afinidad = (football_team_affinity(e) if sport == 'Fútbol' else
+                nba_affinity_score(local, visitante) if sport == 'Baloncesto' else
+                tennis_affinity_bonus(e) if sport == 'Tenis' else 0)
+    # El ajuste por ida/vuelta no equivale a una fase: se calcula sobre el texto de ronda.
+    fase_evento = dict(e, competicion=re.sub(r'\b(?:ida|vuelta)\b', '', e['competicion'], flags=re.IGNORECASE))
+    return valorar(e, local, visitante, normalize_competition(e['competicion']), afinidad,
+                   football_derby_bonus(e) if sport == 'Fútbol' else 0,
+                   knockout_bonus(fase_evento))
+
 def calculate_score(e):
-    score = 0
-    deporte = e["deporte"]
-    comp = normalize_competition(e["competicion"])
-    local = e["local"].lower()
-    visitante = e["visitante"].lower()
-    hora = hour_to_min(e["hora"]) // 60
-    local = normalize_team_name(local)
-    visitante = normalize_team_name(visitante)
-
-    if deporte == "Fútbol":
-
-        # Specific bonus for Nations League
-        if "nations league" in comp:
-            score += 3.5
-        # Highest priority competitions (knockout/finals are handled by knockout_bonus/stakes_bonus)
-        elif "supercopa" in comp:
-            score += 4
-        elif any(x in comp for x in ["champions league", "europa league", "fifa copa mundial"]):
-            score += 4.5 # Increased base score for Champions League
-        elif "copa africana de naciones" in comp:
-            score += 4.0 # Specific bonus for Africa Cup of Nations
-        elif any(x in comp for x in ["copa america", "eurocopa"]):
-            score += 4.5 # Specific bonus for Copa América and Eurocopa
-        elif "copa del mundo" in comp or "world cup" in comp:
-            score += 5.0 # Specific bonus for World Cup
-        # Top 5 leagues, with specific checks for second divisions
-        elif "serie a brasil" in comp:
-            score += 1.5
-        elif "hypermotion" in comp:
-            score += 1.8
-        elif any(x in comp for x in ["laliga", "ea sports", "premier", "bundesliga", "serie a", "ligue 1"]):
-            if "hypermotion" in comp: # LaLiga Hypermotion (Spanish second division)
-                score += 1.8
-            elif "2. bundesliga" in comp: # 2. Bundesliga (German second division)
-                score += 1.8
-            else: # Top tier of these leagues
-                score += 2.5
-        # Other decent leagues
-        elif any(x in comp for x in ["eredivisie", "jupiler pro league", "liga portuguesa", "scottish premiership"]):
-            score += 1.5
-        # Cup competitions (national cups)
-        elif any(x in comp.lower() for x in ["fa cup", "copa del rey", "emirates", "copa de francia", "coupe de france", "coppa"]):
-            score += 2
-        else:
-            # Competiciones admitidas sin una regla específica: base de las ligas secundarias.
-            # No se interpreta un dato ausente como interés cero.
-            score += 1.5
-
-        if "atletico madrid" in local or "atletico madrid" in visitante:
-            score += 3.5
-
-        if "aston villa" in local or "aston villa" in visitante:
-            score += 2
-
-        # Bonus for 'España' (Spain) if playing
-        if "espana" in local or "espana" in visitante:
-            score += 3.0
-
-        score += football_match_quality_bonus(local, visitante)
-
-        # Contexto fuerte
-        context_total = (
-            football_derby_bonus(e)
-            + knockout_bonus(e)
-            + stakes_bonus(e)
-        )
-        score += min(context_total, 4.0)
-
-        # Afinidad personal (FACTOR DECISIVO)
-        affinity = football_team_affinity(e)
-        score *= (1 + affinity * 0.4)
-
-    elif deporte == "Baloncesto":
-        if "nba" in comp:
-            score += 3
-            if any(t in local or t in visitante for t in NBA_TOP_TEAMS):
-                score += 1
-
-            affinity = nba_affinity_score(local, visitante)
-            score += affinity * 3
-
-        if "endesa" in comp or "acb" in comp or "euroliga" in comp:
-            score += 2.5
-        if "estudiantes" in local or "estudiantes" in visitante:
-            score += 4
-        if "minicopa" in comp:
-            score -= 4.5
-
-        if any(t in local for t in TOP_NCAA) or any(t in visitante for t in TOP_NCAA):
-            score += 1 # Base score for NCAA games
-
-        if any(t in local or t in visitante for t in TOP_ACB):
-            score += 2
-
-        # Bonus por eliminatorias
-        score += knockout_bonus(e)
-        score += stakes_bonus(e)
-
-
-    elif deporte == "Tenis":
-        score += 2  # base tenis
-
-        # Finales y torneos grandes
-        score += knockout_bonus(e)
-        score += stakes_bonus(e)
-        score += bonus_categoria_tenis(e)
-
-        affinity = tennis_affinity_bonus(e)
-
-        if affinity > 0:
-            score += affinity
-        # No tener bonus de afinidad significa neutralidad, no una penalización extra.
-
-
-    elif deporte == "Automovilismo":
-        score += 1.5
-
-    if 9<= hora <= 23:
-        score += 1
-
-    return score + channel_score(e["canales"])
+    return evaluar_evento(e)['score']
 
 def build_daily_plan(events):
     # --------------------------------------------------
@@ -375,25 +270,25 @@ def build_daily_plan(events):
     # --------------------------------------------------
     top_events = [
         e for e in events
-        if e["score"] >= 7
+        if e["score"] >= UMBRAL_PLAN
     ]
 
     if not top_events:
         return {}, []
 
-    must_watch = max(top_events, key=lambda e: e["score"])
+    must_watch = max(top_events, key=lambda e: (e.get('prioridad',e['score']),e['score']))
 
     # --------------------------------------------------
     # 2️⃣ Construir selección respetando solapes
     # --------------------------------------------------
     selected = [must_watch]
 
-    for e in sorted(top_events, key=lambda e: (-e['score'], orden_inicio(e))):
+    for e in sorted(top_events, key=lambda e: (-e.get('prioridad',e['score']),-e['score'], orden_inicio(e))):
         if e is must_watch:
             continue
 
         # Umbral mínimo
-        if e["score"] < 7:
+        if e["score"] < UMBRAL_PLAN:
             continue
 
         # Solapamiento real
@@ -509,10 +404,8 @@ def recomendar_eventos(events, ahora=None, fecha=None):
                 or (categoria is not None and knockout_bonus(e) >= 2)):
                 filtered_events.append(e)
     for e in filtered_events:
-        e['score'] = calculate_score(e)
-        # La madrugada y el visionado incompleto son opciones secundarias, no exclusiones.
-        e['ajuste_horario'] = -(1.0 if e['madrugada'] else 0) - (0.5 if e['vision_parcial'] else 0)
-        e['score'] += e['ajuste_horario']
+        e.update(evaluar_evento(e))
+        e['ajuste_horario'] = e['desglose']['horario']
         e['channel'] = select_preferred_channel(e['canales'])
         if e['deporte'] == 'Tenis':
             e['categoria_reconocida'], e['origen_categoria'] = categoria_tenis(e)
@@ -521,7 +414,7 @@ def recomendar_eventos(events, ahora=None, fecha=None):
     daily_plan, selected_events = build_daily_plan(filtered_events)
     visible_plan_keys = {event_key(e) for e in daily_plan.values()}
     other_top_events = [e for e in filtered_events
-                        if event_key(e) not in visible_plan_keys and e['score'] >= 6.5]
-    other_top_events.sort(key=lambda e: (-e['score'], orden_inicio(e)))
+                        if event_key(e) not in visible_plan_keys and e['score'] >= UMBRAL_ALTERNATIVAS]
+    other_top_events.sort(key=lambda e: (-e.get('prioridad',e['score']),-e['score'], orden_inicio(e)))
     return {'filtrados': filtered_events, 'plan': daily_plan,
             'seleccionados': selected_events, 'alternativas': other_top_events[:MAX_OTHER_EVENTS]}

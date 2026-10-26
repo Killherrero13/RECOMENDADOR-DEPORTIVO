@@ -2,7 +2,7 @@ import unittest
 from datetime import date
 
 from resumen.categorias import categoria_tenis
-from resumen.eventos import calculate_score, recomendar_eventos, normalize_team_name
+from resumen.eventos import calculate_score, recomendar_eventos, normalize_team_name, evaluar_evento
 from resumen.__main__ import demostracion
 from resumen.informe import generar_informe
 
@@ -29,24 +29,25 @@ class CategoriasTests(unittest.TestCase):
         self.assertIsNone(categoria_tenis(tenis('Torneo desconocido Premio 500 euros'))[0])
 
     def test_categoria_desconocida_y_afinidad_ausente_son_neutrales(self):
-        self.assertEqual(calculate_score(tenis()),5) # 2 base + 2 categoría + 1 horario.
-        self.assertEqual(calculate_score(tenis('Torneo desconocido')),3)
-        self.assertEqual(calculate_score(tenis('Torneo desconocido',local='C. Alcaraz')),5.5)
+        self.assertEqual(calculate_score(tenis()),4.9)
+        self.assertEqual(calculate_score(tenis('Torneo desconocido')),3.7)
+        self.assertEqual(calculate_score(tenis('Torneo desconocido',local='C. Alcaraz')),4.4)
 
     def test_final_con_jugadores_fuera_de_lista_no_se_pierde(self):
         final=tenis('Torneo de Viena Final',local='Jugador A',visitante='Jugador B')
         final['canales']=['DAZN']
         result=recomendar_eventos([final],fecha=date(2026,10,26))
         self.assertEqual(len(result['filtrados']),1)
-        self.assertEqual(result['plan']['imprescindible']['score'],9.5)
+        self.assertEqual(result['plan']['imprescindible']['score'],6.8)
         self.assertEqual(recomendar_eventos([tenis('Torneo de Viena 1ª Ronda',local='Jugador A',visitante='Jugador B')],fecha=date(2026,10,26))['filtrados'],[])
 
     def test_liga_sin_regla_tiene_base_neutral(self):
         e={'hora':'23:00','deporte':'Fútbol','competicion':'Primera División Argentina Torneo Clausura',
            'local':'Unión Santa Fe','visitante':'Estudiantes LP','canales':['Fanatiz']}
         result=recomendar_eventos([e],fecha=date(2026,10,26))['filtrados'][0]
-        self.assertEqual(result['score'],2) # 1.5 base + 1 horario - 0.5 parcial.
-        self.assertEqual(calculate_score({**e,'competicion':'Conference League'}),2.5)
+        self.assertEqual(result['score'],3.5)
+        self.assertEqual(result['prioridad'],3.0) # La limitación horaria cambia encaje, no interés.
+        self.assertEqual(calculate_score({**e,'competicion':'Conference League'}),5.0)
 
     def test_alias_y_puntuaciones_equivalentes_sin_inventar_favoritos(self):
         for nombres in [('O. Lyonnais','Olympique Lyonnais','Lyon'),('SL Benfica','Benfica'),
@@ -55,7 +56,7 @@ class CategoriasTests(unittest.TestCase):
             self.assertEqual(len({normalize_team_name(n) for n in nombres}),1)
         e={'hora':'19:45','deporte':'Fútbol','competicion':'Liga portuguesa','local':'Benfica','visitante':'Santa Clara','canales':['DAZN']}
         self.assertEqual(calculate_score(e),calculate_score({**e,'local':'SL Benfica'}))
-        self.assertEqual(calculate_score(e),4.5) # Sin bonus personal inventado para Benfica.
+        self.assertEqual(evaluar_evento(e)['desglose']['afinidad'],0.2) # Solo preferencia por fútbol.
 
     def test_categoria_visible_en_correo_y_adjunto(self):
         result=demostracion('eventos')

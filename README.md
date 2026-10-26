@@ -1,5 +1,26 @@
 # Resumen deportivo personal
 
+## Evolución · fase 2: nota personal /10 y encaje
+
+Se sustituye la acumulación de puntos antiguos por una escala personal estable sobre diez.
+El correo muestra la nota y su nivel, con el desglose breve de interés deportivo y afinidad.
+DAZN, Movistar Plus+, canales abiertos, madrugada y visionado parcial afectan al encaje en el
+plan, sin modificar la nota del evento. Un canal distinto no se penaliza.
+
+«Imprescindible» se reserva para notas desde 8. El mejor candidato de menor nota se presenta
+como «Lo mejor del día»; si no hay candidatos suficientes, aparece «Día tranquilo».
+La selección requiere 6,5; las alternativas 4,5. Se mantiene el máximo de cuatro citas y ocho alternativas.
+No se cambian las notas por añadir o quitar otros partidos del día.
+
+Los criterios y pesos iniciales están en `CRITERIOS.md`; las reglas en `resumen/puntuacion.py`.
+No se han ajustado para reproducir las seis notas del evaluador: se prueban también favoritos,
+finales de otros deportes, días flojos y cambios de canal/horario.
+Los tests históricos de puntuación se adaptan a la nueva escala; las referencias originales de Colab
+permanecen congeladas e intactas. Se conservan el disparo de las 05:00 Europe/Madrid, la ejecución
+manual y football-data. No se ha enviado ningún correo desde las pruebas.
+
+---
+
 ## Evolución del recomendador · fase 1: información incompleta
 
 Se reconocen categorías de tenis por texto explícito o catálogo verificado de torneos de 2026,

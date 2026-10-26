@@ -87,3 +87,13 @@ Semifinales y finales de torneos ATP reconocidos pueden entrar aunque no haya ju
 No se copian las notas del evaluador externo: se comparan reglas con los mismos ejemplos y casos de control.
 Se mantienen de momento los puntos internos y los umbrales. La escala /10 y los papeles de
 aperitivo, fondo y seguimiento se harán en fases posteriores, tras validar esta primera fase.
+
+## Fase 2: escala /10 y separación de factores implementada
+
+La fase 1 quedó validada para avanzar. Se reemplazan sus puntos internos por la nota personal
+sobre diez, independiente del acceso y el horario. Los valores iniciales están en `CRITERIOS.md`.
+Los tres favoritos reciben peso personal; la preferencia fútbol/baloncesto es suave, permitiendo
+que una final de tenis o baloncesto supere un partido ordinario de fútbol.
+Se evita llamar imprescindible a lo que no alcanza ocho. La clasificación «De fondo» es de interés,
+todavía no un tramo planificado como aperitivo ni una recomendación de segunda pantalla.
+Quedan pendientes explicación ampliada, planificación de tramos y contexto competitivo verificable.

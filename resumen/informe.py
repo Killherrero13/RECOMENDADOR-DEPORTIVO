@@ -1,14 +1,19 @@
 """Contenido compartido para HTML de correo y texto, sin plantillas externas."""
 from pathlib import Path
 from .horarios import orden_inicio
-from .diseno_correo import crear_html, listado_completo, pagina
+from .diseno_correo import crear_html, listado_completo, pagina, nota_texto
 from .canales import canal_texto
 
 def linea_evento(event):
     title = ((event.get('descripcion') or event['competicion']) + ' · ' + event['competicion']) if not event.get('local') else f"{event['local']} vs {event['visitante']} · {event['competicion']}"
     hora = event['inicio'].strftime('%d/%m %H:%M') if 'inicio' in event else event['hora']
     canales = ' · '.join(canal_texto(c) for c in event.get('canales') or [event.get('channel') or 'Canal no indicado'])
-    texto = f"{hora} · {title} · {canales} · {event['score']:.1f} puntos"
+    texto = f"{hora} · {title} · {canales} · {nota_texto(event)}"
+    if event.get('nivel'):
+        texto += f" · {event['nivel']}"
+    if event.get('desglose'):
+        d = event['desglose']
+        texto += f" · Interés deportivo {d['deportivo']:.1f} · Afinidad {d['afinidad']:+.1f}"
     if event.get('categoria_reconocida'):
         texto += f" · Categoría: {event['categoria_reconocida']}"
     elif event.get('deporte') == 'Tenis' and 'origen_categoria' in event:
@@ -53,11 +58,15 @@ def contenido(resultado):
             sections.append(('Cobertura de la agenda', events['avisos']))
         plan = events['plan']
         imprescindible = plan.get('imprescindible')
-        sections.append(('📺 Imprescindible', [linea_evento(imprescindible)] if imprescindible else ['Ningún evento alcanza el umbral del plan.']))
+        titulo = ('📺 Día tranquilo' if not imprescindible else
+                  '📺 Lo mejor del día' if imprescindible['score'] < 8 else '📺 Imprescindible')
+        sections.append((titulo, [linea_evento(imprescindible)] if imprescindible else ['Hoy no hay citas que alcancen el umbral del plan; puedes dejar el día libre.']))
         agenda = [f'{franja.capitalize()}: {linea_evento(e)}' for franja, e in plan.items() if franja != 'imprescindible']
         sections.append(('Plan principal del día', agenda or ['Sin otros eventos en el plan.']))
         sections.append(('Alternativas', [linea_evento(e) for e in events['alternativas']] or ['Sin alternativas que alcancen el umbral.']))
-        sections.append(('Información', ['Alternativas ordenadas por puntuación. Horarios de Europe/Madrid.',
+        sections.append(('Información', ['Notas personales sobre diez: interés deportivo y afinidad. El acceso y el horario solo ajustan el encaje en la agenda.',
+                         '8–10: cita destacada · 6–7,9: buena opción · 4–5,9: de fondo · menos de 4: prescindible.',
+                         'Alternativas ordenadas por interés y encaje. Horarios de Europe/Madrid.',
                          'Los finales y solapamientos se calculan con duraciones estimadas; pueden variar.',
                          'Fuente de la agenda: futbolenlatv.es.']))
         todos = sorted(events.get('filtrados', []), key=orden_inicio)

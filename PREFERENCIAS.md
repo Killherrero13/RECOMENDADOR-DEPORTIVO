@@ -119,4 +119,7 @@ La NBA se presenta en un solo bloque naranja con cabecera azul oscuro, tarjetas 
 
 
 ### Ajustes tras el correo del 27/10/2026
-Celtics siempre Resumen en diferido y verde en todas las tarjetas. Las ocho alternativas se eligen por interés/encaje y se presentan por fecha y hora. Equipos prioritarios antes de competición: Atleti/España rojo y Aston Villa burdeos. Champions azul, Europa League naranja, Conference verde, ligas de fútbol verde azulado; tenis amarillo pelota; NBA naranja, ACB azul claro, Euroliga violeta. El destacado mantiene su color y añade contorno dorado. Se aplica en tarjetas, planning, listado completo y adjunto; DAZN/Movistar conservan sus distintivos. Sin spoilers ni cambios en las notas del resto.
+Celtics siempre Resumen en diferido y verde en todas las tarjetas. Las ocho alternativas se eligen por interés/encaje y se presentan por fecha y hora. Equipos prioritarios antes de competición: Atleti/España rojo y Aston Villa burdeos. Champions azul, Europa League naranja, Conference verde, ligas de fútbol verde azulado; tenis amarillo pelota; NBA naranja, ACB azul claro, Euroliga violeta. El destacado tiene fondo azul oscuro propio y contorno dorado, independiente del deporte. Se aplica en tarjetas, planning, listado completo y adjunto; DAZN/Movistar conservan sus distintivos. Sin spoilers ni cambios en las notas del resto.
+
+
+Distintivos NBA grandes: completo en verde con ▶, resumen en ámbar con ▷ y puedes saltártelo en gris con —. La tarjeta conserva el color del equipo/deporte. Copas nacionales de fútbol y baloncesto en frambuesa, diferentes de las ligas; se mantiene prioridad de equipos y torneos europeos. No cambian recomendaciones ni orden.

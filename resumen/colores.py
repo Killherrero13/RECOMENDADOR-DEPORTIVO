@@ -1,5 +1,6 @@
 """Identidad visual: equipos por delante de competición, sin inferir resultados."""
 import unicodedata
+import re
 
 
 def normalizar(texto):
@@ -24,7 +25,9 @@ def tema_evento(e):
             return '#ffecd9', '#aa4b08', 'Europa League'
         if 'champions' in comp or 'liga de campeones' in comp:
             return '#e4ebff', '#183d96', 'Champions League'
-        return '#e2f1f0', '#286c69', 'Fútbol'
+        if re.search(r'\b(copa|cup|pokal|coupe|coppa|taca)\b', comp):
+            return '#f9e4f2', '#91316e', 'Copa'
+        return '#e2f1f0', '#286c69', 'Liga / fútbol'
     if deporte == 'tenis':
         return '#f1f7b5', '#566400', 'Tenis'
     if deporte == 'baloncesto':
@@ -32,7 +35,9 @@ def tema_evento(e):
             return '#ffdfc1', '#b45309', 'NBA'
         if 'euroliga' in comp or 'euroleague' in comp:
             return '#ede4fa', '#683d99', 'Euroliga'
-        if any(s in comp for s in ('acb', 'endesa', 'copa del rey')):
+        if re.search(r'\b(copa|cup)\b', comp):
+            return '#f9e4f2', '#91316e', 'Copa de baloncesto'
+        if any(s in comp for s in ('acb', 'endesa')):
             return '#dff0ff', '#176a91', 'ACB'
         return '#fff0df', '#955717', 'Baloncesto'
     return '#edf2f7', '#52647a', e.get('deporte', 'Deporte')

@@ -50,10 +50,24 @@ def explicacion_html(evento):
             + '<br>'.join('• ' + texto(f) for f in frases) + '</div>')
 
 
+def distintivo_nba(recomendacion):
+    estilos = {
+        'Ver completo': ('▶', '#14613b', '#ffffff'),
+        'Resumen': ('▷', '#ffd268', '#352600'),
+        'Puedes saltártelo': ('—', '#e4e8ee', '#414d5e'),
+    }
+    icono, fondo, tinta = estilos.get(recomendacion, ('•', '#e4e8ee', '#414d5e'))
+    return (f'<div class="decision-nba" style="padding:12px 14px;border-radius:8px;'
+            f'background:{fondo};color:{tinta};font-size:16px;line-height:1.4;font-weight:bold;">'
+            f'{icono} {texto(recomendacion.upper())}</div>')
+
+
 def tarjeta_evento(evento, destacado=False, franja=''):
     fondo, acento, identidad = tema_evento(evento)
-    tinta = '#172b43'
-    secundaria = '#43536b'
+    if destacado:
+        fondo = '#132d46'
+    tinta = '#ffffff' if destacado else '#172b43'
+    secundaria = '#cbd9e8' if destacado else '#43536b'
     borde = '3px solid #c89b36' if destacado else f'1px solid {acento}'
     icono = ICONOS.get(evento['deporte'], '📺')
     titulo = (evento.get('descripcion') or evento['competicion']) if not evento.get('local') else f"{evento['local']} — {evento['visitante']}"
@@ -168,7 +182,7 @@ def crear_html(asunto, secciones, resultado, todos):
             for p in nba['partidos']:
                 fondo_nba, acento_nba, _ = tema_evento({**p, 'deporte':'Baloncesto', 'competicion':'NBA'})
                 bloques.append(f'<div class="tarjeta-nba" style="background:{fondo_nba};color:#142840;padding:18px;margin-bottom:12px;border:1px solid {acento_nba};border-left:5px solid {acento_nba};border-radius:10px;">'
-                               f'{etiqueta(p["recomendacion"], "#142840", "#ffffff")}<p style="font-size:17px;line-height:1.5;font-weight:bold;margin:12px 0 0;">{texto(p["local"])} — {texto(p["visitante"])}</p></div>')
+                               f'{distintivo_nba(p["recomendacion"])}<p style="font-size:17px;line-height:1.5;font-weight:bold;margin:12px 0 0;">{texto(p["local"])} — {texto(p["visitante"])}</p></div>')
             if not nba['partidos']:
                 bloques.append('<p>No hay partidos finalizados y validados en esta consulta.</p>')
             cobertura = [f"Ventana de inicio de partidos: {nba['ventana']}",

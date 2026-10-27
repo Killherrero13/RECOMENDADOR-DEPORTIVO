@@ -22,10 +22,11 @@ class ColoresTests(unittest.TestCase):
                ('LaLiga','Fútbol'),('NBA','Baloncesto'),('Liga Endesa','Baloncesto'),('Euroliga','Baloncesto'),('ATP 500','Tenis')]
         self.assertEqual(len({tema_evento(evento(comp=c,deporte=d))[0] for c,d in casos}),len(casos))
 
-    def test_dorado_conserva_color_de_equipo(self):
+    def test_destacado_oscuro_independiente_del_equipo(self):
         html=tarjeta_evento(evento('Aston Villa',comp='Champions League'),destacado=True)
         self.assertIn('3px solid #c89b36',html)
-        self.assertIn('background:#f4e3ea',html)
+        self.assertIn('background:#132d46',html)
+        self.assertNotIn('background:#f4e3ea',html)
 
     def test_alternativas_cronologicas(self):
         eventos=[evento(comp='Champions League Final',hora=h) for h in ['20:00','19:30','19:00','18:30','18:00']]
@@ -33,3 +34,17 @@ class ColoresTests(unittest.TestCase):
         r=recomendar_eventos(eventos)
         self.assertTrue(r['alternativas'])
         self.assertEqual([orden_inicio(e) for e in r['alternativas']],sorted(orden_inicio(e) for e in r['alternativas']))
+
+    def test_copa_y_liga_diferentes_sin_confundir_eurocopa(self):
+        self.assertNotEqual(tema_evento(evento(comp='LaLiga'))[0],tema_evento(evento(comp='Copa del Rey'))[0])
+        self.assertNotEqual(tema_evento(evento(comp='Liga Endesa',deporte='Baloncesto'))[0],tema_evento(evento(comp='Copa del Rey',deporte='Baloncesto'))[0])
+        self.assertNotEqual(tema_evento(evento(comp='Eurocopa'))[2],'Copa')
+        self.assertEqual(tema_evento(evento(comp='FIFA World Cup'))[2],'Copa')
+
+    def test_decisiones_nba_visualmente_distintas(self):
+        from resumen.diseno_correo import distintivo_nba
+        from bs4 import BeautifulSoup
+        etiquetas = ['Ver completo','Resumen','Puedes saltártelo']
+        nodos = [BeautifulSoup(distintivo_nba(e),'html.parser').div for e in etiquetas]
+        self.assertEqual(len({n['style'] for n in nodos}),3)
+        for texto,n in zip(etiquetas,nodos): self.assertIn(texto.upper(),n.get_text())

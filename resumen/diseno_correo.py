@@ -1,5 +1,6 @@
 """HTML de correo con tablas de presentación, estilos inline y sin recursos remotos."""
 from html import escape
+from .colores import tema_evento
 from .explicaciones import frases_explicacion
 from .canales import plataforma_destacada
 
@@ -50,9 +51,10 @@ def explicacion_html(evento):
 
 
 def tarjeta_evento(evento, destacado=False, franja=''):
-    tinta = '#ffffff' if destacado else '#172b43'
-    secundaria = '#cbd9e8' if destacado else '#60728b'
-    fondo = '#132d46' if destacado else '#ffffff'
+    fondo, acento, identidad = tema_evento(evento)
+    tinta = '#172b43'
+    secundaria = '#43536b'
+    borde = '3px solid #c89b36' if destacado else f'1px solid {acento}'
     icono = ICONOS.get(evento['deporte'], '📺')
     titulo = (evento.get('descripcion') or evento['competicion']) if not evento.get('local') else f"{evento['local']} — {evento['visitante']}"
     fecha = evento['inicio'].strftime('%d/%m') if 'inicio' in evento else evento.get('fecha', '')[5:].replace('-', '/')
@@ -67,7 +69,7 @@ def tarjeta_evento(evento, destacado=False, franja=''):
         estado.append(f"Ver hasta {evento['fin_vision']:%H:%M} · parcial")
     fin = f"Fin estimado {evento['fin_estimado']:%d/%m %H:%M}" if 'fin_estimado' in evento else ''
     label = ('TU IMPRESCINDIBLE' if evento['score'] >= 8 else 'LO MEJOR DEL DÍA') if destacado else franja.upper()
-    return (f'<table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="table-layout:fixed;background:{fondo};border:1px solid #dce5ef;border-radius:14px;margin-bottom:12px;">'
+    return (f'<table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="table-layout:fixed;background:{fondo};border:{borde};border-radius:14px;margin-bottom:12px;">'
             f'<tr><td style="padding:20px;">'
             + (f'<p style="margin:0 0 14px;color:{secundaria};font-size:11px;font-weight:bold;letter-spacing:1.8px;">{texto(label)}</p>' if label else '')
             + '<table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="table-layout:fixed;"><tr>'
@@ -75,7 +77,7 @@ def tarjeta_evento(evento, destacado=False, franja=''):
             f'<div style="font-size:27px;font-weight:bold;line-height:1.2;white-space:nowrap;">{texto(evento["hora"])}</div>'
             f'<div style="margin-top:5px;font-size:12px;color:{secundaria};">{texto(fecha)}</div></td>'
             f'<td valign="top" style="color:{tinta};overflow-wrap:anywhere;">'
-            f'<div style="font-size:12px;color:{secundaria};margin-bottom:7px;">{icono} {texto(evento["deporte"])}</div>'
+            f'<div style="font-size:12px;color:{secundaria};margin-bottom:7px;">{icono} {texto(evento["deporte"])} · {texto(identidad)}</div>'
             f'<div style="font-size:20px;font-weight:bold;line-height:1.35;">{texto(titulo)}</div>'
             f'<div style="font-size:13px;line-height:1.5;color:{secundaria};margin-top:7px;">{texto(evento["competicion"])}</div>'
             f'<div style="margin-top:10px;">{categoria_html(evento)} {badge}</div>{desglose_html(evento)}{explicacion_html(evento)}</td></tr></table>'
@@ -89,9 +91,10 @@ def listado_completo(eventos):
     for e in eventos:
         fecha = e['inicio'].strftime('%d/%m') if 'inicio' in e else e.get('fecha', '')
         nombre = (e.get('descripcion') or e['competicion']) if not e.get('local') else f"{e['local']} — {e['visitante']}"
-        filas.append('<tr class="evento-filtrado">'
+        fondo, acento, _ = tema_evento(e)
+        filas.append(f'<tr class="evento-filtrado" style="background:{fondo};">'
                      f'<td width="68" valign="top" style="padding:13px 8px 13px 0;border-bottom:1px solid #e4eaf1;white-space:nowrap;"><strong>{texto(e["hora"])}</strong><br><span style="font-size:11px;color:#64748b;">{texto(fecha)}</span></td>'
-                     '<td valign="top" style="padding:13px 0;border-bottom:1px solid #e4eaf1;overflow-wrap:anywhere;">'
+                     f'<td valign="top" style="padding:13px 8px;border-left:4px solid {acento};border-bottom:1px solid #e4eaf1;overflow-wrap:anywhere;">'
                      f'<strong style="font-size:14px;">{texto(nombre)}</strong><br>'
                      f'<span style="font-size:12px;color:#52647a;">{texto(e["deporte"])} · {texto(e["competicion"])}</span><br>'
                      f'<span style="font-size:12px;line-height:1.6;">{canales_html(e)}</span><br>'
@@ -163,7 +166,8 @@ def crear_html(asunto, secciones, resultado, todos):
                            '<h2 style="font-size:23px;margin:0;color:#ffffff;">🏀 NBA en diferido</h2>'
                            '<p style="font-size:12px;line-height:1.6;margin:10px 0 0;">Sin marcadores ni notas · Orden alfabético</p></div><div style="padding:16px;">')
             for p in nba['partidos']:
-                bloques.append(f'<div class="tarjeta-nba" style="background:#ffdfc1;color:#142840;padding:18px;margin-bottom:12px;border:1px solid #d88a4c;border-left:5px solid #c45a12;border-radius:10px;">'
+                fondo_nba, acento_nba, _ = tema_evento({**p, 'deporte':'Baloncesto', 'competicion':'NBA'})
+                bloques.append(f'<div class="tarjeta-nba" style="background:{fondo_nba};color:#142840;padding:18px;margin-bottom:12px;border:1px solid {acento_nba};border-left:5px solid {acento_nba};border-radius:10px;">'
                                f'{etiqueta(p["recomendacion"], "#142840", "#ffffff")}<p style="font-size:17px;line-height:1.5;font-weight:bold;margin:12px 0 0;">{texto(p["local"])} — {texto(p["visitante"])}</p></div>')
             if not nba['partidos']:
                 bloques.append('<p>No hay partidos finalizados y validados en esta consulta.</p>')
@@ -182,11 +186,12 @@ def crear_html(asunto, secciones, resultado, todos):
                            '<div style="padding:16px;">')
             for b in events.get('planning', []):
                 principal = b['tipo'] == 'Cita principal'
-                color = '#ffffff' if principal else '#e0f1ec'
+                origen = next((e for e in events.get('filtrados', []) if (f"{e['local']} — {e['visitante']}" if e.get('local') else e.get('descripcion') or e['competicion']) == b['evento']), {})
+                color, acento, _ = tema_evento(origen)
                 bloques.append('<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="table-layout:fixed;margin-bottom:12px;">'
                                f'<tr><td width="68" valign="top" style="padding:16px 10px 16px 0;color:#153e43;font-size:14px;"><strong>{texto(b["desde"])}</strong>'
                                f'<br><span style="font-size:11px;">hasta<br>{texto(b["hasta"])}</span></td>'
-                               f'<td valign="top" style="padding:16px;background:{color};border-left:4px solid #287b79;border-radius:0 10px 10px 0;overflow-wrap:anywhere;">'
+                               f'<td valign="top" style="padding:16px;background:{color};border-left:4px solid {acento};border-radius:0 10px 10px 0;overflow-wrap:anywhere;">'
                                f'{etiqueta(b["tipo"], "#153e43" if principal else "#bde3d7", "#ffffff" if principal else "#153e43")}'
                                f'<p style="font-size:16px;line-height:1.5;margin:10px 0 0;color:#153e43;"><strong>{texto(b["evento"])}</strong></p>'
                                f'<p style="font-size:12px;line-height:1.65;margin:8px 0 0;color:#375a5d;">{texto(b["detalle"])}</p></td></tr></table>')

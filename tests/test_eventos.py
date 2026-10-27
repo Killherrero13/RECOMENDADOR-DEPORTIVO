@@ -21,8 +21,8 @@ class EventosTests(unittest.TestCase):
         self.assertEqual(new['plan']['imprescindible']['local'], 'Liverpool')
         self.assertTrue(all(0 <= e['score'] <= 10 for e in new['filtrados']))
         self.assertEqual(len(new['plan']),len(new['seleccionados']))
-        self.assertEqual([e['prioridad'] for e in new['alternativas']],
-                         sorted([e['prioridad'] for e in new['alternativas']],reverse=True))
+        self.assertEqual([e['hora'] for e in new['alternativas']],
+                         sorted(e['hora'] for e in new['alternativas']))
         self.assertEqual(events, original_input)
 
     def test_dia_sin_recomendaciones(self):

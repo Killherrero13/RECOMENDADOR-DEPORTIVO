@@ -421,4 +421,4 @@ def recomendar_eventos(events, ahora=None, fecha=None):
     from .planning import crear_planning
     flexible = crear_planning(filtered_events, selected_events, event_key)
     return {**({'planning': flexible} if flexible else {}), 'filtrados': filtered_events, 'plan': daily_plan,
-            'seleccionados': selected_events, 'alternativas': other_top_events[:MAX_OTHER_EVENTS]}
+            'seleccionados': selected_events, 'alternativas': sorted(other_top_events[:MAX_OTHER_EVENTS], key=orden_inicio)}

@@ -598,3 +598,7 @@ Una tarjeta independiente en morado y dorado agrupa recomendación por partido y
 
 
 Orden del correo: camisetas, NBA, cita destacada, planning diario y todos los eventos filtrados. El planning se agrupa en un bloque verde petróleo con línea temporal y alternativas dentro del mismo bloque; la información general queda dentro del listado final. Los avisos de ejecución y demostración se mantienen visibles.
+
+
+### Ajustes tras el correo del 27/10/2026
+Celtics siempre Resumen en diferido y verde en todas las tarjetas. Las ocho alternativas se eligen por interés/encaje y se presentan por fecha y hora. Equipos prioritarios antes de competición: Atleti/España rojo y Aston Villa burdeos. Champions azul, Europa League naranja, Conference verde, ligas de fútbol verde azulado; tenis amarillo pelota; NBA naranja, ACB azul claro, Euroliga violeta. El destacado mantiene su color y añade contorno dorado. Se aplica en tarjetas, planning, listado completo y adjunto; DAZN/Movistar conservan sus distintivos. Sin spoilers ni cambios en las notas del resto.

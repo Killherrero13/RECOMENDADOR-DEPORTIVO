@@ -116,3 +116,7 @@ Cuaderno independiente: `cuadernos/ScriptPartidosNBA_actualizado.ipynb`. No requ
 
 
 La NBA se presenta en un solo bloque naranja con cabecera azul oscuro, tarjetas naranjas y cobertura dentro del mismo bloque. El color es común a todos los partidos; la categoría se comunica por texto. No se muestran notas ni motivos que anticipen el desenlace.
+
+
+### Ajustes tras el correo del 27/10/2026
+Celtics siempre Resumen en diferido y verde en todas las tarjetas. Las ocho alternativas se eligen por interés/encaje y se presentan por fecha y hora. Equipos prioritarios antes de competición: Atleti/España rojo y Aston Villa burdeos. Champions azul, Europa League naranja, Conference verde, ligas de fútbol verde azulado; tenis amarillo pelota; NBA naranja, ACB azul claro, Euroliga violeta. El destacado mantiene su color y añade contorno dorado. Se aplica en tarjetas, planning, listado completo y adjunto; DAZN/Movistar conservan sus distintivos. Sin spoilers ni cambios en las notas del resto.

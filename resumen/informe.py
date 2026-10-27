@@ -72,7 +72,7 @@ def contenido(resultado):
         sections.append(('Alternativas', [linea_evento(e) for e in events['alternativas']] or ['Sin alternativas que alcancen el umbral.']))
         sections.append(('Información', ['Notas personales sobre diez: interés deportivo y afinidad. El acceso y el horario solo ajustan el encaje en la agenda.',
                          '8–10: cita destacada · 6–7,9: buena opción · 4–5,9: de fondo · menos de 4: prescindible.',
-                         'Alternativas ordenadas por interés y encaje. Horarios de Europe/Madrid.',
+                         'Alternativas seleccionadas por interés y encaje, presentadas por hora. Horarios de Europe/Madrid.',
                          'Los finales y solapamientos se calculan con duraciones estimadas; pueden variar.',
                          'Fuente de la agenda: futbolenlatv.es.']))
         todos = sorted(events.get('filtrados', []), key=orden_inicio)

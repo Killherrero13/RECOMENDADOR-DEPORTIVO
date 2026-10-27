@@ -84,7 +84,7 @@ def evaluar_partidos(partidos, ahora):
             nombres = [t['team']['displayName'] for t in (local, visitante)]
             afinidades = [t['team']['name'] for t in (local, visitante)]
             nota = puntuacion(*afinidades, *puntos)
-            recomendacion = categoria_nba(nota)
+            recomendacion = 'Resumen' if 'Celtics' in afinidades else categoria_nba(nota)
             # Nunca devolver el objeto de la fuente: contiene spoilers incluso en sus enlaces.
             salida.append({'local': nombres[0], 'visitante': nombres[1],
                            'fecha': fecha.astimezone(MADRID_TZ).strftime('%d/%m %H:%M'),

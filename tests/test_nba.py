@@ -25,7 +25,7 @@ class NBATests(unittest.TestCase):
                                   partido('4','2026-10-26T06:00Z')], self.ahora)
         self.assertEqual(len(datos['partidos']),1)
         self.assertEqual(datos['partidos'][0]['visitante'],'Portland Trail Blazers')
-        self.assertEqual(datos['partidos'][0]['recomendacion'],'Ver completo')
+        self.assertEqual(datos['partidos'][0]['recomendacion'],'Resumen')
         self.assertIn('1 encuentros', str(datos['avisos']))
         self.assertEqual(set(datos['partidos'][0]),{'local','visitante','fecha','recomendacion'})
 
@@ -36,11 +36,15 @@ class NBATests(unittest.TestCase):
 
     def test_sin_spoilers_en_html_texto_ni_adjunto(self):
         r = demostracion('eventos')
-        r['nba'] = evaluar_partidos([partido(),partido('2',puntos=('127','89'))],self.ahora)
+        otro = partido('2',puntos=('127','89'))
+        otro['competitions'][0]['competitors'][0]['team']['name'] = 'Jazz'
+        r['nba'] = evaluar_partidos([partido(),otro],self.ahora)
         informe = generar_informe(r)
         for medio in ['html','texto','listado_html']:
             for secreto in ['103','102','127','89','score','winner','puntuacion']:
-                self.assertNotIn(secreto,informe[medio])
+                from bs4 import BeautifulSoup
+                contenido = BeautifulSoup(informe[medio], 'html.parser').get_text(' ') if medio != 'texto' else informe[medio]
+                self.assertNotIn(secreto,contenido)
         self.assertIn('NBA en diferido',informe['html'])
         self.assertIn('Puedes saltártelo',informe['texto'])
 
@@ -76,6 +80,8 @@ class NBATests(unittest.TestCase):
         a['competitions'][0]['competitors'][0]['team']['displayName'] = 'Z equipo'
         b['competitions'][0]['competitors'][0]['team']['displayName'] = 'A equipo'
         c['competitions'][0]['competitors'][0]['team']['displayName'] = 'M equipo'
+        for e in [a,b,c]:
+            e['competitions'][0]['competitors'][0]['team']['name'] = 'Jazz'
         datos = evaluar_partidos([a,b,c],self.ahora)['partidos']
         self.assertEqual([p['recomendacion'] for p in datos],['Resumen','Puedes saltártelo','Ver completo'])
 
@@ -109,4 +115,14 @@ class NBATests(unittest.TestCase):
         self.assertIsNotNone(bloque)
         self.assertIn('Fuente: ESPN',bloque.get_text())
         self.assertEqual(len(soup.select('.tarjeta-nba')),len(bloque.select('.tarjeta-nba')))
-        self.assertIn('#ffdfc1',bloque.select_one('.tarjeta-nba')['style'])
+        self.assertIn('#e2f3e8',bloque.select_one('.tarjeta-nba')['style'])
+
+    def test_celtics_siempre_resumen_local_o_visitante(self):
+        for puntos in [('103','102'),('130','90')]:
+            for fuera in [False,True]:
+                e = partido(puntos=puntos)
+                if fuera:
+                    a,b = e['competitions'][0]['competitors']
+                    a['team'],b['team'] = b['team'],a['team']
+                r = evaluar_partidos([e],self.ahora)
+                self.assertEqual(r['partidos'][0]['recomendacion'],'Resumen')

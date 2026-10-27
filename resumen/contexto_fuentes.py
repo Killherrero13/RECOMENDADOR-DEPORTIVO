@@ -1,0 +1,359 @@
+"""Contexto anterior al partido: tablas e históricos, sin credenciales nuevas."""
+from concurrent.futures import ThreadPoolExecutor
+from datetime import datetime, timedelta, timezone
+
+import requests
+import threading
+import time
+
+from .config import MADRID_TZ
+from .perfiles import normalizar, identidad_basket
+from .categorias import categoria_tenis
+
+ESPN = 'https://site.api.espn.com/apis/site/v2/sports/soccer'
+TABLAS = 'https://site.web.api.espn.com/apis/v2/sports/soccer'
+EURO = 'https://api-live.euroleague.net'
+_PLAZO = threading.local()
+
+REGLA_COPA_2026 = 'https://www.ftf.es/pnfg/NNws_ShwNewDup?cod_primaria=3001822&cod_secundaria=3001822&codigo=1062147'
+
+
+class ErrorContexto(Exception):
+    pass
+
+
+def descargar_json(url):
+    try:
+        restante = getattr(_PLAZO, 'fin', float('inf')) - time.monotonic()
+        if restante <= 0:
+            raise ErrorContexto('Agotado el tiempo disponible para contexto.')
+        r = requests.get(url, timeout=(min(5, restante), min(15, restante)))
+        r.raise_for_status()
+        datos = r.json()
+        if not isinstance(datos, dict):
+            raise ValueError()
+        return datos
+    except (requests.RequestException, ValueError):
+        raise ErrorContexto('Fuente no disponible o formato no válido.') from None
+
+
+def fecha_iso(valor):
+    fecha = datetime.fromisoformat(valor.replace('Z', '+00:00'))
+    if fecha.tzinfo is None:
+        raise ValueError('Fecha de fuente sin zona horaria.')
+    return fecha
+
+
+def temporada(ahora):
+    if ahora.tzinfo is not None:
+        ahora = ahora.astimezone(MADRID_TZ)
+    return ahora.year if ahora.month >= 7 else ahora.year - 1
+
+
+def liga_evento(e):
+    if e.get('deporte') != 'Fútbol':
+        return None
+    comp = normalizar(e['competicion'])
+    if '2 bundesliga' in comp:
+        return None
+    for tokens, liga in [(['hypermotion'], 'esp.2'),
+                         (['laliga', 'la liga', 'ea sports'], 'esp.1'),
+                         (['premier league'], 'eng.1'), (['serie a italiana', 'italian serie a'], 'ita.1'),
+                         (['bundesliga'], 'ger.1'), (['ligue 1'], 'fra.1')]:
+        if any(t in comp for t in tokens):
+            return liga
+    return None
+
+
+def alias_futbol(nombre):
+    # Alias exactos: nunca emparejar por una subcadena ambigua.
+    n = normalizar(nombre)
+    aliases = {'as roma': 'roma', 'as roma fc': 'roma', 'sevilla fc': 'sevilla',
+               'at madrid': 'atletico madrid', 'atletico de madrid': 'atletico madrid',
+               'fc barcelona': 'barcelona', 'manchester utd': 'manchester united',
+               'man utd': 'manchester united', 'fc bayern': 'bayern munich',
+               'bayern munchen': 'bayern munich', 'paris saint germain': 'psg',
+               'o lyonnais': 'lyon', 'olympique lyonnais': 'lyon',
+               'inter milan': 'internazionale', 'ac milan': 'milan', 'como 1907': 'como',
+               'sestao': 'sestao river', 'cd manacor': 'manacor', 'cd tudelano': 'tudelano',
+               'cd atletico paso': 'atletico paso', 'arosa sc': 'arosa', 'rsd alcala': 'alcala',
+               'ud llanera': 'llanera', 'at tordesillas': 'atletico tordesillas',
+               'g segoviana': 'gimnastica segoviana', 'cultural d leonesa': 'cultural leonesa',
+               'ud las palmas': 'las palmas', 'cf calamocha': 'calamocha', 'ce manresa': 'manresa', 'ud almeria': 'almeria'}
+    return aliases.get(n, n)
+
+
+def entradas_tabla(datos):
+    entries = []
+    for hijo in datos.get('children', []):
+        entries.extend(hijo.get('standings', {}).get('entries', []))
+    if len(entries) < 10:
+        raise ErrorContexto('Tabla incompleta.')
+    return entries
+
+
+def historial_futbol(datos, equipo_id, liga, year, corte):
+    if datos.get('season', {}).get('year') != year or str(datos.get('team', {}).get('id')) != equipo_id:
+        raise ErrorContexto('Histórico de otra temporada o equipo.')
+    resultados, vistos = [], set()
+    for e in datos.get('events', []):
+        if e.get('league', {}).get('slug') != liga or e.get('season', {}).get('year') != year:
+            continue
+        comp = e.get('competitions', [{}])[0]
+        if comp.get('status', {}).get('type', {}).get('completed') is not True:
+            continue
+        fecha = fecha_iso(e['date'])
+        # El estado es final, pero no se usa un encuentro iniciado hace menos de 3h.
+        if fecha + timedelta(hours=3) > corte or e['id'] in vistos:
+            continue
+        vistos.add(e['id'])
+        equipos = comp['competitors']
+        propio = next(t for t in equipos if str(t['id']) == equipo_id)
+        rival = next(t for t in equipos if str(t['id']) != equipo_id)
+        a, b = float(propio['score']['value']), float(rival['score']['value'])
+        if min(a, b) < 0 or not a.is_integer() or not b.is_integer():
+            raise ErrorContexto('Marcador histórico no válido.')
+        resultados.append((fecha, 'W' if a > b else 'D' if a == b else 'L'))
+    resultados.sort(reverse=True)
+    return resultados
+
+
+def tabla_futbol(liga, nombres, ahora):
+    year = temporada(ahora)
+    url = f'{TABLAS}/{liga}/standings'
+    datos = descargar_json(url)
+    if datos.get('season', {}).get('year') != year:
+        raise ErrorContexto('Tabla de otra temporada.')
+    entries = entradas_tabla(datos)
+    esperados = {'esp.1':20,'esp.2':22,'ita.1':20,'eng.1':20,'ger.1':18,'fra.1':18}
+    if len({str(r['team']['id']) for r in entries}) != esperados[liga]:
+        raise ErrorContexto('Clasificación parcial o con equipos duplicados.')
+    encontrados = {}
+    historiales = {}
+    for nombre in nombres:
+        candidatos = [r for r in entries if alias_futbol(nombre) in
+                      {alias_futbol(r['team'].get(k, '')) for k in ('displayName', 'shortDisplayName', 'name', 'location')}]
+        if len(candidatos) != 1:
+            continue
+        r = candidatos[0]
+        stats = {s['name']: s.get('value') for s in r['stats']}
+        gp, wins, draws, losses = (int(stats[k]) for k in ('gamesPlayed', 'wins', 'ties', 'losses'))
+        position = int(stats['rank'])
+        if gp != wins + draws + losses or gp < 1 or not 1 <= position <= len(entries):
+            continue
+        equipo_id = str(r['team']['id'])
+        historial_url = f'{ESPN}/{liga}/teams/{equipo_id}/schedule?season={year}'
+        try:
+            if equipo_id not in historiales:
+                historiales[equipo_id] = historial_futbol(descargar_json(historial_url), equipo_id, liga, year, ahora)
+            hist = historiales[equipo_id]
+        except (ErrorContexto, KeyError, ValueError, TypeError, StopIteration):
+            continue
+        # La tabla solo se acepta si coincide íntegramente con los resultados anteriores al corte.
+        balance = [sum(resultado == x for _, resultado in hist) for x in ('W', 'D', 'L')]
+        if len(hist) != gp or balance != [wins, draws, losses]:
+            continue
+        encontrados[nombre] = {'nombre': nombre, 'posicion': position, 'jugados': gp,
+                              'victorias': wins, 'derrotas': losses, 'forma': ''.join(x for _, x in hist[:5]),
+                              'fuentes': [url, historial_url], 'ultimo_partido': hist[0][0].isoformat()}
+    return encontrados
+
+
+def identidad_club(club):
+    return {identidad_basket(club.get(k, '')) for k in ('name', 'abbreviatedName', 'editorialName')}
+
+
+def tabla_euroliga(nombres, ahora):
+    year = temporada(ahora)
+    url = f'{EURO}/v2/competitions/E/seasons/E{year}/games?limit=1000'
+    datos = descargar_json(url)
+    games = datos.get('data', [])
+    if not games or len(games) != datos.get('total') or len(games) >= 1000:
+        raise ErrorContexto('Calendario de Euroliga incompleto.')
+    regulares = [g for g in games if g.get('season', {}).get('code') == f'E{year}'
+                 and g.get('phaseType', {}).get('code') == 'RS']
+    if not regulares:
+        raise ErrorContexto('No hay calendario de la temporada solicitada.')
+    anteriores = [g for g in regulares if g.get('played') is True
+                  and fecha_iso(g['utcDate']) + timedelta(hours=3) <= ahora]
+    rondas = {g['round'] for g in anteriores}
+    completas = [n for n in rondas if all(g in anteriores for g in regulares if g['round'] == n)]
+    if not completas:
+        raise ErrorContexto('No hay una jornada completa anterior al corte.')
+    ronda = max(completas)
+    tabla_url = f'{EURO}/v3/competitions/E/seasons/E{year}/rounds/{ronda}/basicstandings'
+    tabla = descargar_json(tabla_url).get('teams', [])
+    if len(tabla) < 10:
+        raise ErrorContexto('Clasificación de Euroliga incompleta.')
+    encontrados = {}
+    for nombre in nombres:
+        candidatos = [r for r in tabla if identidad_basket(nombre) in identidad_club(r['club'])]
+        if len(candidatos) != 1:
+            continue
+        r = candidatos[0]
+        code = r['club']['code']
+        hist = []
+        for g in anteriores:
+            propios = [g[k] for k in ('local', 'road') if g[k]['club']['code'] == code]
+            if not propios:
+                continue
+            a = propios[0]['score']
+            b = g['road' if g['local']['club']['code'] == code else 'local']['score']
+            if not isinstance(a, int) or not isinstance(b, int) or min(a, b) < 0 or a == b:
+                raise ErrorContexto('Resultado de Euroliga no válido.')
+            hist.append((fecha_iso(g['utcDate']), 'W' if a > b else 'L'))
+        hist.sort(reverse=True)
+        wins = sum(x == 'W' for _, x in hist)
+        if len(hist) != r['gamesPlayed'] or wins != r['gamesWon'] or len(hist) - wins != r['gamesLost']:
+            continue
+        encontrados[nombre] = {'nombre': nombre, 'posicion': int(r['position']), 'jugados': len(hist),
+                              'victorias': wins, 'derrotas': len(hist) - wins,
+                              'forma': ''.join(x for _, x in hist[:5]), 'fuentes': [url, tabla_url],
+                              'ultimo_partido': hist[0][0].isoformat()}
+    return encontrados
+
+
+def contextos_copa(items, ahora):
+    # Esta fuente confirma el formato de la primera ronda 2026/27, no otras ediciones.
+    if temporada(ahora) != 2026:
+        return 0
+    tabla_url = f'{TABLAS}/esp.1/standings'
+    datos = descargar_json(tabla_url)
+    if datos.get('season', {}).get('year') != 2026:
+        return 0
+    ids_primera = {str(r['team']['id']) for r in entradas_tabla(datos)}
+    if len(ids_primera) != 20:
+        return 0
+    dias = {e.get('fecha', ahora.date().isoformat()) for e in items}
+    consulta = {}
+    for dia in dias:
+        url = f'{ESPN}/esp.copa_del_rey/scoreboard?dates={dia.replace("-", "")}&limit=100'
+        consulta[dia] = (url, descargar_json(url).get('events', []))
+    cubiertos = 0
+    for e in items:
+        if not any(t in normalizar(e['competicion']) for t in ('1a ronda', '1 ronda', 'primera ronda')):
+            continue
+        dia = e.get('fecha', ahora.date().isoformat())
+        url, partidos = consulta[dia]
+        candidatos = []
+        for p in partidos:
+            comp = p.get('competitions', [{}])[0]
+            equipos = comp.get('competitors', [])
+            if comp.get('status', {}).get('type', {}).get('state') != 'pre':
+                continue
+            local = next((t for t in equipos if t.get('homeAway') == 'home'), None)
+            visita = next((t for t in equipos if t.get('homeAway') == 'away'), None)
+            if not local or not visita:
+                continue
+            def coincide(nombre, t):
+                return alias_futbol(nombre) in {alias_futbol(t['team'].get(k, ''))
+                                                for k in ('displayName', 'shortDisplayName', 'name')}
+            if coincide(e['local'], local) and coincide(e['visitante'], visita):
+                inicio = datetime.fromisoformat(f"{dia}T{e['hora']}").replace(tzinfo=MADRID_TZ)
+                if abs(fecha_iso(p['date']) - inicio) <= timedelta(minutes=15):
+                    candidatos.append((local, visita))
+        if len(candidatos) != 1:
+            continue
+        local, visita = candidatos[0]
+        contraste = str(local['id']) not in ids_primera and str(visita['id']) in ids_primera
+        e['contexto'] = {'tipo': 'copa', 'temporada': 2026, 'consultado': ahora.isoformat(),
+                         'competicion': 'esp.copa_del_rey',
+                         'local': {'nombre': e['local']}, 'visitante': {'nombre': e['visitante']},
+                         'copa': {'partido_unico': True, 'contraste_primera': contraste,
+                                  'fuentes': [url, tabla_url, REGLA_COPA_2026]}}
+        cubiertos += 1
+    return cubiertos
+
+
+def contextos_tenis(items, ahora):
+    url = 'https://site.api.espn.com/apis/site/v2/sports/tennis/atp/rankings'
+    datos = descargar_json(url)
+    tablas = [r for r in datos.get('rankings', []) if r.get('type') == 'atp']
+    if len(tablas) != 1:
+        return 0
+    tabla = tablas[0]
+    publicado = fecha_iso(tabla['update'])
+    if not timedelta(0) <= ahora - publicado <= timedelta(days=10):
+        return 0
+    ranks = tabla.get('ranks', [])
+    if len(ranks) < 50:
+        return 0
+    cubiertos = 0
+    for e in items:
+        categoria, _ = categoria_tenis(e)
+        if categoria is None:
+            continue
+        jugadores = []
+        for k in ('local', 'visitante'):
+            candidatos = [r for r in ranks if normalizar(e[k]) in
+                          {normalizar(r['athlete'].get(n, '')) for n in ('displayName', 'shortname', 'shortName', 'fullName')}]
+            if len(candidatos) != 1:
+                break
+            r = candidatos[0]
+            if type(r.get('current')) is not int or not 1 <= r['current'] <= 1000:
+                break
+            a = r['athlete']
+            jugadores.append({'nombre': e[k], 'id': str(a['id']), 'ranking': r['current'],
+                              'edad': a.get('age'), 'pais': a.get('citizenshipCountry')})
+        if len(jugadores) != 2 or jugadores[0]['id'] == jugadores[1]['id']:
+            continue
+        e['contexto'] = {'tipo': 'tenis', 'competicion': 'atp', 'temporada': temporada(ahora),
+                         'consultado': ahora.isoformat(), 'publicado': publicado.isoformat(),
+                         'local': jugadores[0], 'visitante': jugadores[1], 'fuentes': [url]}
+        cubiertos += 1
+    return cubiertos
+
+
+def enriquecer_eventos(eventos, ahora):
+    """Añade contexto solo a encuentros futuros; no sustituye ni bloquea la agenda."""
+    if ahora.tzinfo is None:
+        raise ValueError('El contexto requiere fecha con zona horaria.')
+    ahora = ahora.astimezone(MADRID_TZ)
+    grupos = {}
+    for e in eventos:
+        e.pop('contexto', None)
+        try:
+            inicio = datetime.fromisoformat(f"{e.get('fecha', ahora.date().isoformat())}T{e['hora']}").replace(tzinfo=MADRID_TZ)
+        except (ValueError, KeyError, TypeError):
+            continue
+        if inicio <= ahora:
+            continue
+        liga = liga_evento(e)
+        if e.get('deporte') == 'Tenis':
+            liga = 'tenis'
+        if e.get('deporte') == 'Fútbol' and 'copa del rey' in normalizar(e['competicion']):
+            liga = 'copa'
+        if e.get('deporte') == 'Baloncesto' and any(t in normalizar(e['competicion']) for t in ('euroliga', 'euroleague')):
+            liga = 'euro'
+        if liga:
+            grupos.setdefault(liga, []).append(e)
+
+    fin = time.monotonic() + 45
+
+    def procesar(item):
+        _PLAZO.fin = fin
+        liga, items = item
+        nombres = sorted({e[k] for e in items for k in ('local', 'visitante')})
+        try:
+            if liga == 'tenis':
+                return contextos_tenis(items, ahora)
+            if liga == 'copa':
+                return contextos_copa(items, ahora)
+            datos = tabla_euroliga(nombres, ahora) if liga == 'euro' else tabla_futbol(liga, nombres, ahora)
+        except (ErrorContexto, KeyError, ValueError, TypeError, IndexError, StopIteration):
+            datos = {}
+        for e in items:
+            if e['local'] in datos and e['visitante'] in datos:
+                e['contexto'] = {'consultado': ahora.isoformat(), 'temporada': temporada(ahora),
+                                 'competicion': liga, 'local': datos[e['local']], 'visitante': datos[e['visitante']]}
+        return sum('contexto' in e for e in items)
+
+    if not grupos:
+        return []
+    with ThreadPoolExecutor(max_workers=3) as pool:
+        cubiertos = sum(pool.map(procesar, grupos.items()))
+    elegibles = sum(len(items) for items in grupos.values())
+    return [f'Contexto deportivo validado en {cubiertos}/{elegibles} encuentros futuros de las ligas cubiertas. '
+            'En el resto se mantiene la nota básica. Cobertura actual: ligas principales de fútbol, Euroliga '
+            'y contraste de categorías en primera ronda de Copa del Rey 2026/27, además de ranking ATP. '
+            'Las competiciones o jugadores sin datos conservan su valoración básica.']

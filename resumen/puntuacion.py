@@ -4,6 +4,7 @@ import re
 from .categorias import categoria_tenis
 from .perfiles import identidad_basket, REFERENTES_EUROLIGA, REFERENTES_TENIS, perfil_tenis
 from .canales import plataforma_destacada
+from .contexto import valorar_contexto
 
 UMBRAL_PLAN = 6.5
 UMBRAL_ALTERNATIVAS = 4.5
@@ -120,7 +121,13 @@ def valorar(evento, local, visitante, competicion, afinidad_previa=0, derby=0, r
         motivos.append('Valoración neutral del deporte')
     if fase:
         motivos.append('Final' if ronda == 2.5 else 'Fase de eliminatoria')
-    deportivo = round(min(8.5,base + cartel + fase),2)
+    contexto = valorar_contexto(evento)
+    motivos.extend(contexto['motivos'])
+    deportivo_basico = min(8.5, base + cartel + fase)
+    afinidad_basica = max(-deportivo_basico, min(10-deportivo_basico, afinidad))
+    nota_basica = round(max(0, min(10, deportivo_basico + afinidad_basica)), 1)
+    afinidad += contexto.get('afinidad', 0)
+    deportivo = round(min(8.5,base + cartel + fase + contexto['ajuste']),2)
     afinidad = round(max(-deportivo,min(10-deportivo,afinidad)),2)
     nota = round(max(0,min(10,deportivo+afinidad)),1)
     canales = evento.get('canales',[])
@@ -128,5 +135,6 @@ def valorar(evento, local, visitante, competicion, afinidad_previa=0, derby=0, r
     horario = -(0.6 if evento.get('madrugada') else 0) - (0.5 if evento.get('vision_parcial') else 0)
     return {'score':nota,'prioridad':round(nota+acceso+horario,2),'nivel':nivel_nota(nota),
             'desglose':{'base':base,'cartel':cartel,'fase':fase,'deportivo':deportivo,
-                        'afinidad':afinidad,'acceso':acceso,'horario':horario},
+                        'afinidad':afinidad,'acceso':acceso,'horario':horario,'contexto':round(nota-nota_basica,1)},
+            'evaluacion_contexto':contexto,
             'motivos':motivos, 'escala':'personal-10-v2'}

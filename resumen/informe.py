@@ -16,6 +16,11 @@ def linea_evento(event):
     if event.get('desglose'):
         d = event['desglose']
         texto += f" · Interés deportivo {d['deportivo']:.1f} · Afinidad {d['afinidad']:+.1f}"
+    contexto = event.get('evaluacion_contexto', {})
+    if contexto.get('estado') == 'validado':
+        texto += f" · Contexto {event['desglose'].get('contexto', 0):+.1f} · Consultado {contexto['consultado']} · Fuentes: " + ' '.join(contexto['fuentes'])
+        if contexto.get('publicado'):
+            texto += f" · Ranking publicado: {contexto['publicado'][:10]}"
     if event.get('categoria_reconocida'):
         texto += f" · Categoría: {event['categoria_reconocida']}"
     elif event.get('deporte') == 'Tenis' and 'origen_categoria' in event:

@@ -9,6 +9,7 @@ from bs4 import BeautifulSoup
 
 from .config import MADRID_TZ
 from .eventos import recomendar_eventos
+from .contexto_fuentes import enriquecer_eventos
 
 URL = 'https://www.futbolenlatv.es/deporte'
 logger = logging.getLogger(__name__)
@@ -113,6 +114,13 @@ def generar_resultado_eventos(ahora=None):
         raise ErrorEventos('La fecha de consulta debe incluir zona horaria.')
     fecha = ahora.astimezone(MADRID_TZ).date()
     events, avisos = extraer_jornada(descargar_html(), fecha)
+    try:
+        avisos.extend(enriquecer_eventos(events, ahora))
+    except Exception:
+        # El contexto es opcional: un fallo inesperado tampoco debe perder la agenda.
+        for e in events:
+            e.pop('contexto', None)
+        avisos.append('Contexto deportivo no disponible; se conservan las valoraciones básicas.')
     result = recomendar_eventos(events, ahora=ahora, fecha=fecha)
     logger.info('Eventos filtrados: %s; seleccionados: %s; alternativas: %s.',
                 len(result['filtrados']), len(result['seleccionados']), len(result['alternativas']))

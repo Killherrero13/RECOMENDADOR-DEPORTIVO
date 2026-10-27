@@ -1,0 +1,100 @@
+"""Ajuste contextual acotado y auditable, independiente del horario y el acceso."""
+from datetime import datetime, timedelta
+
+from .config import MADRID_TZ
+from .contexto_fuentes import fecha_iso, temporada, liga_evento
+from .perfiles import normalizar
+
+
+def valorar_contexto(evento):
+    vacio = {'ajuste': 0.0, 'motivos': [], 'fuentes': [], 'estado': 'sin datos'}
+    c = evento.get('contexto')
+    if not c:
+        return vacio
+    try:
+        inicio = evento.get('inicio') or datetime.fromisoformat(
+            f"{evento['fecha']}T{evento['hora']}").replace(tzinfo=MADRID_TZ)
+        consulta = fecha_iso(c['consultado'])
+        if not timedelta(0) <= inicio - consulta <= timedelta(hours=36):
+            return {**vacio, 'estado': 'datos fuera del corte temporal'}
+        if c['temporada'] != temporada(inicio):
+            return {**vacio, 'estado': 'otra temporada'}
+        if c.get('tipo') == 'tenis':
+            if evento['deporte'] != 'Tenis' or c.get('competicion') != 'atp' or not c.get('fuentes'):
+                raise ValueError()
+            if not timedelta(0) <= consulta - fecha_iso(c['publicado']) <= timedelta(days=10):
+                raise ValueError()
+            jugadores = [c['local'], c['visitante']]
+            for k, p in zip(('local', 'visitante'), jugadores):
+                if p['nombre'] != evento[k] or type(p['ranking']) is not int or not 1 <= p['ranking'] <= 1000:
+                    raise ValueError()
+            ranking = sorted(p['ranking'] for p in jugadores)
+            ajuste = .6 if ranking[1] <= 10 else .4 if ranking[0] <= 10 and ranking[1] <= 30 else .2 if ranking[1] <= 30 else 0
+            motivos = []
+            if ajuste:
+                motivos.append(f'Contexto: ranking ATP {jugadores[0]["ranking"]} frente a {jugadores[1]["ranking"]}')
+            afinidad = 0
+            for p, rival in ((jugadores[0], jugadores[1]), (jugadores[1], jugadores[0])):
+                if (p.get('pais') == 'ESP' and type(p.get('edad')) is int and 18 <= p['edad'] <= 22
+                        and p['ranking'] <= 100 and rival['ranking'] <= 10):
+                    afinidad = .6
+                    motivos.append('Contexto de afinidad: joven español del top-100 frente a un top-10')
+            return {'ajuste': ajuste, 'afinidad': afinidad, 'motivos': motivos, 'fuentes': c['fuentes'],
+                    'estado': 'validado', 'consultado': c['consultado'], 'publicado': c['publicado']}
+        if c.get('tipo') == 'copa':
+            copa = c['copa']
+            if (evento['deporte'] != 'Fútbol' or c['competicion'] != 'esp.copa_del_rey'
+                    or c['local']['nombre'] != evento['local'] or c['visitante']['nombre'] != evento['visitante']
+                    or copa.get('partido_unico') is not True or not copa.get('fuentes')):
+                raise ValueError()
+            ajuste = .6 if copa.get('contraste_primera') is True else 0.0
+            return {'ajuste': ajuste, 'motivos': ['Contexto: eliminatoria a partido único con local fuera de Primera y visitante de Primera'] if ajuste else [],
+                    'fuentes': copa['fuentes'], 'estado': 'validado', 'consultado': c['consultado']}
+        if evento['deporte'] == 'Fútbol' and c['competicion'] != liga_evento(evento):
+            raise ValueError()
+        if evento['deporte'] == 'Baloncesto' and (c['competicion'] != 'euro' or not any(x in normalizar(evento['competicion']) for x in ('euroliga','euroleague'))):
+            raise ValueError()
+        if evento['deporte'] not in ('Fútbol','Baloncesto'):
+            raise ValueError()
+        equipos = [c['local'], c['visitante']]
+        for k, e in zip(('local', 'visitante'), equipos):
+            if e['nombre'] != evento[k]:
+                raise ValueError()
+            if any(type(e[n]) is not int for n in ('posicion', 'jugados', 'victorias', 'derrotas')):
+                raise ValueError()
+            if not 1 <= e['posicion'] <= 40 or not 0 <= e['victorias'] <= e['jugados']:
+                raise ValueError()
+            if not 0 <= e['derrotas'] <= e['jugados'] - e['victorias']:
+                raise ValueError()
+            if not 1 <= len(e['forma']) <= 5 or set(e['forma']) - set('WDL'):
+                raise ValueError()
+            if fecha_iso(e['ultimo_partido']) + timedelta(hours=3) > consulta:
+                raise ValueError()
+            if not e['fuentes']:
+                raise ValueError()
+        if any(e['jugados'] < 5 for e in equipos):
+            return {**vacio, 'estado': 'muestra inferior a cinco partidos'}
+        candidatos = [(0.0, 'Sin señal excepcional en el contexto disponible')]
+        zona_alta = all(e['posicion'] <= 5 for e in equipos)
+        if zona_alta:
+            candidatos.append((1.0, 'Cruce entre dos equipos situados entre los cinco primeros'))
+        if zona_alta and any(e['forma'].startswith('WWW') for e in equipos):
+            candidatos.append((1.3, 'Cruce de zona alta con una racha de tres victorias consecutivas'))
+        if all(e['forma'].startswith('WWW') for e in equipos):
+            candidatos.append((1.0, 'Ambos equipos encadenan tres victorias en esta competición'))
+        for e in equipos:
+            if e['posicion'] <= 3:
+                candidatos.append((0.5, f"{e['nombre']}: entre los tres primeros"))
+                if e['victorias'] / e['jugados'] >= .8 and e['derrotas'] == 0:
+                    candidatos.append((1.2, f"{e['nombre']}: entre los tres primeros, invicto y con al menos un 80% de victorias"))
+            if e['forma'].count('W') >= 4:
+                candidatos.append((0.6, f"{e['nombre']}: al menos cuatro victorias en los últimos cinco partidos"))
+            elif e['forma'].startswith('WWW'):
+                candidatos.append((0.5, f"{e['nombre']}: tres victorias consecutivas"))
+        # Las señales relacionadas compiten: no sumar posición, invicto y racha por separado.
+        ajuste, motivo = max(candidatos, key=lambda x: x[0])
+        fuentes = list(dict.fromkeys(u for e in equipos for u in e['fuentes']))
+        return {'ajuste': min(1.5, ajuste), 'motivos': ['Contexto: ' + motivo] if ajuste else [],
+                'fuentes': fuentes, 'estado': 'validado', 'consultado': c['consultado']}
+    except (KeyError, ValueError, TypeError, AttributeError):
+        return {**vacio, 'estado': 'contexto no válido'}

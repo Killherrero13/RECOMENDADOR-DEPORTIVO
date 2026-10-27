@@ -17,6 +17,7 @@ ALIAS_BASKET = {
     'fc bayern basketball': 'bayern', 'bayern munich': 'bayern', 'bayern munchen': 'bayern',
     'fenerbahce istanbul': 'fenerbahce', 'fenerbahce beko istanbul': 'fenerbahce',
     'panathinaikos bc': 'panathinaikos', 'panathinaikos aktor athens': 'panathinaikos',
+    'armani olimpia milan': 'milano', 'milan': 'milano',
     'ax olimpia milano': 'milano', 'ea7 emporio armani milan': 'milano', 'olimpia milano': 'milano',
     'crvena zvezda mts belgrade': 'estrella roja', 'crvena zvezda': 'estrella roja',
     'crvena zvezda meridianbet belgrade': 'estrella roja',

@@ -15,6 +15,7 @@ class PerfilesTests(unittest.TestCase):
         b=evento('Bayern','FC Barcelona','Euroleague Liga Regular','Baloncesto')
         self.assertEqual(evaluar_evento(a)['score'],evaluar_evento(b)['score'])
         self.assertEqual(identidad_basket('AX Olimpia Milano'),'milano')
+        self.assertEqual(identidad_basket('Armani Olimpia Milan'),'milano')
         self.assertEqual(identidad_basket('Fenerbahçe Istanbul'),'fenerbahce')
         self.assertEqual(identidad_basket('Panathinaikos BC'),'panathinaikos')
 

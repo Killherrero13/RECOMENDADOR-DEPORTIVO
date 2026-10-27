@@ -38,8 +38,19 @@ def nota_texto(evento):
 def desglose_html(evento):
     d = evento.get('desglose')
     if not d:return ''
-    return (f'<div style="font-size:12px;line-height:1.6;margin-top:8px;">'
+    html = (f'<div style="font-size:12px;line-height:1.6;margin-top:8px;">'
             f'Interés deportivo {d["deportivo"]:.1f} · Afinidad {d["afinidad"]:+.1f}</div>')
+    c = evento.get('evaluacion_contexto', {})
+    if c.get('estado') == 'validado' and d.get('contexto', 0):
+        html += etiqueta(f'Contexto validado {d.get("contexto", 0):+.1f}', '#dcefe9', '#205443')
+        html += f'<div style="font-size:11px;line-height:1.6;">Consultado: {texto(c["consultado"][:16].replace("T", " "))}'
+        if c.get('publicado'):
+            html += f' · Ranking publicado: {texto(c["publicado"][:10])}'
+        for i, url in enumerate(c['fuentes'], 1):
+            html += f' · <a href="{texto(url)}" style="color:inherit;">Fuente {i}</a>'
+        html += '</div>'
+    return html
+
 
 def explicacion_html(evento):
     frases = frases_explicacion(evento)
@@ -115,7 +126,7 @@ def listado_completo(eventos):
                      f'<span style="font-size:11px;color:#1b6948;">{texto(nota_texto(e))} · {texto(e.get("nivel", ""))}</span> {categoria_html(e)}'
                      + (f'<br><span style="font-size:11px;color:#8a5217;">Visionado parcial hasta {e["fin_vision"]:%H:%M}</span>' if e.get('vision_parcial') else '')
                      + ('<br><span style="font-size:11px;color:#8a5217;">En curso</span>' if e.get('en_curso') else '')
-                     + explicacion_html(e) + '</td></tr>')
+                     + desglose_html(e) + explicacion_html(e) + '</td></tr>')
     return ('<table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="color:#172b43;">'
             + ''.join(filas) + '</table>' if filas else '<p>No hay eventos que superen los filtros y la disponibilidad.</p>')
 

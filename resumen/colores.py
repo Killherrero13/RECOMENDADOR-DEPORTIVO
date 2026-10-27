@@ -34,7 +34,7 @@ def tema_evento(e):
         if 'nba' in comp:
             return '#ffdfc1', '#b45309', 'NBA'
         if 'euroliga' in comp or 'euroleague' in comp:
-            return '#ede4fa', '#683d99', 'Euroliga'
+            return '#d7b9f3', '#502080', 'Euroliga'
         if re.search(r'\b(copa|cup)\b', comp):
             return '#f9e4f2', '#91316e', 'Copa de baloncesto'
         if any(s in comp for s in ('acb', 'endesa')):

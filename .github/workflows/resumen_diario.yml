@@ -3,7 +3,7 @@ run-name: Resumen deportivo · ${{ inputs.modo || 'ambos' }}
 
 on:
   schedule:
-    - cron: '0 5 * * *'
+    - cron: '0 3 * * *'
       timezone: Europe/Madrid
   workflow_dispatch:
     inputs:

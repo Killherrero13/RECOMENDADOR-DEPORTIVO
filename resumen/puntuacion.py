@@ -2,6 +2,7 @@
 import re
 
 from .categorias import categoria_tenis
+from .perfiles import identidad_basket, REFERENTES_EUROLIGA, REFERENTES_TENIS, perfil_tenis
 from .canales import plataforma_destacada
 
 UMBRAL_PLAN = 6.5
@@ -15,8 +16,7 @@ REFERENTES_FUTBOL = {
 }
 REFERENTES_NBA = {'lakers','warriors','celtics','nuggets','suns','clippers'}
 REFERENTES_ACB = {'barcelona','real madrid','valencia','joventut','gran canaria','baskonia'}
-REFERENTES_TENIS = {'djokovic','alcaraz','medvedev','sinner','zverev','rublev','hurkacz',
-                    'fritz','tsitsipas','rune','ruud','de minaur'}
+
 
 def coincide(alias, nombre):
     return re.search(r'(?<!\w)' + re.escape(alias) + r'(?!\w)', nombre) is not None
@@ -83,22 +83,31 @@ def valorar(evento, local, visitante, competicion, afinidad_previa=0, derby=0, r
                 motivos.append('Juegan tus Celtics')
         else:
             base = (5.8 if any(x in competicion for x in ['mundial','copa del mundo','world cup','eurobasket','olimpic']) else
-                    5.0 if 'euroliga' in competicion else
+                    5.0 if any(x in competicion for x in ('euroliga', 'euroleague')) else
                     4.5 if any(x in competicion for x in ['endesa','acb','copa del rey']) else 3.5)
-            n = contar_referentes(local, visitante, REFERENTES_ACB)
+            equipos = [identidad_basket(e) for e in (local, visitante)]
+            referentes = REFERENTES_EUROLIGA if any(x in competicion for x in ('euroliga', 'euroleague')) else REFERENTES_ACB
+            n = sum(e in referentes for e in equipos)
             if 'estudiantes' in local or 'estudiantes' in visitante:afinidad = 0.6
         cartel = 1.5 if n == 2 else 0.8 if n == 1 else 0
         afinidad += 0.1
         motivos.append('Baloncesto de interés')
+        if n:
+            motivos.append('Dos clubes del catálogo de referentes de la competición' if n == 2 else 'Un club del catálogo de referentes de la competición')
         if 'minicopa' in competicion:base = 2.0
     elif sport == 'Tenis':
         categoria, _ = categoria_tenis(evento)
         base = {'Grand Slam':5.8,'Masters 1000':5.0,'ATP 500':4.4,'ATP 250':3.8}.get(categoria,3.2)
-        n = contar_referentes(local, visitante, REFERENTES_TENIS)
-        cartel = 1.2 if n == 2 else 0.5 if n == 1 else 0
+        perfiles = [perfil_tenis(p) for p in (local, visitante)]
+        n = sum(p is not None for p in perfiles)
+        cartel = sum(1.2 if p == 'figura' else 0.5 if p == 'referente' else 0 for p in perfiles)
+        if n == 2:
+            cartel += 0.5
         afinidad = max(0,afinidad_previa) * 0.28
         motivos.append(categoria or 'Categoría sin confirmar: valoración neutral')
-        if n:motivos.append('Participante de tu lista de interés')
+        if 'figura' in perfiles: motivos.append('Figura del catálogo editorial de tenis')
+        if n == 2: motivos.append('Ambos jugadores tienen perfil reconocido; se valora también al rival')
+        elif n == 1: motivos.append('Un jugador reconocido; rival sin perfil en el catálogo')
     elif sport == 'Automovilismo':
         base = 4.7 if any(x in competicion for x in ['formula 1','f1']) else 3.5
         motivos.append('Motor: interés secundario')

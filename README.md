@@ -605,3 +605,9 @@ Celtics siempre Resumen en diferido y verde en todas las tarjetas. Las ocho alte
 
 
 Distintivos NBA grandes: completo en verde con ▶, resumen en ámbar con ▷ y puedes saltártelo en gris con —. La tarjeta conserva el color del equipo/deporte. Copas nacionales de fútbol y baloncesto en frambuesa, diferentes de las ligas; se mantiene prioridad de equipos y torneos europeos. No cambian recomendaciones ni orden.
+
+
+### Fase 1: reconocimiento de equipos y jugadores
+Catálogo editorial de perfiles en resumen/perfiles.py, sin afirmar rankings ni forma actuales. Alias exactos por deporte normalizan Barça Basket, FC Bayern Basketball, Fenerbahce Istanbul, Panathinaikos BC, AX Olimpia Milano y otros. Euroliga y ACB tienen referentes separados; Euroleague equivale a Euroliga. No se aumenta su base: dos referentes mantienen +1,5 y uno +0,8. NBA en diferido y fútbol no cambian.
+
+Tenis: figura editorial +1,2 por jugador, referente +0,5 y cruce entre dos reconocidos +0,5 adicional. Se incluyen Paul y Khachanov, además de Shelton, Tiafoe y Musetti. La afinidad conserva su peso, usando el máximo de ambos jugadores y coincidencia por palabras, independiente del orden. El mismo catálogo decide reconocimiento y filtrado. Ronda y categoría mantienen sus pesos. No hay bonus por nacionalidad, juventud, ranking, rachas ni contexto no disponible. Landaluce queda pendiente de fase 2; desconocido no significa jugador de bajo nivel.

@@ -1,4 +1,5 @@
 """Filtrado, valoración personal y agenda, sin consultas al importar."""
+from .perfiles import perfil_tenis, normalizar as normalizar_perfil
 from copy import deepcopy
 from datetime import time
 from datetime import datetime
@@ -150,14 +151,10 @@ def stakes_bonus(event):
     return bonus
 
 def tennis_affinity_bonus(event):
-    local = event["local"].lower()
-    visitante = event["visitante"].lower()
+    nombres = [normalizar_perfil(event[k]) for k in ('local', 'visitante')]
+    return max((bonus for player, bonus in TENNIS_PLAYER_AFFINITY.items()
+                if any(re.search(r'(?<!\w)' + re.escape(player) + r'(?!\w)', n) for n in nombres)), default=0)
 
-    for player, bonus in TENNIS_PLAYER_AFFINITY.items():
-        if player in local or player in visitante:
-            return bonus
-
-    return 0
 
 def event_key(e):
     return (
@@ -380,7 +377,7 @@ def recomendar_eventos(events, ahora=None, fecha=None):
                 is_relevant_baloncesto = True
             if "copa del rey" in comp:
                 is_relevant_baloncesto = True
-            if "endesa" in comp or "acb" in comp or "euroliga" in comp:
+            if "endesa" in comp or "acb" in comp or "euroliga" in comp or "euroleague" in comp:
                 is_relevant_baloncesto = True
             if "estudiantes" in local or "estudiantes" in visitante:
                 is_relevant_baloncesto = True
@@ -400,7 +397,7 @@ def recomendar_eventos(events, ahora=None, fecha=None):
     
         if deporte == "Tenis":
             categoria, _ = categoria_tenis(e)
-            if (any(p in local for p in TOP_ATP_20) or any(p in visitante for p in TOP_ATP_20)
+            if (perfil_tenis(e['local']) or perfil_tenis(e['visitante'])
                 or (categoria is not None and knockout_bonus(e) >= 2)):
                 filtered_events.append(e)
     for e in filtered_events:

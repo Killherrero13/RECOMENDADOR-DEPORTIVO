@@ -31,7 +31,7 @@ class CategoriasTests(unittest.TestCase):
     def test_categoria_desconocida_y_afinidad_ausente_son_neutrales(self):
         self.assertEqual(calculate_score(tenis()),4.9)
         self.assertEqual(calculate_score(tenis('Torneo desconocido')),3.7)
-        self.assertEqual(calculate_score(tenis('Torneo desconocido',local='C. Alcaraz')),4.4)
+        self.assertEqual(calculate_score(tenis('Torneo desconocido',local='C. Alcaraz')),5.1)
 
     def test_final_con_jugadores_fuera_de_lista_no_se_pierde(self):
         final=tenis('Torneo de Viena Final',local='Jugador A',visitante='Jugador B')

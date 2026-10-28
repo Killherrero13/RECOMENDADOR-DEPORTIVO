@@ -44,6 +44,9 @@ def desglose_html(evento):
     if c.get('estado') == 'validado' and d.get('contexto', 0):
         html += etiqueta(f'Contexto validado {d.get("contexto", 0):+.1f}', '#dcefe9', '#205443')
         html += f'<div style="font-size:11px;line-height:1.6;">Consultado: {texto(c["consultado"][:16].replace("T", " "))}'
+        ronda = evento.get('contexto', {}).get('local', {}).get('ronda')
+        if ronda:
+            html += f' · Datos hasta jornada {texto(ronda)}'
         if c.get('publicado'):
             html += f' · Ranking publicado: {texto(c["publicado"][:10])}'
         for i, url in enumerate(c['fuentes'], 1):

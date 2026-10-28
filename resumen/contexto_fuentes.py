@@ -7,8 +7,9 @@ import threading
 import time
 
 from .config import MADRID_TZ
-from .perfiles import normalizar, identidad_basket
+from .perfiles import normalizar, identidad_basket, CODIGOS_EUROLIGA
 from .categorias import categoria_tenis
+from .diagnostico import ResultadoContexto, marcar
 
 ESPN = 'https://site.api.espn.com/apis/site/v2/sports/soccer'
 TABLAS = 'https://site.web.api.espn.com/apis/v2/sports/soccer'
@@ -19,22 +20,26 @@ REGLA_COPA_2026 = 'https://www.ftf.es/pnfg/NNws_ShwNewDup?cod_primaria=3001822&c
 
 
 class ErrorContexto(Exception):
-    pass
+    def __init__(self, mensaje, codigo='fuente_no_disponible'):
+        super().__init__(mensaje)
+        self.codigo = codigo
 
 
 def descargar_json(url):
     try:
         restante = getattr(_PLAZO, 'fin', float('inf')) - time.monotonic()
         if restante <= 0:
-            raise ErrorContexto('Agotado el tiempo disponible para contexto.')
+            raise ErrorContexto('Agotado el tiempo disponible para contexto.', 'tiempo_agotado')
         r = requests.get(url, timeout=(min(5, restante), min(15, restante)))
         r.raise_for_status()
         datos = r.json()
         if not isinstance(datos, dict):
             raise ValueError()
         return datos
-    except (requests.RequestException, ValueError):
-        raise ErrorContexto('Fuente no disponible o formato no válido.') from None
+    except requests.RequestException:
+        raise ErrorContexto('Fuente no disponible.', 'fuente_no_disponible') from None
+    except ValueError:
+        raise ErrorContexto('Formato de fuente no válido.', 'formato_no_valido') from None
 
 
 def fecha_iso(valor):
@@ -88,13 +93,13 @@ def entradas_tabla(datos):
     for hijo in datos.get('children', []):
         entries.extend(hijo.get('standings', {}).get('entries', []))
     if len(entries) < 10:
-        raise ErrorContexto('Tabla incompleta.')
+        raise ErrorContexto('Tabla incompleta.', 'tabla_incompleta')
     return entries
 
 
 def historial_futbol(datos, equipo_id, liga, year, corte):
     if datos.get('season', {}).get('year') != year or str(datos.get('team', {}).get('id')) != equipo_id:
-        raise ErrorContexto('Histórico de otra temporada o equipo.')
+        raise ErrorContexto('Histórico de otra temporada o equipo.', 'historico_no_corresponde')
     resultados, vistos = [], set()
     for e in datos.get('events', []):
         if e.get('league', {}).get('slug') != liga or e.get('season', {}).get('year') != year:
@@ -112,7 +117,7 @@ def historial_futbol(datos, equipo_id, liga, year, corte):
         rival = next(t for t in equipos if str(t['id']) != equipo_id)
         a, b = float(propio['score']['value']), float(rival['score']['value'])
         if min(a, b) < 0 or not a.is_integer() or not b.is_integer():
-            raise ErrorContexto('Marcador histórico no válido.')
+            raise ErrorContexto('Marcador histórico no válido.', 'resultado_no_valido')
         resultados.append((fecha, 'W' if a > b else 'D' if a == b else 'L'))
     resultados.sort(reverse=True)
     return resultados
@@ -123,23 +128,25 @@ def tabla_futbol(liga, nombres, ahora):
     url = f'{TABLAS}/{liga}/standings'
     datos = descargar_json(url)
     if datos.get('season', {}).get('year') != year:
-        raise ErrorContexto('Tabla de otra temporada.')
+        raise ErrorContexto('Tabla de otra temporada.', 'otra_temporada')
     entries = entradas_tabla(datos)
     esperados = {'esp.1':20,'esp.2':22,'ita.1':20,'eng.1':20,'ger.1':18,'fra.1':18}
     if len({str(r['team']['id']) for r in entries}) != esperados[liga]:
-        raise ErrorContexto('Clasificación parcial o con equipos duplicados.')
-    encontrados = {}
+        raise ErrorContexto('Clasificación parcial o con equipos duplicados.', 'tabla_incompleta')
+    encontrados = ResultadoContexto()
     historiales = {}
     for nombre in nombres:
         candidatos = [r for r in entries if alias_futbol(nombre) in
                       {alias_futbol(r['team'].get(k, '')) for k in ('displayName', 'shortDisplayName', 'name', 'location')}]
         if len(candidatos) != 1:
+            encontrados.fallo(nombre, 'identidad_ambigua' if candidatos else 'identidad_no_resuelta')
             continue
         r = candidatos[0]
         stats = {s['name']: s.get('value') for s in r['stats']}
         gp, wins, draws, losses = (int(stats[k]) for k in ('gamesPlayed', 'wins', 'ties', 'losses'))
         position = int(stats['rank'])
         if gp != wins + draws + losses or gp < 1 or not 1 <= position <= len(entries):
+            encontrados.fallo(nombre, 'balance_no_valido')
             continue
         equipo_id = str(r['team']['id'])
         historial_url = f'{ESPN}/{liga}/teams/{equipo_id}/schedule?season={year}'
@@ -147,20 +154,25 @@ def tabla_futbol(liga, nombres, ahora):
             if equipo_id not in historiales:
                 historiales[equipo_id] = historial_futbol(descargar_json(historial_url), equipo_id, liga, year, ahora)
             hist = historiales[equipo_id]
-        except (ErrorContexto, KeyError, ValueError, TypeError, StopIteration):
+        except (ErrorContexto, KeyError, ValueError, TypeError, StopIteration) as error:
+            encontrados.fallo(nombre, getattr(error, 'codigo', 'formato_no_valido'))
             continue
         # La tabla solo se acepta si coincide íntegramente con los resultados anteriores al corte.
         balance = [sum(resultado == x for _, resultado in hist) for x in ('W', 'D', 'L')]
         if len(hist) != gp or balance != [wins, draws, losses]:
+            encontrados.fallo(nombre, 'historico_y_tabla_no_coinciden')
             continue
-        encontrados[nombre] = {'nombre': nombre, 'posicion': position, 'jugados': gp,
+        encontrados[nombre] = {'nombre': nombre, 'id':equipo_id, 'posicion': position, 'jugados': gp,
                               'victorias': wins, 'derrotas': losses, 'forma': ''.join(x for _, x in hist[:5]),
                               'fuentes': [url, historial_url], 'ultimo_partido': hist[0][0].isoformat()}
     return encontrados
 
 
 def identidad_club(club):
-    return {identidad_basket(club.get(k, '')) for k in ('name', 'abbreviatedName', 'editorialName')}
+    nombres = {identidad_basket(club.get(k, '')) for k in ('name', 'abbreviatedName', 'editorialName', 'clubPermanentName')}
+    if club.get('code') in CODIGOS_EUROLIGA:
+        nombres.add(CODIGOS_EUROLIGA[club['code']])
+    return nombres
 
 
 def tabla_euroliga(nombres, ahora):
@@ -169,46 +181,48 @@ def tabla_euroliga(nombres, ahora):
     datos = descargar_json(url)
     games = datos.get('data', [])
     if not games or len(games) != datos.get('total') or len(games) >= 1000:
-        raise ErrorContexto('Calendario de Euroliga incompleto.')
+        raise ErrorContexto('Calendario de Euroliga incompleto.', 'calendario_incompleto')
     regulares = [g for g in games if g.get('season', {}).get('code') == f'E{year}'
                  and g.get('phaseType', {}).get('code') == 'RS']
     if not regulares:
-        raise ErrorContexto('No hay calendario de la temporada solicitada.')
+        raise ErrorContexto('No hay calendario de la temporada solicitada.', 'otra_temporada')
     anteriores = [g for g in regulares if g.get('played') is True
                   and fecha_iso(g['utcDate']) + timedelta(hours=3) <= ahora]
     rondas = {g['round'] for g in anteriores}
     completas = [n for n in rondas if all(g in anteriores for g in regulares if g['round'] == n)]
     if not completas:
-        raise ErrorContexto('No hay una jornada completa anterior al corte.')
+        raise ErrorContexto('No hay una jornada completa anterior al corte.', 'sin_jornada_completa')
     ronda = max(completas)
     tabla_url = f'{EURO}/v3/competitions/E/seasons/E{year}/rounds/{ronda}/basicstandings'
     tabla = descargar_json(tabla_url).get('teams', [])
     if len(tabla) < 10:
-        raise ErrorContexto('Clasificación de Euroliga incompleta.')
-    encontrados = {}
+        raise ErrorContexto('Clasificación de Euroliga incompleta.', 'tabla_incompleta')
+    encontrados = ResultadoContexto()
     for nombre in nombres:
         candidatos = [r for r in tabla if identidad_basket(nombre) in identidad_club(r['club'])]
         if len(candidatos) != 1:
+            encontrados.fallo(nombre, 'identidad_ambigua' if candidatos else 'identidad_no_resuelta')
             continue
         r = candidatos[0]
         code = r['club']['code']
         hist = []
         for g in anteriores:
             propios = [g[k] for k in ('local', 'road') if g[k]['club']['code'] == code]
-            if not propios:
+            if not propios or g['round'] > ronda:
                 continue
             a = propios[0]['score']
             b = g['road' if g['local']['club']['code'] == code else 'local']['score']
             if not isinstance(a, int) or not isinstance(b, int) or min(a, b) < 0 or a == b:
-                raise ErrorContexto('Resultado de Euroliga no válido.')
+                raise ErrorContexto('Resultado de Euroliga no válido.', 'resultado_no_valido')
             hist.append((fecha_iso(g['utcDate']), 'W' if a > b else 'L'))
         hist.sort(reverse=True)
         wins = sum(x == 'W' for _, x in hist)
         if len(hist) != r['gamesPlayed'] or wins != r['gamesWon'] or len(hist) - wins != r['gamesLost']:
+            encontrados.fallo(nombre, 'historico_y_tabla_no_coinciden')
             continue
-        encontrados[nombre] = {'nombre': nombre, 'posicion': int(r['position']), 'jugados': len(hist),
+        encontrados[nombre] = {'nombre': nombre, 'id':code, 'posicion': int(r['position']), 'jugados': len(hist),
                               'victorias': wins, 'derrotas': len(hist) - wins,
-                              'forma': ''.join(x for _, x in hist[:5]), 'fuentes': [url, tabla_url],
+                              'forma': ''.join(x for _, x in hist[:5]), 'fuentes': [url, tabla_url], 'ronda':ronda,
                               'ultimo_partido': hist[0][0].isoformat()}
     return encontrados
 
@@ -216,13 +230,16 @@ def tabla_euroliga(nombres, ahora):
 def contextos_copa(items, ahora):
     # Esta fuente confirma el formato de la primera ronda 2026/27, no otras ediciones.
     if temporada(ahora) != 2026:
+        for e in items: marcar(e, 'sin_datos', 'edicion_no_cubierta')
         return 0
     tabla_url = f'{TABLAS}/esp.1/standings'
     datos = descargar_json(tabla_url)
     if datos.get('season', {}).get('year') != 2026:
+        for e in items: marcar(e, 'sin_datos', 'otra_temporada')
         return 0
     ids_primera = {str(r['team']['id']) for r in entradas_tabla(datos)}
     if len(ids_primera) != 20:
+        for e in items: marcar(e, 'sin_datos', 'tabla_incompleta')
         return 0
     dias = {e.get('fecha', ahora.date().isoformat()) for e in items}
     consulta = {}
@@ -231,7 +248,9 @@ def contextos_copa(items, ahora):
         consulta[dia] = (url, descargar_json(url).get('events', []))
     cubiertos = 0
     for e in items:
+        marcar(e, 'sin_datos', 'partido_no_identificado')
         if not any(t in normalizar(e['competicion']) for t in ('1a ronda', '1 ronda', 'primera ronda')):
+            marcar(e, 'sin_datos', 'ronda_no_cubierta')
             continue
         dia = e.get('fecha', ahora.date().isoformat())
         url, partidos = consulta[dia]
@@ -252,13 +271,17 @@ def contextos_copa(items, ahora):
                 inicio = datetime.fromisoformat(f"{dia}T{e['hora']}").replace(tzinfo=MADRID_TZ)
                 if abs(fecha_iso(p['date']) - inicio) <= timedelta(minutes=15):
                     candidatos.append((local, visita))
+                else:
+                    marcar(e, 'sin_datos', 'horario_no_coincide')
         if len(candidatos) != 1:
+            if candidatos: marcar(e, 'sin_datos', 'identidad_ambigua')
             continue
+        marcar(e, 'validado', 'datos_validados')
         local, visita = candidatos[0]
         contraste = str(local['id']) not in ids_primera and str(visita['id']) in ids_primera
         e['contexto'] = {'tipo': 'copa', 'temporada': 2026, 'consultado': ahora.isoformat(),
                          'competicion': 'esp.copa_del_rey',
-                         'local': {'nombre': e['local']}, 'visitante': {'nombre': e['visitante']},
+                         'local': {'nombre': e['local'], 'id':str(local['id'])}, 'visitante': {'nombre': e['visitante'], 'id':str(visita['id'])},
                          'copa': {'partido_unico': True, 'contraste_primera': contraste,
                                   'fuentes': [url, tabla_url, REGLA_COPA_2026]}}
         cubiertos += 1
@@ -270,33 +293,41 @@ def contextos_tenis(items, ahora):
     datos = descargar_json(url)
     tablas = [r for r in datos.get('rankings', []) if r.get('type') == 'atp']
     if len(tablas) != 1:
+        for e in items: marcar(e, 'sin_datos', 'ranking_no_disponible')
         return 0
     tabla = tablas[0]
     publicado = fecha_iso(tabla['update'])
     if not timedelta(0) <= ahora - publicado <= timedelta(days=10):
+        for e in items: marcar(e, 'sin_datos', 'ranking_fuera_de_fecha')
         return 0
     ranks = tabla.get('ranks', [])
     if len(ranks) < 50:
+        for e in items: marcar(e, 'sin_datos', 'ranking_incompleto')
         return 0
     cubiertos = 0
     for e in items:
+        marcar(e, 'sin_datos', 'identidad_no_resuelta')
         categoria, _ = categoria_tenis(e)
         if categoria is None:
+            marcar(e, 'sin_datos', 'categoria_no_confirmada')
             continue
         jugadores = []
         for k in ('local', 'visitante'):
             candidatos = [r for r in ranks if normalizar(e[k]) in
                           {normalizar(r['athlete'].get(n, '')) for n in ('displayName', 'shortname', 'shortName', 'fullName')}]
             if len(candidatos) != 1:
+                marcar(e, 'sin_datos', 'identidad_ambigua' if candidatos else 'identidad_no_resuelta', participante=k)
                 break
             r = candidatos[0]
             if type(r.get('current')) is not int or not 1 <= r['current'] <= 1000:
+                marcar(e, 'sin_datos', 'ranking_no_valido', participante=k)
                 break
             a = r['athlete']
             jugadores.append({'nombre': e[k], 'id': str(a['id']), 'ranking': r['current'],
                               'edad': a.get('age'), 'pais': a.get('citizenshipCountry')})
         if len(jugadores) != 2 or jugadores[0]['id'] == jugadores[1]['id']:
             continue
+        marcar(e, 'validado', 'datos_validados')
         e['contexto'] = {'tipo': 'tenis', 'competicion': 'atp', 'temporada': temporada(ahora),
                          'consultado': ahora.isoformat(), 'publicado': publicado.isoformat(),
                          'local': jugadores[0], 'visitante': jugadores[1], 'fuentes': [url]}
@@ -312,11 +343,14 @@ def enriquecer_eventos(eventos, ahora):
     grupos = {}
     for e in eventos:
         e.pop('contexto', None)
+        marcar(e, 'sin_datos', 'competicion_no_cubierta')
         try:
             inicio = datetime.fromisoformat(f"{e.get('fecha', ahora.date().isoformat())}T{e['hora']}").replace(tzinfo=MADRID_TZ)
         except (ValueError, KeyError, TypeError):
+            marcar(e, 'sin_datos', 'fecha_no_valida')
             continue
         if inicio <= ahora:
+            marcar(e, 'sin_datos', 'evento_iniciado')
             continue
         liga = liga_evento(e)
         if e.get('deporte') == 'Tenis':
@@ -326,6 +360,7 @@ def enriquecer_eventos(eventos, ahora):
         if e.get('deporte') == 'Baloncesto' and any(t in normalizar(e['competicion']) for t in ('euroliga', 'euroleague')):
             liga = 'euro'
         if liga:
+            marcar(e, 'pendiente', 'pendiente')
             grupos.setdefault(liga, []).append(e)
 
     fin = time.monotonic() + 45
@@ -340,9 +375,17 @@ def enriquecer_eventos(eventos, ahora):
             if liga == 'copa':
                 return contextos_copa(items, ahora)
             datos = tabla_euroliga(nombres, ahora) if liga == 'euro' else tabla_futbol(liga, nombres, ahora)
-        except (ErrorContexto, KeyError, ValueError, TypeError, IndexError, StopIteration):
+        except (ErrorContexto, KeyError, ValueError, TypeError, IndexError, StopIteration) as error:
+            for e in items: marcar(e, 'sin_datos', getattr(error, 'codigo', 'formato_no_valido'))
             datos = {}
         for e in items:
+            general = e.get('diagnostico_contexto',{}).get('motivo','sin_datos')
+            if general == 'pendiente': general = 'identidad_no_resuelta'
+            estados = {k: ('validado' if e[k] in datos else getattr(datos, 'fallos', {}).get(e[k], general)) for k in ('local','visitante')}
+            validos = sum(v == 'validado' for v in estados.values())
+            marcar(e, 'validado' if validos == 2 else 'parcial' if validos else 'sin_datos', 'datos_validados' if validos == 2 else 'participante_sin_datos' if validos else next(iter(estados.values())), participantes=estados)
+            if validos == 1:
+                e['diagnostico_contexto']['datos_parciales'] = {k:datos[e[k]] for k in ('local','visitante') if e[k] in datos}
             if e['local'] in datos and e['visitante'] in datos:
                 e['contexto'] = {'consultado': ahora.isoformat(), 'temporada': temporada(ahora),
                                  'competicion': liga, 'local': datos[e['local']], 'visitante': datos[e['visitante']]}

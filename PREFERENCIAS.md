@@ -149,3 +149,13 @@ Ranking ATP: publicación no futura y de antigüedad máxima diez días. Context
 
 ### Copas añadidas el 28/10/2026
 Autorizadas: Copa de Alemania (DFB-Pokal), EFL Carabao Cup (EFL Cup) y Copa Libertadores/CONMEBOL Libertadores. Las dos primeras usan la base de Copa nacional (4,5); Libertadores, base continental (5,6). Mantienen fase, afinidad, disponibilidad y filtros existentes; no se extiende el contexto específico de Copa del Rey a estas competiciones. No se incorporan otras copas sin aprobación del usuario.
+
+
+### Diagnóstico e identidad — primera entrega del plan del 28/10
+El contexto se solicita después de aplicar los filtros, únicamente para los eventos relevantes; no cambia la lista de competiciones aprobadas. Cada evento registra estado y motivo: validado con/sin ajuste, parcial, nombre no resuelto/ambiguo, falta de fuente, temporada, fecha, historial incoherente, ranking y tiempo agotado. Un participante sin datos no borra el diagnóstico del otro: se conserva el dato parcial, sin usarlo todavía para puntuar.
+
+Se verificaron los códigos oficiales de Efes (IST), Hapoel (HTA), ASVEL (ASV), Partizan (PAR), Virtus (VIR) y Žalgiris (ZAL). Se normalizan patrocinadores sin añadir estos equipos automáticamente al catálogo de élite. En Euroliga, tabla e histórico se limitan a la misma jornada completa anterior al corte; se muestra la jornada utilizada en los datos guardados. Esto puede recuperar contexto que se perdía por mezclar jornadas.
+
+Al guardar el informe conectado se generan diagnostico.json y diagnostico.html. La instantánea incluye agenda relevante, datos de contexto utilizados, corte, desglose y huella del modelo/catálogos. No incluye correo personal, contraseñas, claves ni marcadores NBA. Se puede reproducir sin red con resumen.diagnostico.reproducir(snapshot), que rechaza versiones de modelo distintas. No almacena las respuestas completas de proveedores: conserva los datos que intervienen en la puntuación.
+
+GitHub conserva ambos diagnósticos como artefacto durante 14 días, incluso ante fallos parciales; un fallo de almacenamiento no bloquea el envío. No se adjuntan al correo diario. No se han modificado pesos, bases ni umbrales. La calidad conjunta, rivalidades y narrativa copera corresponden a las siguientes entregas.

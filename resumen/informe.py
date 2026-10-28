@@ -19,6 +19,9 @@ def linea_evento(event):
     contexto = event.get('evaluacion_contexto', {})
     if contexto.get('estado') == 'validado':
         texto += f" · Contexto {event['desglose'].get('contexto', 0):+.1f} · Consultado {contexto['consultado']} · Fuentes: " + ' '.join(contexto['fuentes'])
+        ronda = event.get('contexto', {}).get('local', {}).get('ronda')
+        if ronda:
+            texto += f" · Datos hasta jornada {ronda}"
         if contexto.get('publicado'):
             texto += f" · Ranking publicado: {contexto['publicado'][:10]}"
     if event.get('categoria_reconocida'):
@@ -122,12 +125,17 @@ def generar_informe(resultado):
     todos = sorted((resultado['eventos'] or {}).get('filtrados', []), key=orden_inicio)
     html = crear_html(subject, sections, resultado, todos)
     listado = pagina(f'Todos los eventos filtrados — {day}/{month}/{year}', listado_completo(todos)) if resultado['eventos'] is not None else None
-    return {'asunto': subject, 'texto': plain, 'html': html, 'listado_html':listado}
+    return {'asunto': subject, 'texto': plain, 'html': html, 'listado_html':listado, 'diagnostico':(resultado.get('eventos') or {}).get('diagnostico')}
 
 def guardar_informe(informe, carpeta):
     carpeta = Path(carpeta)
     carpeta.mkdir(parents=True, exist_ok=True)
     for nombre, value in [('resumen.html', informe['html']), ('resumen.txt', informe['texto'])]:
         (carpeta / nombre).write_text(value, encoding='utf-8')
+    if informe.get('diagnostico'):
+        import json
+        from .diagnostico import html_diagnostico
+        (carpeta/'diagnostico.json').write_text(json.dumps(informe['diagnostico'],ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+        (carpeta/'diagnostico.html').write_text(html_diagnostico(informe['diagnostico']),encoding='utf-8')
     if informe.get('listado_html'):
         (carpeta/'todos_eventos.html').write_text(informe['listado_html'],encoding='utf-8')

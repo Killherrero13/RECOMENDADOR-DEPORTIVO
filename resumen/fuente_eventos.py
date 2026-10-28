@@ -8,8 +8,9 @@ import requests
 from bs4 import BeautifulSoup
 
 from .config import MADRID_TZ
-from .eventos import recomendar_eventos
+from .eventos import recomendar_eventos, event_key
 from .contexto_fuentes import enriquecer_eventos
+from .diagnostico import preparar_diagnostico, marcar
 
 URL = 'https://www.futbolenlatv.es/deporte'
 logger = logging.getLogger(__name__)
@@ -114,14 +115,27 @@ def generar_resultado_eventos(ahora=None):
         raise ErrorEventos('La fecha de consulta debe incluir zona horaria.')
     fecha = ahora.astimezone(MADRID_TZ).date()
     events, avisos = extraer_jornada(descargar_html(), fecha)
+    relevantes = recomendar_eventos(events, ahora=ahora, fecha=fecha)['filtrados']
+    hubo_contexto = False
     try:
-        avisos.extend(enriquecer_eventos(events, ahora))
+        avisos_contexto = enriquecer_eventos(relevantes, ahora)
+        hubo_contexto = bool(avisos_contexto)
+        por_clave = {event_key(e):e for e in relevantes}
+        for e in events:
+            candidato = por_clave.get(event_key(e), {})
+            for campo in ('contexto', 'diagnostico_contexto'):
+                if campo in candidato: e[campo] = candidato[campo]
     except Exception:
         # El contexto es opcional: un fallo inesperado tampoco debe perder la agenda.
         for e in events:
             e.pop('contexto', None)
+            marcar(e, 'sin_datos', 'fallo_contexto')
         avisos.append('Contexto deportivo no disponible; se conservan las valoraciones básicas.')
     result = recomendar_eventos(events, ahora=ahora, fecha=fecha)
+    result['diagnostico'] = preparar_diagnostico(result, ahora)
+    cobertura = result['diagnostico']['cobertura']
+    if hubo_contexto:
+        avisos.append(f"Contexto validado en {cobertura['validados']}/{cobertura['relevantes']} eventos relevantes; {cobertura['parciales']} con datos parciales. {cobertura['con_ajuste']} notas ajustadas. Los datos ausentes no restan.")
     logger.info('Eventos filtrados: %s; seleccionados: %s; alternativas: %s.',
                 len(result['filtrados']), len(result['seleccionados']), len(result['alternativas']))
     return {'fecha': fecha.isoformat(), 'extraidos': len(events), 'avisos': avisos,

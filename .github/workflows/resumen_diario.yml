@@ -54,6 +54,17 @@ jobs:
           SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
           EMAIL_TO: ${{ secrets.EMAIL_TO }}
         run: python -m resumen --modo "$MODO" --nba --enviar --salida vista_previa
+      - name: Conservar diagnóstico de la agenda
+        if: always()
+        continue-on-error: true
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: diagnostico-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            vista_previa/diagnostico.json
+            vista_previa/diagnostico.html
+          retention-days: 14
+          if-no-files-found: ignore
       - name: Indicar resultado
         if: always()
         env:
@@ -61,4 +72,4 @@ jobs:
         run: |
           echo '### Resumen deportivo' >> "$GITHUB_STEP_SUMMARY"
           echo "Estado del paso de envío: $RESULTADO_ENVIO" >> "$GITHUB_STEP_SUMMARY"
-          echo 'Horario diario: 05:00 Europe/Madrid. Un fallo parcial también marca error.' >> "$GITHUB_STEP_SUMMARY"
+          echo 'Horario diario definido en schedule (Europe/Madrid). Un fallo parcial de las fuentes principales también marca error.' >> "$GITHUB_STEP_SUMMARY"

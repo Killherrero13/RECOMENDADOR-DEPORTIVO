@@ -97,15 +97,9 @@ def football_team_affinity(event):
     return max(affinities) if affinities else 0
 
 def football_derby_bonus(event):
-    local = normalize_team_name(event["local"])
-    visitante = normalize_team_name(event["visitante"])
-
-    for (team1, team2), bonus in FOOTBALL_DERBIES.items():
-        if (team_matches(team1, local) and team_matches(team2, visitante)) or \
-           (team_matches(team2, local) and team_matches(team1, visitante)):
-            return bonus
-
-    return 0
+    # Compatibilidad con la antigua escala; la nota usa el registro documentado.
+    from .rivalidades import valorar_rivalidad
+    return valorar_rivalidad({**event, 'deporte': 'Fútbol'})['ajuste'] / .3
 
 def knockout_bonus(event):
     comp = event["competicion"].lower()

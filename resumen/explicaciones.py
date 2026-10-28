@@ -10,7 +10,7 @@ def explicar_agenda(eventos, plan, clave):
     for e in eventos:
         # Destacar primero las señales personales y las eliminatorias.
         motivos = list(dict.fromkeys(e.get('motivos', [])))
-        motivos.sort(key=lambda m: 0 if any(s in m.casefold() for s in ('contexto:', 'favorito', 'celtics', 'final', 'eliminatoria')) else 1)
+        motivos.sort(key=lambda m: 0 if any(s in m.casefold() for s in ('derbi local:', 'rivalidad histórica:', 'contexto:', 'favorito', 'celtics', 'final', 'eliminatoria')) else 1)
         razones = motivos[:3]
         plataformas = list(dict.fromkeys(p for c in e.get('canales', []) if (p := plataforma_destacada(c))))
         if plataformas:

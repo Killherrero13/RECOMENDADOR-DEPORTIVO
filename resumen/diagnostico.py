@@ -24,7 +24,7 @@ def marcar(evento, estado, motivo, **detalle):
 
 def version_modelo():
     h = hashlib.sha256()
-    for nombre in ('puntuacion.py', 'calidad_cruce.py', 'contexto.py', 'perfiles.py', 'preferencias_eventos.py',
+    for nombre in ('puntuacion.py', 'calidad_cruce.py', 'rivalidades.py', 'contexto.py', 'perfiles.py', 'preferencias_eventos.py',
                    'contexto_fuentes.py', 'eventos.py', 'horarios.py', 'categorias.py', 'canales.py'):
         h.update(nombre.encode())
         h.update((ROOT/'resumen'/nombre).read_bytes().replace(b'\r\n', b'\n'))
@@ -42,7 +42,7 @@ def serializar(valor):
 
 def preparar_diagnostico(eventos, ahora):
     campos = ('hora','fecha','deporte','competicion','local','visitante','descripcion','canales',
-              'contexto','diagnostico_contexto','score','prioridad','desglose','evaluacion_contexto',
+              'contexto','diagnostico_contexto','score','prioridad','desglose','evaluacion_contexto','evaluacion_rivalidad',
               'motivos','inicio','fin_estimado','inicio_vision','fin_vision','vision_parcial')
     registros = [{k:e[k] for k in campos if k in e} for e in eventos.get('filtrados', [])]
     for e in registros:

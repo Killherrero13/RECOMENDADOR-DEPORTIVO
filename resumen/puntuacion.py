@@ -6,6 +6,7 @@ from .perfiles import identidad_basket, REFERENTES_EUROLIGA, REFERENTES_TENIS, p
 from .canales import plataforma_destacada
 from .contexto import valorar_contexto
 from .calidad_cruce import valorar_cruce
+from .rivalidades import valorar_rivalidad
 
 UMBRAL_PLAN = 6.5
 UMBRAL_ALTERNATIVAS = 4.5
@@ -68,9 +69,6 @@ def valorar(evento, local, visitante, competicion, afinidad_previa=0, derby=0, r
         cartel = 2.0 if n == 2 else 0.8 if n == 1 else 0
         if n == 2:motivos.append('Duelo entre equipos de referencia')
         elif n == 1:motivos.append('Participa un equipo de referencia')
-        if derby:
-            cartel += min(0.6, derby * 0.3)
-            motivos.append('Rivalidad reconocida')
         if local in FAVORITOS_FUTBOL or visitante in FAVORITOS_FUTBOL:
             afinidad = 1.3
             motivos.append('Juega uno de tus favoritos')
@@ -126,13 +124,16 @@ def valorar(evento, local, visitante, competicion, afinidad_previa=0, derby=0, r
         motivos.append('Final' if ronda == 2.5 else 'Fase de eliminatoria')
     contexto = valorar_contexto(evento)
     calidad = valorar_cruce(evento, contexto, cartel)
+    rivalidad = valorar_rivalidad(evento)
+    if rivalidad['ajuste']:
+        motivos.append(f"{rivalidad['tipo']}: {rivalidad['nombre']}")
     motivos.extend(contexto['motivos'])
     motivos.extend(calidad['motivos'])
-    deportivo_basico = min(8.5, base + cartel + fase)
+    deportivo_basico = min(8.5, base + cartel + fase + rivalidad['ajuste'])
     afinidad_basica = max(-deportivo_basico, min(10-deportivo_basico, afinidad))
     nota_basica = round(max(0, min(10, deportivo_basico + afinidad_basica)), 1)
     afinidad += contexto.get('afinidad', 0)
-    deportivo = round(min(8.5,base + cartel + fase + contexto['ajuste'] + calidad['ajuste']),2)
+    deportivo = round(min(8.5,base + cartel + fase + contexto['ajuste'] + calidad['ajuste'] + rivalidad['ajuste']),2)
     afinidad = round(max(-deportivo,min(10-deportivo,afinidad)),2)
     nota = round(max(0,min(10,deportivo+afinidad)),1)
     canales = evento.get('canales',[])
@@ -141,6 +142,7 @@ def valorar(evento, local, visitante, competicion, afinidad_previa=0, derby=0, r
     return {'score':nota,'prioridad':round(nota+acceso+horario,2),'nivel':nivel_nota(nota),
             'desglose':{'base':base,'cartel':cartel,'fase':fase,'deportivo':deportivo,
                         'afinidad':afinidad,'acceso':acceso,'horario':horario,'contexto':round(nota-nota_basica,1),
-                        'calidad_cruce':calidad['ajuste']},
+                        'calidad_cruce':calidad['ajuste'], 'rivalidad':rivalidad['ajuste']},
+            'evaluacion_rivalidad':rivalidad,
             'evaluacion_contexto':contexto,
             'motivos':motivos, 'escala':'personal-10-v2'}

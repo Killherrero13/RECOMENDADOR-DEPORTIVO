@@ -17,6 +17,9 @@ def linea_evento(event):
         d = event['desglose']
         texto += f" · Interés deportivo {d['deportivo']:.1f} · Afinidad {d['afinidad']:+.1f}"
     contexto = event.get('evaluacion_contexto', {})
+    rivalidad = event.get('evaluacion_rivalidad', {})
+    if rivalidad.get('estado') == 'verificada':
+        texto += f" · {rivalidad['nombre']} (+{rivalidad['ajuste']:.2f}) · Verificado {rivalidad['verificado']} · Fuente: {rivalidad['fuente']}"
     if contexto.get('estado') == 'validado':
         texto += f" · Contexto {event['desglose'].get('contexto', 0):+.1f} · Consultado {contexto['consultado']} · Fuentes: " + ' '.join(contexto['fuentes'])
         ronda = event.get('contexto', {}).get('local', {}).get('ronda')

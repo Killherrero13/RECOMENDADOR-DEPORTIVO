@@ -1,0 +1,254 @@
+[
+  {
+    "deporte": "Fútbol",
+    "equipos": [
+      "real madrid",
+      "fc barcelona"
+    ],
+    "tipo": "Rivalidad histórica",
+    "nombre": "El Clásico",
+    "bonus": 0.6,
+    "fuente": "https://www.laliga.com/en-ES/partidazos",
+    "verificado": "2026-10-28"
+  },
+  {
+    "deporte": "Fútbol",
+    "equipos": [
+      "atletico madrid",
+      "real madrid"
+    ],
+    "tipo": "Derbi local",
+    "nombre": "Derbi de Madrid",
+    "bonus": 0.48,
+    "fuente": "https://www.laliga.com/en-ES/partidazos",
+    "verificado": "2026-10-28"
+  },
+  {
+    "deporte": "Fútbol",
+    "equipos": [
+      "atletico madrid",
+      "fc barcelona"
+    ],
+    "tipo": "Rivalidad histórica",
+    "nombre": "Atlético–Barcelona",
+    "bonus": 0.42,
+    "fuente": "https://www.laliga.com/en-ES/partidazos",
+    "verificado": "2026-10-28"
+  },
+  {
+    "deporte": "Fútbol",
+    "equipos": [
+      "sevilla fc",
+      "betis"
+    ],
+    "tipo": "Derbi local",
+    "nombre": "Derbi sevillano",
+    "bonus": 0.45,
+    "fuente": "https://www.laliga.com/en-ES/partidazos",
+    "verificado": "2026-10-28"
+  },
+  {
+    "deporte": "Fútbol",
+    "equipos": [
+      "athletic",
+      "real sociedad"
+    ],
+    "tipo": "Derbi local",
+    "nombre": "Derbi vasco",
+    "bonus": 0.42,
+    "fuente": "https://www.laliga.com/en-ES/partidazos",
+    "verificado": "2026-10-28"
+  },
+  {
+    "deporte": "Fútbol",
+    "equipos": [
+      "arsenal",
+      "tottenham"
+    ],
+    "tipo": "Derbi local",
+    "nombre": "Derbi del norte de Londres",
+    "bonus": 0.45,
+    "fuente": "https://www.premierleague.com/en/news/2172660",
+    "verificado": "2026-10-28"
+  },
+  {
+    "deporte": "Fútbol",
+    "equipos": [
+      "manchester united",
+      "manchester city"
+    ],
+    "tipo": "Derbi local",
+    "nombre": "Derbi de Manchester",
+    "bonus": 0.48,
+    "fuente": "https://www.premierleague.com/en/news/2172660",
+    "verificado": "2026-10-28"
+  },
+  {
+    "deporte": "Fútbol",
+    "equipos": [
+      "liverpool",
+      "everton"
+    ],
+    "tipo": "Derbi local",
+    "nombre": "Derbi de Merseyside",
+    "bonus": 0.51,
+    "fuente": "https://www.premierleague.com/en/news/2172660",
+    "verificado": "2026-10-28"
+  },
+  {
+    "deporte": "Fútbol",
+    "equipos": [
+      "bayern munich",
+      "borussia dortmund"
+    ],
+    "tipo": "Rivalidad histórica",
+    "nombre": "Der Klassiker",
+    "bonus": 0.54,
+    "fuente": "https://www.bundesliga.com/en/bundesliga/news/biggest-soccer-derbies-in-germany-klassiker-revierderby-oldest-rivalries-7578",
+    "verificado": "2026-10-28"
+  },
+  {
+    "deporte": "Fútbol",
+    "equipos": [
+      "schalke04",
+      "borussia dortmund"
+    ],
+    "tipo": "Derbi local",
+    "nombre": "Revierderby",
+    "bonus": 0.45,
+    "fuente": "https://www.bundesliga.com/en/bundesliga/news/biggest-soccer-derbies-in-germany-klassiker-revierderby-oldest-rivalries-7578",
+    "verificado": "2026-10-28"
+  },
+  {
+    "deporte": "Fútbol",
+    "equipos": [
+      "hamburger sv",
+      "werder bremen"
+    ],
+    "tipo": "Derbi local",
+    "nombre": "Nordderby",
+    "bonus": 0.42,
+    "fuente": "https://www.bundesliga.com/en/bundesliga/news/biggest-soccer-derbies-in-germany-klassiker-revierderby-oldest-rivalries-7578",
+    "verificado": "2026-10-28"
+  },
+  {
+    "deporte": "Fútbol",
+    "equipos": [
+      "juventus",
+      "inter milan"
+    ],
+    "tipo": "Rivalidad histórica",
+    "nombre": "Derby d’Italia",
+    "bonus": 0.45,
+    "fuente": "https://www.legaseriea.it/serie-a/news/inter-juventus-2025-2026-formazioni-risultato",
+    "verificado": "2026-10-28"
+  },
+  {
+    "deporte": "Fútbol",
+    "equipos": [
+      "xerez-cd",
+      "cadiz"
+    ],
+    "tipo": "Derbi local",
+    "nombre": "Derbi gaditano",
+    "bonus": 0.6,
+    "fuente": "https://www.rfaf.es/pnfg/NNws_ShwNewDup?cod_primaria=140&cod_secundaria=140&codigo=63805",
+    "verificado": "2026-10-28"
+  },
+  {
+    "deporte": "Baloncesto",
+    "equipos": [
+      "real madrid",
+      "barcelona"
+    ],
+    "tipo": "Rivalidad histórica",
+    "nombre": "Clásico de baloncesto",
+    "bonus": 0.6,
+    "fuente": "https://mediacentre.euroleague.net/en/app/2/communication/communication/preview/24407",
+    "verificado": "2026-10-28"
+  },
+  {
+    "deporte": "Baloncesto",
+    "equipos": [
+      "panathinaikos",
+      "olympiacos"
+    ],
+    "tipo": "Derbi local",
+    "nombre": "Derbi griego",
+    "bonus": 0.6,
+    "fuente": "https://mediacentre.euroleague.net/en/app/2/communication/communication/preview/24407",
+    "verificado": "2026-10-28"
+  },
+  {
+    "deporte": "Baloncesto",
+    "equipos": [
+      "partizan",
+      "estrella roja"
+    ],
+    "tipo": "Derbi local",
+    "nombre": "Derbi de Belgrado",
+    "bonus": 0.6,
+    "fuente": "https://mediacentre.euroleague.net/en/app/2/communication/communication/preview/24407",
+    "verificado": "2026-10-28"
+  },
+  {
+    "deporte": "Baloncesto",
+    "equipos": [
+      "hapoel tel aviv",
+      "maccabi"
+    ],
+    "tipo": "Derbi local",
+    "nombre": "Derbi de Tel Aviv",
+    "bonus": 0.4,
+    "fuente": "https://mediacentre.euroleague.net/en/app/2/communication/communication/preview/24407",
+    "verificado": "2026-10-28"
+  },
+  {
+    "deporte": "Fútbol",
+    "equipos": [
+      "inter milan",
+      "ac milan"
+    ],
+    "tipo": "Derbi local",
+    "nombre": "Derby della Madonnina",
+    "bonus": 0.54,
+    "fuente": "https://www.inter.it/en/news/inter-ac-milan-origins-heroes-records-guide-derby",
+    "verificado": "2026-10-28"
+  },
+  {
+    "deporte": "Fútbol",
+    "equipos": [
+      "roma",
+      "lazio"
+    ],
+    "tipo": "Derbi local",
+    "nombre": "Derbi de Roma",
+    "bonus": 0.48,
+    "fuente": "https://www.asroma.com/en/club/history/a-brief-history-of-as-roma",
+    "verificado": "2026-10-28"
+  },
+  {
+    "deporte": "Fútbol",
+    "equipos": [
+      "psg",
+      "olympique marsella"
+    ],
+    "tipo": "Rivalidad histórica",
+    "nombre": "Le Classique",
+    "bonus": 0.51,
+    "fuente": "https://ligue1.com/fr/articles/l1_article_5867-",
+    "verificado": "2026-10-28"
+  },
+  {
+    "deporte": "Fútbol",
+    "equipos": [
+      "aston villa",
+      "birmingham city"
+    ],
+    "tipo": "Derbi local",
+    "nombre": "Second City derby",
+    "bonus": 0.36,
+    "fuente": "https://www.bbc.co.uk/sport/football/46251074",
+    "verificado": "2026-10-28"
+  }
+]

@@ -48,8 +48,31 @@ def valorar_contexto(evento):
                     or copa.get('partido_unico') is not True or not copa.get('fuentes')):
                 raise ValueError()
             ajuste = .6 if copa.get('contraste_primera') is True else 0.0
-            return {'ajuste': ajuste, 'motivos': ['Contexto: eliminatoria a partido único con local fuera de Primera y visitante de Primera'] if ajuste else [],
-                    'fuentes': copa['fuentes'], 'estado': 'validado', 'consultado': c['consultado']}
+            motivos = ['Contexto: partido único con local fuera de Primera y visitante de Primera'] if ajuste else []
+            if (not ajuste and copa.get('contraste_segunda') is True
+                    and c['local'].get('categoria') == 'Fuera de Primera y Segunda'
+                    and c['visitante'].get('categoria') == 'Segunda'):
+                ajuste = .3
+                motivos.append('Contexto: partido único con local fuera de Primera y Segunda frente a un Segunda')
+            fuentes = list(copa['fuentes'])
+            f = copa.get('forma_visitante', {})
+            extra = 0.0
+            try:
+                forma = f['forma']
+                if (ajuste and f['nombre'] == evento['visitante'] and f['id'] == c['visitante']['id']
+                        and type(f['jugados']) is int and f['jugados'] >= 5
+                        and len(forma) == 5 and not set(forma) - set('WDL') and f['fuentes']
+                        and fecha_iso(f['ultimo_partido']) + timedelta(hours=3) <= consulta):
+                    if forma.count('L') >= 3 or 'W' not in forma:
+                        extra = .3
+                        motivos.append('Contexto de Copa: visitante con tres derrotas o cinco partidos sin ganar en su liga')
+                    fuentes.extend(f['fuentes'])
+            except (KeyError, TypeError, ValueError, AttributeError):
+                pass  # Un historial incompleto no invalida las categorías contrastadas.
+            return {'ajuste': ajuste + extra, 'contraste': ajuste, 'vulnerabilidad': extra,
+                    'estado_forma': copa.get('estado_forma', 'Historial no consultado'),
+                    'motivos': motivos, 'detalle_copa': f"{c['local'].get('categoria','Categoría no precisada')} frente a {c['visitante'].get('categoria','Categoría no precisada')}",
+                    'fuentes': list(dict.fromkeys(fuentes)), 'estado': 'validado', 'consultado': c['consultado']}
         if evento['deporte'] == 'Fútbol' and c['competicion'] != liga_evento(evento):
             raise ValueError()
         if evento['deporte'] == 'Baloncesto' and (c['competicion'] != 'euro' or not any(x in normalizar(evento['competicion']) for x in ('euroliga','euroleague'))):

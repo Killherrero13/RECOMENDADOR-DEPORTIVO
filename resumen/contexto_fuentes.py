@@ -285,7 +285,55 @@ def contextos_copa(items, ahora):
                          'copa': {'partido_unico': True, 'contraste_primera': contraste,
                                   'fuentes': [url, tabla_url, REGLA_COPA_2026]}}
         cubiertos += 1
+    completar_contextos_copa(items, ahora, ids_primera, tabla_url)
     return cubiertos
+
+
+def completar_contextos_copa(items, ahora, ids_primera, tabla_url):
+    """La ampliación opcional nunca borra un contraste de Primera ya validado."""
+    if not any(e.get('contexto', {}).get('tipo') == 'copa' for e in items):
+        return
+    segunda_url = f'{TABLAS}/esp.2/standings'
+    ids_segunda = None
+    try:
+        datos = descargar_json(segunda_url)
+        ids = {str(r['team']['id']) for r in entradas_tabla(datos)}
+        if datos.get('season', {}).get('year') == temporada(ahora) and len(ids) == 22 and not ids & ids_primera:
+            ids_segunda = ids
+    except (ErrorContexto, KeyError, ValueError, TypeError, StopIteration):
+        pass
+    grupos = {}
+    for e in items:
+        c = e.get('contexto', {})
+        if c.get('tipo') != 'copa':
+            continue
+        for lado in ('local', 'visitante'):
+            p = c[lado]
+            p['categoria'] = ('Primera' if p['id'] in ids_primera else
+                              'Segunda' if ids_segunda is not None and p['id'] in ids_segunda else
+                              'Fuera de Primera y Segunda' if ids_segunda is not None else 'Fuera de Primera')
+        copa = c['copa']
+        copa['contraste_segunda'] = (ids_segunda is not None and c['local']['id'] not in ids_primera | ids_segunda
+                                     and c['visitante']['id'] in ids_segunda)
+        copa['estado_categorias'] = 'Primera y Segunda verificadas' if ids_segunda is not None else 'Segunda sin validar'
+        if ids_segunda is not None:
+            copa['fuentes'].append(segunda_url)
+        if copa['contraste_primera'] or copa['contraste_segunda']:
+            liga = 'esp.1' if copa['contraste_primera'] else 'esp.2'
+            grupos.setdefault(liga, []).append(e)
+    for liga, eventos in grupos.items():
+        try:
+            formas = tabla_futbol(liga, sorted({e['visitante'] for e in eventos}), ahora)
+        except (ErrorContexto, KeyError, ValueError, TypeError, StopIteration):
+            formas = {}
+        for e in eventos:
+            p = formas.get(e['visitante'])
+            copa = e['contexto']['copa']
+            if p and p['id'] == e['contexto']['visitante']['id']:
+                copa['forma_visitante'] = p
+                copa['estado_forma'] = 'Historial y tabla coinciden'
+            else:
+                copa['estado_forma'] = getattr(formas, 'fallos', {}).get(e['visitante'], 'Historial no validado')
 
 
 def contextos_tenis(items, ahora):

@@ -41,6 +41,11 @@ def desglose_html(evento):
     html = (f'<div style="font-size:12px;line-height:1.6;margin-top:8px;">'
             f'Interés deportivo {d["deportivo"]:.1f} · Afinidad {d["afinidad"]:+.1f}</div>')
     c = evento.get('evaluacion_contexto', {})
+    if c.get('detalle_copa'):
+        html += etiqueta(c['detalle_copa'], '#fae4ed', '#823658')
+        html += (f'<div style="font-size:11px;line-height:1.6;">Contraste copero: +{c["contraste"]:.1f}'
+                 f' · Racha desfavorable validada: +{c["vulnerabilidad"]:.1f}'
+                 f'<br>Historial: {texto(c["estado_forma"])}</div>')
     r = evento.get('evaluacion_rivalidad', {})
     if r.get('estado') == 'verificada':
         html += etiqueta(f"{r['nombre']} · +{r['ajuste']:.2f}", '#eee3fa', '#592880')

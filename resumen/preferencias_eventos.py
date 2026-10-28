@@ -245,6 +245,9 @@ ALLOWED_FOOTBALL_COMPETITIONS = [
     "serie a", "ligue 1", "eredivisie",
     "fa cup", "emirates",
     "copa del rey", "coppa",
+    "copa de alemania", "dfb-pokal", "dfb pokal",
+    "carabao cup", "efl cup",
+    "copa libertadores", "conmebol libertadores",
     "copa de francia", "coupe de france",
     "supercopa", "scottish premiership", "copa africana de naciones",
     "cham", "europa league", "champions league", "conference league", "fifa",
@@ -254,6 +257,7 @@ ALLOWED_FOOTBALL_COMPETITIONS = [
 ]
 
 EXCLUDED_FOOTBALL_COMPETITIONS = [
+    "libertadores sub-20", "libertadores sub 20", "libertadores u20",
     "bahrain",
     "northern irish",
     "northern ireland",

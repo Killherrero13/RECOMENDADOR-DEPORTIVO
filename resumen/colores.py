@@ -25,6 +25,8 @@ def tema_evento(e):
             return '#ffecd9', '#aa4b08', 'Europa League'
         if 'champions' in comp or 'liga de campeones' in comp:
             return '#e4ebff', '#183d96', 'Champions League'
+        if 'libertadores' in comp:
+            return '#f9e4f2', '#91316e', 'Copa Libertadores'
         if re.search(r'\b(copa|cup|pokal|coupe|coppa|taca)\b', comp):
             return '#f9e4f2', '#91316e', 'Copa'
         return '#e2f1f0', '#286c69', 'Liga / fútbol'

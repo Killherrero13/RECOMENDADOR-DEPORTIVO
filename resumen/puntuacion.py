@@ -34,12 +34,14 @@ def base_futbol(comp):
         (['eurocopa','copa america'],5.8,'Torneo continental de selecciones'),
         (['champions league','europa league'],5.6,'Competición europea principal'),
         (['conference league'],4.8,'Competición europea'),
+        (['copa libertadores','conmebol libertadores'],5.6,'Copa continental sudamericana'),
         (['nations league','copa africana de naciones'],5.0,'Competición de selecciones'),
         (['supercopa'],5.0,'Supercopa'),
         (['laliga','ea sports','premier','bundesliga','serie a','ligue 1'],5.0,'Primera división europea principal'),
         (['liga portuguesa','eredivisie'],4.3,'Primera división europea'),
         (['jupiler','scottish premiership'],4.0,'Primera división europea'),
-        (['copa del rey','fa cup','emirates','coppa','coupe de france','copa de francia'],4.5,'Copa nacional'),
+        (['copa del rey','fa cup','emirates','coppa','coupe de france','copa de francia',
+          'copa de alemania','dfb-pokal','dfb pokal','carabao cup','efl cup'],4.5,'Copa nacional'),
     ]:
         if any(token in comp for token in tokens):
             return valor, motivo

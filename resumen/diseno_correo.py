@@ -1,6 +1,6 @@
 """HTML de correo con tablas de presentación, estilos inline y sin recursos remotos."""
 from html import escape
-from .colores import tema_evento
+from .colores import tema_evento, favorito_visual
 from .explicaciones import frases_explicacion
 from .canales import plataforma_destacada
 
@@ -106,6 +106,10 @@ def tarjeta_evento(evento, destacado=False, franja=''):
     tinta = '#ffffff' if destacado else '#172b43'
     secundaria = '#cbd9e8' if destacado else '#43536b'
     borde = '3px solid #c89b36' if destacado else f'1px solid {acento}'
+    favorito = favorito_visual(evento)
+    if favorito and not destacado:
+        tinta, secundaria = favorito['tinta'], favorito['secundaria']
+        borde = '3px solid ' + favorito['borde']
     icono = ICONOS.get(evento['deporte'], '📺')
     titulo = (evento.get('descripcion') or evento['competicion']) if not evento.get('local') else f"{evento['local']} — {evento['visitante']}"
     fecha = evento['inicio'].strftime('%d/%m') if 'inicio' in evento else evento.get('fecha', '')[5:].replace('-', '/')
@@ -143,15 +147,22 @@ def listado_completo(eventos):
         fecha = e['inicio'].strftime('%d/%m') if 'inicio' in e else e.get('fecha', '')
         nombre = (e.get('descripcion') or e['competicion']) if not e.get('local') else f"{e['local']} — {e['visitante']}"
         fondo, acento, _ = tema_evento(e)
-        filas.append(f'<tr class="evento-filtrado" style="background:{fondo};">'
-                     f'<td width="68" valign="top" style="padding:13px 12px;text-align:center;border-bottom:1px solid #e4eaf1;white-space:nowrap;"><strong>{texto(e["hora"])}</strong><br><span style="font-size:11px;color:#64748b;">{texto(fecha)}</span></td>'
-                     f'<td valign="top" style="padding:13px 8px;border-left:4px solid {acento};border-bottom:1px solid #e4eaf1;overflow-wrap:anywhere;">'
+        favorito = favorito_visual(e)
+        tinta = favorito['tinta'] if favorito else '#172b43'
+        secundaria = favorito['secundaria'] if favorito else '#52647a'
+        linea = favorito['borde'] if favorito else '#e4eaf1'
+        marco = f'border:3px solid {linea};' if favorito else ''
+        marco_hora = f'border-left:3px solid {linea};border-top:3px solid {linea};border-bottom:3px solid {linea};' if favorito else ''
+        marco_datos = f'border-right:3px solid {linea};border-top:3px solid {linea};border-bottom:3px solid {linea};' if favorito else ''
+        filas.append(f'<tr class="evento-filtrado" style="background:{fondo};color:{tinta};{marco}">'
+                     f'<td width="68" valign="top" style="padding:13px 12px;text-align:center;border-bottom:1px solid {linea};white-space:nowrap;{marco_hora}"><strong>{texto(e["hora"])}</strong><br><span style="font-size:11px;color:{secundaria};">{texto(fecha)}</span></td>'
+                     f'<td valign="top" style="padding:13px 8px;border-left:4px solid {favorito["borde"] if favorito else acento};border-bottom:1px solid {linea};overflow-wrap:anywhere;{marco_datos}">'
                      f'<strong style="font-size:14px;">{texto(nombre)}</strong><br>'
-                     f'<span style="font-size:12px;color:#52647a;">{texto(e["deporte"])} · {texto(e["competicion"])}</span><br>'
+                     f'<span style="font-size:12px;color:{secundaria};">{texto(e["deporte"])} · {texto(e["competicion"])}</span><br>'
                      f'<span style="font-size:12px;line-height:1.6;">{canales_html(e)}</span><br>'
-                     f'<span style="font-size:11px;color:#1b6948;">{texto(nota_texto(e))} · {texto(e.get("nivel", ""))}</span> {categoria_html(e)}'
-                     + (f'<br><span style="font-size:11px;color:#8a5217;">Visionado parcial hasta {e["fin_vision"]:%H:%M}</span>' if e.get('vision_parcial') else '')
-                     + ('<br><span style="font-size:11px;color:#8a5217;">En curso</span>' if e.get('en_curso') else '')
+                     f'<span style="font-size:11px;color:{secundaria if favorito else "#1b6948"};">{texto(nota_texto(e))} · {texto(e.get("nivel", ""))}</span> {categoria_html(e)}'
+                     + (f'<br><span style="font-size:11px;color:{secundaria if favorito else "#8a5217"};">Visionado parcial hasta {e["fin_vision"]:%H:%M}</span>' if e.get('vision_parcial') else '')
+                     + (f'<br><span style="font-size:11px;color:{secundaria if favorito else "#8a5217"};">En curso</span>' if e.get('en_curso') else '')
                      + desglose_html(e) + explicacion_html(e) + boton_calendario(e) + '</td></tr>')
     return ('<table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="color:#172b43;">'
             + ''.join(filas) + '</table>' if filas else '<p>No hay eventos que superen los filtros y la disponibilidad.</p>')
@@ -218,7 +229,10 @@ def crear_html(asunto, secciones, resultado, todos):
                            '<p style="font-size:12px;line-height:1.6;margin:10px 0 0;">Sin marcadores ni notas · Orden alfabético</p></div><div style="padding:16px;">')
             for p in nba['partidos']:
                 fondo_nba, acento_nba, _ = tema_evento({**p, 'deporte':'Baloncesto', 'competicion':'NBA'})
-                bloques.append(f'<div class="tarjeta-nba" style="background:{fondo_nba};color:#142840;padding:18px;margin-bottom:12px;border:1px solid {acento_nba};border-left:5px solid {acento_nba};border-radius:10px;">'
+                favorito = favorito_visual({**p, 'deporte':'Baloncesto', 'competicion':'NBA'})
+                tinta_nba = favorito['tinta'] if favorito else '#142840'
+                borde_nba = '3px solid ' + favorito['borde'] if favorito else '1px solid ' + acento_nba
+                bloques.append(f'<div class="tarjeta-nba" style="background:{fondo_nba};color:{tinta_nba};padding:18px;margin-bottom:12px;border:{borde_nba};border-radius:10px;">'
                                f'{distintivo_nba(p["recomendacion"])}<p style="font-size:17px;line-height:1.5;font-weight:bold;margin:12px 0 0;">{texto(p["local"])} — {texto(p["visitante"])}</p></div>')
             if not nba['partidos']:
                 bloques.append('<p>No hay partidos finalizados y validados en esta consulta.</p>')
@@ -239,13 +253,17 @@ def crear_html(asunto, secciones, resultado, todos):
                 principal = b['tipo'] == 'Cita principal'
                 origen = next((e for e in events.get('filtrados', []) if (f"{e['local']} — {e['visitante']}" if e.get('local') else e.get('descripcion') or e['competicion']) == b['evento']), {})
                 color, acento, _ = tema_evento(origen)
+                favorito = favorito_visual(origen)
+                tinta_plan = favorito['tinta'] if favorito else '#153e43'
+                secundaria_plan = favorito['secundaria'] if favorito else '#375a5d'
+                borde_plan = '3px solid ' + favorito['borde'] if favorito else '0'
                 bloques.append('<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="table-layout:fixed;margin-bottom:12px;">'
                                f'<tr><td width="68" valign="top" style="padding:16px 12px;text-align:center;color:#153e43;font-size:14px;"><strong>{texto(b["desde"])}</strong>'
                                f'<br><span style="font-size:11px;">hasta<br>{texto(b["hasta"])}</span></td>'
-                               f'<td valign="top" style="padding:16px;background:{color};border-left:4px solid {acento};border-radius:0 10px 10px 0;overflow-wrap:anywhere;">'
+                               f'<td valign="top" style="padding:16px;background:{color};color:{tinta_plan};border:{borde_plan};border-left:4px solid {favorito["borde"] if favorito else acento};border-radius:0 10px 10px 0;overflow-wrap:anywhere;">'
                                f'{etiqueta(b["tipo"], "#153e43" if principal else "#bde3d7", "#ffffff" if principal else "#153e43")}'
-                               f'<p style="font-size:16px;line-height:1.5;margin:10px 0 0;color:#153e43;"><strong>{texto(b["evento"])}</strong></p>'
-                               f'<p style="font-size:12px;line-height:1.65;margin:8px 0 0;color:#375a5d;">{texto(b["detalle"])}</p>'
+                               f'<p style="font-size:16px;line-height:1.5;margin:10px 0 0;color:{tinta_plan};"><strong>{texto(b["evento"])}</strong></p>'
+                               f'<p style="font-size:12px;line-height:1.65;margin:8px 0 0;color:{secundaria_plan};">{texto(b["detalle"])}</p>'
                                + boton_calendario(enlace=b.get('calendario_url',''), tramo=True) + '</td></tr></table>')
             if not events.get('planning'):
                 bloques.append('<p style="color:#153e43;">Sin citas que reservar: deja el día libre.</p>')

@@ -8,7 +8,30 @@ def normalizar(texto):
                            if not unicodedata.combining(c)).split())
 
 
+def favorito_visual(e):
+    """Identidad visual exacta; no altera afinidades ni puntuaciones."""
+    equipos = {normalizar(e.get(k, '')) for k in ('local','visitante')}
+    deporte = normalizar(e.get('deporte',''))
+    catalogo = [
+        ('baloncesto', {'estudiantes','movistar estudiantes','estudiantes baloncesto'}, '#103e70', '#176a91', 'Estudiantes', '#ffffff'),
+        ('futbol', {'atletico de madrid','atletico madrid','at. madrid','at madrid','club atletico de madrid'}, '#861526', '#b51c2b', 'Atlético de Madrid', '#ffffff'),
+        ('futbol', {'aston villa','aston villa fc'}, '#551b38', '#760d35', 'Aston Villa', '#ffffff'),
+        ('futbol', {'roma','as roma','as roma fc'}, '#681c2b', '#c69229', 'Roma', '#ffffff'),
+        ('futbol', {'borussia dortmund','dortmund','bvb','bvb dortmund'}, '#d4b000', '#161616', 'Borussia Dortmund', '#161616'),
+        (deporte, {'espana','seleccion espanola','spain'}, '#a31524', '#b51c2b', 'España', '#ffffff'),
+        ('baloncesto', {'celtics','boston celtics'}, '#064c2d', '#007a33', 'Boston Celtics', '#ffffff'),
+    ]
+    for sport, aliases, fondo, acento, nombre, tinta in catalogo:
+        if deporte == sport and equipos & aliases:
+            return dict(fondo=fondo, acento=acento, nombre=nombre, tinta=tinta,
+                        secundaria='#edeff3' if tinta == '#ffffff' else '#302900', borde='#c4cbd4')
+    return None
+
+
 def tema_evento(e):
+    favorito = favorito_visual(e)
+    if favorito:
+        return favorito['fondo'], favorito['acento'], favorito['nombre']
     equipos = {normalizar(e.get(k, '')) for k in ('local', 'visitante')}
     deporte = normalizar(e.get('deporte', ''))
     comp = normalizar(e.get('competicion', ''))

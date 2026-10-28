@@ -120,7 +120,8 @@ class NBATests(unittest.TestCase):
         self.assertIsNotNone(bloque)
         self.assertIn('Fuente: ESPN',bloque.get_text())
         self.assertEqual(len(soup.select('.tarjeta-nba')),len(bloque.select('.tarjeta-nba')))
-        self.assertIn('#e2f3e8',bloque.select_one('.tarjeta-nba')['style'])
+        self.assertIn('#064c2d',bloque.select_one('.tarjeta-nba')['style'])
+        self.assertIn('3px solid #c4cbd4',bloque.select_one('.tarjeta-nba')['style'])
 
     def test_celtics_siempre_resumen_local_o_visitante(self):
         for puntos in [('103','102'),('130','90')]:

@@ -1,0 +1,1061 @@
+{
+  "corte": "2026-10-27T12:50:29.135077+01:00",
+  "eventos": [
+    {
+      "hora": "12:00",
+      "fecha": "2026-10-27",
+      "deporte": "Tenis",
+      "competicion": "Torneo de Basilea 1ª Ronda",
+      "local": "H. Hurkacz",
+      "visitante": "Z. Bergs",
+      "canales": [
+        "ATP Tennis TV",
+        "M+ Deportes 4 (191)"
+      ]
+    },
+    {
+      "hora": "13:30",
+      "fecha": "2026-10-27",
+      "deporte": "Tenis",
+      "competicion": "Torneo de Viena 1ª Ronda",
+      "local": "T. Paul",
+      "visitante": "A. Rublev",
+      "canales": [
+        "ATP Tennis TV",
+        "M+ Deportes 2 (64)"
+      ],
+      "contexto": {
+        "tipo": "tenis",
+        "competicion": "atp",
+        "temporada": 2026,
+        "consultado": "2026-10-27T12:50:29.135077+01:00",
+        "publicado": "2026-10-22T07:00:00+00:00",
+        "local": {
+          "nombre": "T. Paul",
+          "id": "2964",
+          "ranking": 14,
+          "edad": 29,
+          "pais": "USA"
+        },
+        "visitante": {
+          "nombre": "A. Rublev",
+          "id": "2642",
+          "ranking": 22,
+          "edad": 29,
+          "pais": "RUS"
+        },
+        "fuentes": [
+          "https://site.api.espn.com/apis/site/v2/sports/tennis/atp/rankings"
+        ]
+      }
+    },
+    {
+      "hora": "15:00",
+      "fecha": "2026-10-27",
+      "deporte": "Tenis",
+      "competicion": "Torneo de Viena 1ª Ronda",
+      "local": "K. Khachanov",
+      "visitante": "C. Alcaraz",
+      "canales": [
+        "ATP Tennis TV",
+        "Movistar Plus+ (M7): VER PARTIDO",
+        "M+ Deportes 2 (64)"
+      ],
+      "contexto": {
+        "tipo": "tenis",
+        "competicion": "atp",
+        "temporada": 2026,
+        "consultado": "2026-10-27T12:50:29.135077+01:00",
+        "publicado": "2026-10-22T07:00:00+00:00",
+        "local": {
+          "nombre": "K. Khachanov",
+          "id": "2367",
+          "ranking": 24,
+          "edad": 30,
+          "pais": "RUS"
+        },
+        "visitante": {
+          "nombre": "C. Alcaraz",
+          "id": "3782",
+          "ranking": 3,
+          "edad": 23,
+          "pais": "ESP"
+        },
+        "fuentes": [
+          "https://site.api.espn.com/apis/site/v2/sports/tennis/atp/rankings"
+        ]
+      }
+    },
+    {
+      "hora": "17:00",
+      "fecha": "2026-10-27",
+      "deporte": "Baloncesto",
+      "competicion": "Euroliga Liga Regular",
+      "local": "Dubai Basketball",
+      "visitante": "Paris Basketball",
+      "canales": [
+        "M+ Baloncesto (M66)"
+      ],
+      "contexto": {
+        "consultado": "2026-10-27T12:50:29.135077+01:00",
+        "temporada": 2026,
+        "competicion": "euro",
+        "local": {
+          "nombre": "Dubai Basketball",
+          "posicion": 6,
+          "jugados": 7,
+          "victorias": 5,
+          "derrotas": 2,
+          "forma": "WWWLL",
+          "fuentes": [
+            "https://api-live.euroleague.net/v2/competitions/E/seasons/E2026/games?limit=1000",
+            "https://api-live.euroleague.net/v3/competitions/E/seasons/E2026/rounds/7/basicstandings"
+          ],
+          "ultimo_partido": "2026-10-22T18:00:00+00:00"
+        },
+        "visitante": {
+          "nombre": "Paris Basketball",
+          "posicion": 18,
+          "jugados": 7,
+          "victorias": 1,
+          "derrotas": 6,
+          "forma": "LLLLW",
+          "fuentes": [
+            "https://api-live.euroleague.net/v2/competitions/E/seasons/E2026/games?limit=1000",
+            "https://api-live.euroleague.net/v3/competitions/E/seasons/E2026/rounds/7/basicstandings"
+          ],
+          "ultimo_partido": "2026-10-23T18:45:00+00:00"
+        }
+      }
+    },
+    {
+      "hora": "17:30",
+      "fecha": "2026-10-27",
+      "deporte": "Tenis",
+      "competicion": "Torneo de Viena 1ª Ronda",
+      "local": "A. Zverev",
+      "visitante": "M. Landaluce",
+      "canales": [
+        "ATP Tennis TV",
+        "M+ Deportes 2 (64)"
+      ],
+      "contexto": {
+        "tipo": "tenis",
+        "competicion": "atp",
+        "temporada": 2026,
+        "consultado": "2026-10-27T12:50:29.135077+01:00",
+        "publicado": "2026-10-22T07:00:00+00:00",
+        "local": {
+          "nombre": "A. Zverev",
+          "id": "2375",
+          "ranking": 2,
+          "edad": 29,
+          "pais": "GER"
+        },
+        "visitante": {
+          "nombre": "M. Landaluce",
+          "id": "11640",
+          "ranking": 67,
+          "edad": 20,
+          "pais": "ESP"
+        },
+        "fuentes": [
+          "https://site.api.espn.com/apis/site/v2/sports/tennis/atp/rankings"
+        ]
+      }
+    },
+    {
+      "hora": "18:30",
+      "fecha": "2026-10-27",
+      "deporte": "Fútbol",
+      "competicion": "Copa del Rey 1ª Ronda",
+      "local": "CD Cuarte",
+      "visitante": "Girona",
+      "canales": [
+        "Aragón Play",
+        "Aragón TV"
+      ],
+      "contexto": {
+        "tipo": "copa",
+        "temporada": 2026,
+        "consultado": "2026-10-27T12:50:29.135077+01:00",
+        "competicion": "esp.copa_del_rey",
+        "local": {
+          "nombre": "CD Cuarte"
+        },
+        "visitante": {
+          "nombre": "Girona"
+        },
+        "copa": {
+          "partido_unico": true,
+          "contraste_primera": false,
+          "fuentes": [
+            "https://site.api.espn.com/apis/site/v2/sports/soccer/esp.copa_del_rey/scoreboard?dates=20261027&limit=100",
+            "https://site.web.api.espn.com/apis/v2/sports/soccer/esp.1/standings",
+            "https://www.ftf.es/pnfg/NNws_ShwNewDup?cod_primaria=3001822&cod_secundaria=3001822&codigo=1062147"
+          ]
+        }
+      }
+    },
+    {
+      "hora": "18:30",
+      "fecha": "2026-10-27",
+      "deporte": "Fútbol",
+      "competicion": "Serie A Italiana",
+      "local": "Sassuolo",
+      "visitante": "Lazio",
+      "canales": [
+        "DAZN (Ver en directo)"
+      ],
+      "contexto": {
+        "consultado": "2026-10-27T12:50:29.135077+01:00",
+        "temporada": 2026,
+        "competicion": "ita.1",
+        "local": {
+          "nombre": "Sassuolo",
+          "posicion": 14,
+          "jugados": 8,
+          "victorias": 2,
+          "derrotas": 4,
+          "forma": "LLDLW",
+          "fuentes": [
+            "https://site.web.api.espn.com/apis/v2/sports/soccer/ita.1/standings",
+            "https://site.api.espn.com/apis/site/v2/sports/soccer/ita.1/teams/3997/schedule?season=2026"
+          ],
+          "ultimo_partido": "2026-10-24T13:00:00+00:00"
+        },
+        "visitante": {
+          "nombre": "Lazio",
+          "posicion": 2,
+          "jugados": 8,
+          "victorias": 7,
+          "derrotas": 0,
+          "forma": "WWWWD",
+          "fuentes": [
+            "https://site.web.api.espn.com/apis/v2/sports/soccer/ita.1/standings",
+            "https://site.api.espn.com/apis/site/v2/sports/soccer/ita.1/teams/112/schedule?season=2026"
+          ],
+          "ultimo_partido": "2026-10-24T18:45:00+00:00"
+        }
+      }
+    },
+    {
+      "hora": "19:00",
+      "fecha": "2026-10-27",
+      "deporte": "Fútbol",
+      "competicion": "Copa del Rey 1ª Ronda",
+      "local": "Sestao River",
+      "visitante": "Espanyol",
+      "canales": [
+        "M+ LALIGA (M54 O110)",
+        "LaLiga TV Bar"
+      ],
+      "contexto": {
+        "tipo": "copa",
+        "temporada": 2026,
+        "consultado": "2026-10-27T12:50:29.135077+01:00",
+        "competicion": "esp.copa_del_rey",
+        "local": {
+          "nombre": "Sestao River"
+        },
+        "visitante": {
+          "nombre": "Espanyol"
+        },
+        "copa": {
+          "partido_unico": true,
+          "contraste_primera": true,
+          "fuentes": [
+            "https://site.api.espn.com/apis/site/v2/sports/soccer/esp.copa_del_rey/scoreboard?dates=20261027&limit=100",
+            "https://site.web.api.espn.com/apis/v2/sports/soccer/esp.1/standings",
+            "https://www.ftf.es/pnfg/NNws_ShwNewDup?cod_primaria=3001822&cod_secundaria=3001822&codigo=1062147"
+          ]
+        }
+      }
+    },
+    {
+      "hora": "19:00",
+      "fecha": "2026-10-27",
+      "deporte": "Fútbol",
+      "competicion": "Copa del Rey 1ª Ronda",
+      "local": "Calamocha",
+      "visitante": "CE Europa",
+      "canales": [
+        "Aragón Play",
+        "Betevé (Barcelona)"
+      ],
+      "contexto": {
+        "tipo": "copa",
+        "temporada": 2026,
+        "consultado": "2026-10-27T12:50:29.135077+01:00",
+        "competicion": "esp.copa_del_rey",
+        "local": {
+          "nombre": "Calamocha"
+        },
+        "visitante": {
+          "nombre": "CE Europa"
+        },
+        "copa": {
+          "partido_unico": true,
+          "contraste_primera": false,
+          "fuentes": [
+            "https://site.api.espn.com/apis/site/v2/sports/soccer/esp.copa_del_rey/scoreboard?dates=20261027&limit=100",
+            "https://site.web.api.espn.com/apis/v2/sports/soccer/esp.1/standings",
+            "https://www.ftf.es/pnfg/NNws_ShwNewDup?cod_primaria=3001822&cod_secundaria=3001822&codigo=1062147"
+          ]
+        }
+      }
+    },
+    {
+      "hora": "19:00",
+      "fecha": "2026-10-27",
+      "deporte": "Fútbol",
+      "competicion": "Copa del Rey 1ª Ronda",
+      "local": "UD Pinatar",
+      "visitante": "Elche",
+      "canales": [
+        "M+ LALIGA 2 (M57 O112)",
+        "LaLiga TV M2"
+      ]
+    },
+    {
+      "hora": "19:30",
+      "fecha": "2026-10-27",
+      "deporte": "Fútbol",
+      "competicion": "Copa del Rey 1ª Ronda",
+      "local": "CE Manresa",
+      "visitante": "Sant Andreu",
+      "canales": [
+        "Esport3 (Cataluña)"
+      ]
+    },
+    {
+      "hora": "19:45",
+      "fecha": "2026-10-27",
+      "deporte": "Fútbol",
+      "competicion": "Copa del Rey 1ª Ronda",
+      "local": "UD Castellonense",
+      "visitante": "UD Almería",
+      "canales": [
+        "Canal por confirmar"
+      ],
+      "contexto": {
+        "tipo": "copa",
+        "temporada": 2026,
+        "consultado": "2026-10-27T12:50:29.135077+01:00",
+        "competicion": "esp.copa_del_rey",
+        "local": {
+          "nombre": "UD Castellonense"
+        },
+        "visitante": {
+          "nombre": "UD Almería"
+        },
+        "copa": {
+          "partido_unico": true,
+          "contraste_primera": false,
+          "fuentes": [
+            "https://site.api.espn.com/apis/site/v2/sports/soccer/esp.copa_del_rey/scoreboard?dates=20261027&limit=100",
+            "https://site.web.api.espn.com/apis/v2/sports/soccer/esp.1/standings",
+            "https://www.ftf.es/pnfg/NNws_ShwNewDup?cod_primaria=3001822&cod_secundaria=3001822&codigo=1062147"
+          ]
+        }
+      }
+    },
+    {
+      "hora": "20:00",
+      "fecha": "2026-10-27",
+      "deporte": "Fútbol",
+      "competicion": "Copa del Rey 1ª Ronda",
+      "local": "RSD Alcalá",
+      "visitante": "UD Las Palmas",
+      "canales": [
+        "TV Canaria"
+      ],
+      "contexto": {
+        "tipo": "copa",
+        "temporada": 2026,
+        "consultado": "2026-10-27T12:50:29.135077+01:00",
+        "competicion": "esp.copa_del_rey",
+        "local": {
+          "nombre": "RSD Alcalá"
+        },
+        "visitante": {
+          "nombre": "UD Las Palmas"
+        },
+        "copa": {
+          "partido_unico": true,
+          "contraste_primera": false,
+          "fuentes": [
+            "https://site.api.espn.com/apis/site/v2/sports/soccer/esp.copa_del_rey/scoreboard?dates=20261027&limit=100",
+            "https://site.web.api.espn.com/apis/v2/sports/soccer/esp.1/standings",
+            "https://www.ftf.es/pnfg/NNws_ShwNewDup?cod_primaria=3001822&cod_secundaria=3001822&codigo=1062147"
+          ]
+        }
+      }
+    },
+    {
+      "hora": "20:00",
+      "fecha": "2026-10-27",
+      "deporte": "Fútbol",
+      "competicion": "Copa del Rey 1ª Ronda",
+      "local": "G. Segoviana",
+      "visitante": "Cultural Leonesa",
+      "canales": [
+        "Canal por confirmar"
+      ],
+      "contexto": {
+        "tipo": "copa",
+        "temporada": 2026,
+        "consultado": "2026-10-27T12:50:29.135077+01:00",
+        "competicion": "esp.copa_del_rey",
+        "local": {
+          "nombre": "G. Segoviana"
+        },
+        "visitante": {
+          "nombre": "Cultural Leonesa"
+        },
+        "copa": {
+          "partido_unico": true,
+          "contraste_primera": false,
+          "fuentes": [
+            "https://site.api.espn.com/apis/site/v2/sports/soccer/esp.copa_del_rey/scoreboard?dates=20261027&limit=100",
+            "https://site.web.api.espn.com/apis/v2/sports/soccer/esp.1/standings",
+            "https://www.ftf.es/pnfg/NNws_ShwNewDup?cod_primaria=3001822&cod_secundaria=3001822&codigo=1062147"
+          ]
+        }
+      }
+    },
+    {
+      "hora": "20:00",
+      "fecha": "2026-10-27",
+      "deporte": "Fútbol",
+      "competicion": "Copa del Rey 1ª Ronda",
+      "local": "UD Llanera",
+      "visitante": "Ponferradina",
+      "canales": [
+        "Canal por confirmar"
+      ],
+      "contexto": {
+        "tipo": "copa",
+        "temporada": 2026,
+        "consultado": "2026-10-27T12:50:29.135077+01:00",
+        "competicion": "esp.copa_del_rey",
+        "local": {
+          "nombre": "UD Llanera"
+        },
+        "visitante": {
+          "nombre": "Ponferradina"
+        },
+        "copa": {
+          "partido_unico": true,
+          "contraste_primera": false,
+          "fuentes": [
+            "https://site.api.espn.com/apis/site/v2/sports/soccer/esp.copa_del_rey/scoreboard?dates=20261027&limit=100",
+            "https://site.web.api.espn.com/apis/v2/sports/soccer/esp.1/standings",
+            "https://www.ftf.es/pnfg/NNws_ShwNewDup?cod_primaria=3001822&cod_secundaria=3001822&codigo=1062147"
+          ]
+        }
+      }
+    },
+    {
+      "hora": "20:00",
+      "fecha": "2026-10-27",
+      "deporte": "Fútbol",
+      "competicion": "Copa del Rey 1ª Ronda",
+      "local": "Ciudad de Lucena",
+      "visitante": "Rayo Majadahonda",
+      "canales": [
+        "Canal por confirmar"
+      ],
+      "contexto": {
+        "tipo": "copa",
+        "temporada": 2026,
+        "consultado": "2026-10-27T12:50:29.135077+01:00",
+        "competicion": "esp.copa_del_rey",
+        "local": {
+          "nombre": "Ciudad de Lucena"
+        },
+        "visitante": {
+          "nombre": "Rayo Majadahonda"
+        },
+        "copa": {
+          "partido_unico": true,
+          "contraste_primera": false,
+          "fuentes": [
+            "https://site.api.espn.com/apis/site/v2/sports/soccer/esp.copa_del_rey/scoreboard?dates=20261027&limit=100",
+            "https://site.web.api.espn.com/apis/v2/sports/soccer/esp.1/standings",
+            "https://www.ftf.es/pnfg/NNws_ShwNewDup?cod_primaria=3001822&cod_secundaria=3001822&codigo=1062147"
+          ]
+        }
+      }
+    },
+    {
+      "hora": "20:00",
+      "fecha": "2026-10-27",
+      "deporte": "Fútbol",
+      "competicion": "Copa del Rey 1ª Ronda",
+      "local": "At. Tordesillas",
+      "visitante": "Mirandés",
+      "canales": [
+        "Canal por confirmar"
+      ],
+      "contexto": {
+        "tipo": "copa",
+        "temporada": 2026,
+        "consultado": "2026-10-27T12:50:29.135077+01:00",
+        "competicion": "esp.copa_del_rey",
+        "local": {
+          "nombre": "At. Tordesillas"
+        },
+        "visitante": {
+          "nombre": "Mirandés"
+        },
+        "copa": {
+          "partido_unico": true,
+          "contraste_primera": false,
+          "fuentes": [
+            "https://site.api.espn.com/apis/site/v2/sports/soccer/esp.copa_del_rey/scoreboard?dates=20261027&limit=100",
+            "https://site.web.api.espn.com/apis/v2/sports/soccer/esp.1/standings",
+            "https://www.ftf.es/pnfg/NNws_ShwNewDup?cod_primaria=3001822&cod_secundaria=3001822&codigo=1062147"
+          ]
+        }
+      }
+    },
+    {
+      "hora": "20:00",
+      "fecha": "2026-10-27",
+      "deporte": "Baloncesto",
+      "competicion": "Euroliga Liga Regular",
+      "local": "Crvena Zvezda MTS Belgrade",
+      "visitante": "Maccabi Tel Aviv BC",
+      "canales": [
+        "M+ Baloncesto 4 (M195)"
+      ],
+      "contexto": {
+        "consultado": "2026-10-27T12:50:29.135077+01:00",
+        "temporada": 2026,
+        "competicion": "euro",
+        "local": {
+          "nombre": "Crvena Zvezda MTS Belgrade",
+          "posicion": 8,
+          "jugados": 7,
+          "victorias": 4,
+          "derrotas": 3,
+          "forma": "LWWWW",
+          "fuentes": [
+            "https://api-live.euroleague.net/v2/competitions/E/seasons/E2026/games?limit=1000",
+            "https://api-live.euroleague.net/v3/competitions/E/seasons/E2026/rounds/7/basicstandings"
+          ],
+          "ultimo_partido": "2026-10-22T18:45:00+00:00"
+        },
+        "visitante": {
+          "nombre": "Maccabi Tel Aviv BC",
+          "posicion": 15,
+          "jugados": 7,
+          "victorias": 2,
+          "derrotas": 5,
+          "forma": "LWLWL",
+          "fuentes": [
+            "https://api-live.euroleague.net/v2/competitions/E/seasons/E2026/games?limit=1000",
+            "https://api-live.euroleague.net/v3/competitions/E/seasons/E2026/rounds/7/basicstandings"
+          ],
+          "ultimo_partido": "2026-10-22T18:05:00+00:00"
+        }
+      }
+    },
+    {
+      "hora": "20:00",
+      "fecha": "2026-10-27",
+      "deporte": "Baloncesto",
+      "competicion": "Euroliga Liga Regular",
+      "local": "FC Bayern Basketball",
+      "visitante": "Barça Basket",
+      "canales": [
+        "M+ Baloncesto (M66)"
+      ],
+      "contexto": {
+        "consultado": "2026-10-27T12:50:29.135077+01:00",
+        "temporada": 2026,
+        "competicion": "euro",
+        "local": {
+          "nombre": "FC Bayern Basketball",
+          "posicion": 16,
+          "jugados": 7,
+          "victorias": 2,
+          "derrotas": 5,
+          "forma": "LLWLL",
+          "fuentes": [
+            "https://api-live.euroleague.net/v2/competitions/E/seasons/E2026/games?limit=1000",
+            "https://api-live.euroleague.net/v3/competitions/E/seasons/E2026/rounds/7/basicstandings"
+          ],
+          "ultimo_partido": "2026-10-22T18:00:00+00:00"
+        },
+        "visitante": {
+          "nombre": "Barça Basket",
+          "posicion": 9,
+          "jugados": 7,
+          "victorias": 4,
+          "derrotas": 3,
+          "forma": "WLWLW",
+          "fuentes": [
+            "https://api-live.euroleague.net/v2/competitions/E/seasons/E2026/games?limit=1000",
+            "https://api-live.euroleague.net/v3/competitions/E/seasons/E2026/rounds/7/basicstandings"
+          ],
+          "ultimo_partido": "2026-10-22T18:30:00+00:00"
+        }
+      }
+    },
+    {
+      "hora": "20:15",
+      "fecha": "2026-10-27",
+      "deporte": "Baloncesto",
+      "competicion": "Euroliga Liga Regular",
+      "local": "Panathinaikos BC",
+      "visitante": "AX Olimpia Milano",
+      "canales": [
+        "M+ Baloncesto 3 (M194)"
+      ],
+      "contexto": {
+        "consultado": "2026-10-27T12:50:29.135077+01:00",
+        "temporada": 2026,
+        "competicion": "euro",
+        "local": {
+          "nombre": "Panathinaikos BC",
+          "posicion": 1,
+          "jugados": 7,
+          "victorias": 6,
+          "derrotas": 1,
+          "forma": "WLWWW",
+          "fuentes": [
+            "https://api-live.euroleague.net/v2/competitions/E/seasons/E2026/games?limit=1000",
+            "https://api-live.euroleague.net/v3/competitions/E/seasons/E2026/rounds/7/basicstandings"
+          ],
+          "ultimo_partido": "2026-10-22T18:15:00+00:00"
+        },
+        "visitante": {
+          "nombre": "AX Olimpia Milano",
+          "posicion": 19,
+          "jugados": 7,
+          "victorias": 1,
+          "derrotas": 6,
+          "forma": "LLLLL",
+          "fuentes": [
+            "https://api-live.euroleague.net/v2/competitions/E/seasons/E2026/games?limit=1000",
+            "https://api-live.euroleague.net/v3/competitions/E/seasons/E2026/rounds/7/basicstandings"
+          ],
+          "ultimo_partido": "2026-10-22T18:30:00+00:00"
+        }
+      }
+    },
+    {
+      "hora": "20:30",
+      "fecha": "2026-10-27",
+      "deporte": "Fútbol",
+      "competicion": "Copa del Rey 1ª Ronda",
+      "local": "Don Benito",
+      "visitante": "CD Extremadura",
+      "canales": [
+        "Canal por confirmar"
+      ],
+      "contexto": {
+        "tipo": "copa",
+        "temporada": 2026,
+        "consultado": "2026-10-27T12:50:29.135077+01:00",
+        "competicion": "esp.copa_del_rey",
+        "local": {
+          "nombre": "Don Benito"
+        },
+        "visitante": {
+          "nombre": "CD Extremadura"
+        },
+        "copa": {
+          "partido_unico": true,
+          "contraste_primera": false,
+          "fuentes": [
+            "https://site.api.espn.com/apis/site/v2/sports/soccer/esp.copa_del_rey/scoreboard?dates=20261027&limit=100",
+            "https://site.web.api.espn.com/apis/v2/sports/soccer/esp.1/standings",
+            "https://www.ftf.es/pnfg/NNws_ShwNewDup?cod_primaria=3001822&cod_secundaria=3001822&codigo=1062147"
+          ]
+        }
+      }
+    },
+    {
+      "hora": "20:30",
+      "fecha": "2026-10-27",
+      "deporte": "Baloncesto",
+      "competicion": "Euroliga Liga Regular",
+      "local": "Valencia Basket",
+      "visitante": "Fenerbahce Istanbul",
+      "canales": [
+        "M+ Vamos (8 y 50)",
+        "M+ #Vamos Bar (307)"
+      ],
+      "contexto": {
+        "consultado": "2026-10-27T12:50:29.135077+01:00",
+        "temporada": 2026,
+        "competicion": "euro",
+        "local": {
+          "nombre": "Valencia Basket",
+          "posicion": 3,
+          "jugados": 7,
+          "victorias": 5,
+          "derrotas": 2,
+          "forma": "WLLWW",
+          "fuentes": [
+            "https://api-live.euroleague.net/v2/competitions/E/seasons/E2026/games?limit=1000",
+            "https://api-live.euroleague.net/v3/competitions/E/seasons/E2026/rounds/7/basicstandings"
+          ],
+          "ultimo_partido": "2026-10-23T18:45:00+00:00"
+        },
+        "visitante": {
+          "nombre": "Fenerbahce Istanbul",
+          "posicion": 2,
+          "jugados": 7,
+          "victorias": 6,
+          "derrotas": 1,
+          "forma": "WWWLW",
+          "fuentes": [
+            "https://api-live.euroleague.net/v2/competitions/E/seasons/E2026/games?limit=1000",
+            "https://api-live.euroleague.net/v3/competitions/E/seasons/E2026/rounds/7/basicstandings"
+          ],
+          "ultimo_partido": "2026-10-23T18:15:00+00:00"
+        }
+      }
+    },
+    {
+      "hora": "20:45",
+      "fecha": "2026-10-27",
+      "deporte": "Fútbol",
+      "competicion": "Serie A Italiana",
+      "local": "AS Roma",
+      "visitante": "Cagliari",
+      "canales": [
+        "DAZN (Ver en directo)"
+      ],
+      "contexto": {
+        "consultado": "2026-10-27T12:50:29.135077+01:00",
+        "temporada": 2026,
+        "competicion": "ita.1",
+        "local": {
+          "nombre": "AS Roma",
+          "posicion": 3,
+          "jugados": 8,
+          "victorias": 5,
+          "derrotas": 0,
+          "forma": "DWDDW",
+          "fuentes": [
+            "https://site.web.api.espn.com/apis/v2/sports/soccer/ita.1/standings",
+            "https://site.api.espn.com/apis/site/v2/sports/soccer/ita.1/teams/104/schedule?season=2026"
+          ],
+          "ultimo_partido": "2026-10-24T16:00:00+00:00"
+        },
+        "visitante": {
+          "nombre": "Cagliari",
+          "posicion": 9,
+          "jugados": 8,
+          "victorias": 4,
+          "derrotas": 3,
+          "forma": "LLDWW",
+          "fuentes": [
+            "https://site.web.api.espn.com/apis/v2/sports/soccer/ita.1/standings",
+            "https://site.api.espn.com/apis/site/v2/sports/soccer/ita.1/teams/2925/schedule?season=2026"
+          ],
+          "ultimo_partido": "2026-10-24T13:00:00+00:00"
+        }
+      }
+    },
+    {
+      "hora": "20:45",
+      "fecha": "2026-10-27",
+      "deporte": "Fútbol",
+      "competicion": "Serie A Italiana",
+      "local": "Torino",
+      "visitante": "Como 1907",
+      "canales": [
+        "DAZN (Ver en directo)"
+      ],
+      "contexto": {
+        "consultado": "2026-10-27T12:50:29.135077+01:00",
+        "temporada": 2026,
+        "competicion": "ita.1",
+        "local": {
+          "nombre": "Torino",
+          "posicion": 8,
+          "jugados": 8,
+          "victorias": 4,
+          "derrotas": 3,
+          "forma": "WWWDL",
+          "fuentes": [
+            "https://site.web.api.espn.com/apis/v2/sports/soccer/ita.1/standings",
+            "https://site.api.espn.com/apis/site/v2/sports/soccer/ita.1/teams/239/schedule?season=2026"
+          ],
+          "ultimo_partido": "2026-10-23T18:45:00+00:00"
+        },
+        "visitante": {
+          "nombre": "Como 1907",
+          "posicion": 5,
+          "jugados": 8,
+          "victorias": 5,
+          "derrotas": 1,
+          "forma": "WWDLW",
+          "fuentes": [
+            "https://site.web.api.espn.com/apis/v2/sports/soccer/ita.1/standings",
+            "https://site.api.espn.com/apis/site/v2/sports/soccer/ita.1/teams/2572/schedule?season=2026"
+          ],
+          "ultimo_partido": "2026-10-24T13:00:00+00:00"
+        }
+      }
+    },
+    {
+      "hora": "21:00",
+      "fecha": "2026-10-27",
+      "deporte": "Fútbol",
+      "competicion": "Copa del Rey 1ª Ronda",
+      "local": "Recreativo Huelva",
+      "visitante": "Rayo Vallecano",
+      "canales": [
+        "M+ LALIGA (M54 O110)",
+        "M+ Liga de Campeones (M60 O115)",
+        "LaLiga TV M2"
+      ],
+      "contexto": {
+        "tipo": "copa",
+        "temporada": 2026,
+        "consultado": "2026-10-27T12:50:29.135077+01:00",
+        "competicion": "esp.copa_del_rey",
+        "local": {
+          "nombre": "Recreativo Huelva"
+        },
+        "visitante": {
+          "nombre": "Rayo Vallecano"
+        },
+        "copa": {
+          "partido_unico": true,
+          "contraste_primera": true,
+          "fuentes": [
+            "https://site.api.espn.com/apis/site/v2/sports/soccer/esp.copa_del_rey/scoreboard?dates=20261027&limit=100",
+            "https://site.web.api.espn.com/apis/v2/sports/soccer/esp.1/standings",
+            "https://www.ftf.es/pnfg/NNws_ShwNewDup?cod_primaria=3001822&cod_secundaria=3001822&codigo=1062147"
+          ]
+        }
+      }
+    },
+    {
+      "hora": "21:00",
+      "fecha": "2026-10-27",
+      "deporte": "Fútbol",
+      "competicion": "Copa del Rey 1ª Ronda",
+      "local": "Tudelano",
+      "visitante": "Real Zaragoza",
+      "canales": [
+        "Aragón Play",
+        "Aragón TV"
+      ],
+      "contexto": {
+        "tipo": "copa",
+        "temporada": 2026,
+        "consultado": "2026-10-27T12:50:29.135077+01:00",
+        "competicion": "esp.copa_del_rey",
+        "local": {
+          "nombre": "Tudelano"
+        },
+        "visitante": {
+          "nombre": "Real Zaragoza"
+        },
+        "copa": {
+          "partido_unico": true,
+          "contraste_primera": false,
+          "fuentes": [
+            "https://site.api.espn.com/apis/site/v2/sports/soccer/esp.copa_del_rey/scoreboard?dates=20261027&limit=100",
+            "https://site.web.api.espn.com/apis/v2/sports/soccer/esp.1/standings",
+            "https://www.ftf.es/pnfg/NNws_ShwNewDup?cod_primaria=3001822&cod_secundaria=3001822&codigo=1062147"
+          ]
+        }
+      }
+    },
+    {
+      "hora": "21:00",
+      "fecha": "2026-10-27",
+      "deporte": "Fútbol",
+      "competicion": "Copa del Rey 1ª Ronda",
+      "local": "Arosa SC",
+      "visitante": "Pontevedra",
+      "canales": [
+        "Canal por confirmar"
+      ],
+      "contexto": {
+        "tipo": "copa",
+        "temporada": 2026,
+        "consultado": "2026-10-27T12:50:29.135077+01:00",
+        "competicion": "esp.copa_del_rey",
+        "local": {
+          "nombre": "Arosa SC"
+        },
+        "visitante": {
+          "nombre": "Pontevedra"
+        },
+        "copa": {
+          "partido_unico": true,
+          "contraste_primera": false,
+          "fuentes": [
+            "https://site.api.espn.com/apis/site/v2/sports/soccer/esp.copa_del_rey/scoreboard?dates=20261027&limit=100",
+            "https://site.web.api.espn.com/apis/v2/sports/soccer/esp.1/standings",
+            "https://www.ftf.es/pnfg/NNws_ShwNewDup?cod_primaria=3001822&cod_secundaria=3001822&codigo=1062147"
+          ]
+        }
+      }
+    },
+    {
+      "hora": "21:00",
+      "fecha": "2026-10-27",
+      "deporte": "Fútbol",
+      "competicion": "Copa del Rey 1ª Ronda",
+      "local": "CD Manacor",
+      "visitante": "Villarreal",
+      "canales": [
+        "M+ LALIGA 2 (M57 O112)",
+        "M+ LALIGA 4 (M168 O417)",
+        "LaLiga TV Bar"
+      ],
+      "contexto": {
+        "tipo": "copa",
+        "temporada": 2026,
+        "consultado": "2026-10-27T12:50:29.135077+01:00",
+        "competicion": "esp.copa_del_rey",
+        "local": {
+          "nombre": "CD Manacor"
+        },
+        "visitante": {
+          "nombre": "Villarreal"
+        },
+        "copa": {
+          "partido_unico": true,
+          "contraste_primera": true,
+          "fuentes": [
+            "https://site.api.espn.com/apis/site/v2/sports/soccer/esp.copa_del_rey/scoreboard?dates=20261027&limit=100",
+            "https://site.web.api.espn.com/apis/v2/sports/soccer/esp.1/standings",
+            "https://www.ftf.es/pnfg/NNws_ShwNewDup?cod_primaria=3001822&cod_secundaria=3001822&codigo=1062147"
+          ]
+        }
+      }
+    },
+    {
+      "hora": "21:00",
+      "fecha": "2026-10-27",
+      "deporte": "Fútbol",
+      "competicion": "Copa del Rey 1ª Ronda",
+      "local": "CD Atlético Paso",
+      "visitante": "Córdoba",
+      "canales": [
+        "TV Canaria"
+      ],
+      "contexto": {
+        "tipo": "copa",
+        "temporada": 2026,
+        "consultado": "2026-10-27T12:50:29.135077+01:00",
+        "competicion": "esp.copa_del_rey",
+        "local": {
+          "nombre": "CD Atlético Paso"
+        },
+        "visitante": {
+          "nombre": "Córdoba"
+        },
+        "copa": {
+          "partido_unico": true,
+          "contraste_primera": false,
+          "fuentes": [
+            "https://site.api.espn.com/apis/site/v2/sports/soccer/esp.copa_del_rey/scoreboard?dates=20261027&limit=100",
+            "https://site.web.api.espn.com/apis/v2/sports/soccer/esp.1/standings",
+            "https://www.ftf.es/pnfg/NNws_ShwNewDup?cod_primaria=3001822&cod_secundaria=3001822&codigo=1062147"
+          ]
+        }
+      }
+    },
+    {
+      "hora": "21:00",
+      "fecha": "2026-10-27",
+      "deporte": "Fútbol",
+      "competicion": "Copa del Rey 1ª Ronda",
+      "local": "Sporting de Alcázar",
+      "visitante": "Málaga",
+      "canales": [
+        "M+ LALIGA 3 (M167 O123)",
+        "LaLiga TV M3"
+      ],
+      "contexto": {
+        "tipo": "copa",
+        "temporada": 2026,
+        "consultado": "2026-10-27T12:50:29.135077+01:00",
+        "competicion": "esp.copa_del_rey",
+        "local": {
+          "nombre": "Sporting de Alcázar"
+        },
+        "visitante": {
+          "nombre": "Málaga"
+        },
+        "copa": {
+          "partido_unico": true,
+          "contraste_primera": true,
+          "fuentes": [
+            "https://site.api.espn.com/apis/site/v2/sports/soccer/esp.copa_del_rey/scoreboard?dates=20261027&limit=100",
+            "https://site.web.api.espn.com/apis/v2/sports/soccer/esp.1/standings",
+            "https://www.ftf.es/pnfg/NNws_ShwNewDup?cod_primaria=3001822&cod_secundaria=3001822&codigo=1062147"
+          ]
+        }
+      }
+    },
+    {
+      "hora": "21:00",
+      "fecha": "2026-10-27",
+      "deporte": "Baloncesto",
+      "competicion": "Euroliga Liga Regular",
+      "local": "Baskonia",
+      "visitante": "Real Madrid Baloncesto",
+      "canales": [
+        "Movistar Plus+ (M7): VER PARTIDO",
+        "M+ Baloncesto 2 (M67)"
+      ],
+      "contexto": {
+        "consultado": "2026-10-27T12:50:29.135077+01:00",
+        "temporada": 2026,
+        "competicion": "euro",
+        "local": {
+          "nombre": "Baskonia",
+          "posicion": 20,
+          "jugados": 7,
+          "victorias": 1,
+          "derrotas": 6,
+          "forma": "LLLLW",
+          "fuentes": [
+            "https://api-live.euroleague.net/v2/competitions/E/seasons/E2026/games?limit=1000",
+            "https://api-live.euroleague.net/v3/competitions/E/seasons/E2026/rounds/7/basicstandings"
+          ],
+          "ultimo_partido": "2026-10-22T18:15:00+00:00"
+        },
+        "visitante": {
+          "nombre": "Real Madrid Baloncesto",
+          "posicion": 7,
+          "jugados": 7,
+          "victorias": 4,
+          "derrotas": 3,
+          "forma": "WWWWL",
+          "fuentes": [
+            "https://api-live.euroleague.net/v2/competitions/E/seasons/E2026/games?limit=1000",
+            "https://api-live.euroleague.net/v3/competitions/E/seasons/E2026/rounds/7/basicstandings"
+          ],
+          "ultimo_partido": "2026-10-22T18:05:00+00:00"
+        }
+      }
+    },
+    {
+      "hora": "23:00",
+      "fecha": "2026-10-27",
+      "deporte": "Fútbol",
+      "competicion": "Primera División Argentina Torneo Clausura",
+      "local": "Argentinos Juniors",
+      "visitante": "Independiente Rivadavia",
+      "canales": [
+        "Fanatiz (Ver en directo)"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,1380 @@
+{
+  "corte": "2026-10-28T11:14:00.515316+01:00",
+  "eventos": [
+    {
+      "hora": "13:30",
+      "fecha": "2026-10-28",
+      "deporte": "Tenis",
+      "competicion": "Torneo de Viena 1ª Ronda",
+      "local": "D. Mérida",
+      "visitante": "D. Medvedev",
+      "canales": [
+        "ATP Tennis TV",
+        "Movistar Plus+ (M7): VER PARTIDO",
+        "M+ Deportes 2 (64)"
+      ]
+    },
+    {
+      "hora": "14:00",
+      "fecha": "2026-10-28",
+      "deporte": "Tenis",
+      "competicion": "Torneo de Basilea 2ª Ronda",
+      "local": "N. Borges",
+      "visitante": "C. Ruud",
+      "canales": [
+        "ATP Tennis TV",
+        "M+ Deportes (63)"
+      ],
+      "contexto": {
+        "tipo": "tenis",
+        "competicion": "atp",
+        "temporada": 2026,
+        "consultado": "2026-10-28T10:45:48.556196+01:00",
+        "publicado": "2026-10-22T07:00:00+00:00",
+        "local": {
+          "nombre": "N. Borges",
+          "id": "4115",
+          "ranking": 53,
+          "edad": 29,
+          "pais": "POR"
+        },
+        "visitante": {
+          "nombre": "C. Ruud",
+          "id": "2989",
+          "ranking": 25,
+          "edad": 27,
+          "pais": "NOR"
+        },
+        "fuentes": [
+          "https://site.api.espn.com/apis/site/v2/sports/tennis/atp/rankings"
+        ]
+      }
+    },
+    {
+      "hora": "15:00",
+      "fecha": "2026-10-28",
+      "deporte": "Tenis",
+      "competicion": "Torneo de Viena 1ª Ronda",
+      "local": "L. Musetti",
+      "visitante": "F. Tiafoe",
+      "canales": [
+        "ATP Tennis TV",
+        "M+ Deportes 2 (64)"
+      ],
+      "contexto": {
+        "tipo": "tenis",
+        "competicion": "atp",
+        "temporada": 2026,
+        "consultado": "2026-10-28T10:45:48.556196+01:00",
+        "publicado": "2026-10-22T07:00:00+00:00",
+        "local": {
+          "nombre": "L. Musetti",
+          "id": "3764",
+          "ranking": 26,
+          "edad": 24,
+          "pais": "ITA"
+        },
+        "visitante": {
+          "nombre": "F. Tiafoe",
+          "id": "2708",
+          "ranking": 9,
+          "edad": 28,
+          "pais": "USA"
+        },
+        "fuentes": [
+          "https://site.api.espn.com/apis/site/v2/sports/tennis/atp/rankings"
+        ]
+      }
+    },
+    {
+      "hora": "15:30",
+      "fecha": "2026-10-28",
+      "deporte": "Tenis",
+      "competicion": "Torneo de Basilea 1ª Ronda",
+      "local": "N. Djokovic",
+      "visitante": "U. Humbert",
+      "canales": [
+        "ATP Tennis TV",
+        "M+ Vamos (8 y 50)",
+        "M+ #Vamos Bar (307)",
+        "M+ Deportes (63)"
+      ],
+      "contexto": {
+        "tipo": "tenis",
+        "competicion": "atp",
+        "temporada": 2026,
+        "consultado": "2026-10-28T10:45:48.556196+01:00",
+        "publicado": "2026-10-22T07:00:00+00:00",
+        "local": {
+          "nombre": "N. Djokovic",
+          "id": "296",
+          "ranking": 12,
+          "edad": 39,
+          "pais": "SER"
+        },
+        "visitante": {
+          "nombre": "U. Humbert",
+          "id": "3085",
+          "ranking": 38,
+          "edad": 28,
+          "pais": "FRA"
+        },
+        "fuentes": [
+          "https://site.api.espn.com/apis/site/v2/sports/tennis/atp/rankings"
+        ]
+      }
+    },
+    {
+      "hora": "18:00",
+      "fecha": "2026-10-28",
+      "deporte": "Tenis",
+      "competicion": "Torneo de Basilea 1ª Ronda",
+      "local": "T. Fritz",
+      "visitante": "R. Hijikata",
+      "canales": [
+        "ATP Tennis TV",
+        "M+ Deportes (63)"
+      ],
+      "contexto": {
+        "tipo": "tenis",
+        "competicion": "atp",
+        "temporada": 2026,
+        "consultado": "2026-10-28T10:45:48.556196+01:00",
+        "publicado": "2026-10-22T07:00:00+00:00",
+        "local": {
+          "nombre": "T. Fritz",
+          "id": "2946",
+          "ranking": 13,
+          "edad": 28,
+          "pais": "USA"
+        },
+        "visitante": {
+          "nombre": "R. Hijikata",
+          "id": "3716",
+          "ranking": 85,
+          "edad": 25,
+          "pais": "AUS"
+        },
+        "fuentes": [
+          "https://site.api.espn.com/apis/site/v2/sports/tennis/atp/rankings"
+        ]
+      }
+    },
+    {
+      "hora": "18:00",
+      "fecha": "2026-10-28",
+      "deporte": "Fútbol",
+      "competicion": "Copa de Alemania 2ª Ronda",
+      "local": "Freiburg",
+      "visitante": "VfL Wolfsburg",
+      "canales": [
+        "OneFootball PPV",
+        "German Football YouTube"
+      ]
+    },
+    {
+      "hora": "18:00",
+      "fecha": "2026-10-28",
+      "deporte": "Fútbol",
+      "competicion": "Copa de Alemania 2ª Ronda",
+      "local": "Dynamo Dresden",
+      "visitante": "Schalke 04",
+      "canales": [
+        "OneFootball PPV",
+        "German Football YouTube"
+      ]
+    },
+    {
+      "hora": "18:00",
+      "fecha": "2026-10-28",
+      "deporte": "Fútbol",
+      "competicion": "Copa de Alemania 2ª Ronda",
+      "local": "Paderborn 07",
+      "visitante": "Stuttgart",
+      "canales": [
+        "OneFootball PPV",
+        "German Football YouTube"
+      ]
+    },
+    {
+      "hora": "18:00",
+      "fecha": "2026-10-28",
+      "deporte": "Fútbol",
+      "competicion": "Copa de Alemania 2ª Ronda",
+      "local": "SSV Jeddeloh",
+      "visitante": "Hertha Berlin",
+      "canales": [
+        "OneFootball PPV"
+      ]
+    },
+    {
+      "hora": "18:30",
+      "fecha": "2026-10-28",
+      "deporte": "Baloncesto",
+      "competicion": "Euroliga Liga Regular",
+      "local": "Besiktas JK Istanbul",
+      "visitante": "Olympiacos Piraeus",
+      "canales": [
+        "M+ Vamos 3 (53)"
+      ]
+    },
+    {
+      "hora": "18:30",
+      "fecha": "2026-10-28",
+      "deporte": "Fútbol",
+      "competicion": "Serie A Italiana",
+      "local": "AC Milan",
+      "visitante": "Bologna",
+      "canales": [
+        "DAZN (Ver en directo)"
+      ],
+      "contexto": {
+        "consultado": "2026-10-28T10:45:48.556196+01:00",
+        "temporada": 2026,
+        "competicion": "ita.1",
+        "local": {
+          "nombre": "AC Milan",
+          "id": "103",
+          "posicion": 5,
+          "jugados": 8,
+          "victorias": 5,
+          "derrotas": 0,
+          "forma": "WWDWD",
+          "fuentes": [
+            "https://site.web.api.espn.com/apis/v2/sports/soccer/ita.1/standings",
+            "https://site.api.espn.com/apis/site/v2/sports/soccer/ita.1/teams/103/schedule?season=2026"
+          ],
+          "ultimo_partido": "2026-10-25T19:45:00+00:00"
+        },
+        "visitante": {
+          "nombre": "Bologna",
+          "id": "107",
+          "posicion": 13,
+          "jugados": 8,
+          "victorias": 2,
+          "derrotas": 4,
+          "forma": "WLWDL",
+          "fuentes": [
+            "https://site.web.api.espn.com/apis/v2/sports/soccer/ita.1/standings",
+            "https://site.api.espn.com/apis/site/v2/sports/soccer/ita.1/teams/107/schedule?season=2026"
+          ],
+          "ultimo_partido": "2026-10-24T13:00:00+00:00"
+        }
+      }
+    },
+    {
+      "hora": "18:30",
+      "fecha": "2026-10-28",
+      "deporte": "Fútbol",
+      "competicion": "Serie A Italiana",
+      "local": "Parma",
+      "visitante": "Udinese",
+      "canales": [
+        "DAZN (Ver en directo)"
+      ],
+      "contexto": {
+        "consultado": "2026-10-28T10:45:48.556196+01:00",
+        "temporada": 2026,
+        "competicion": "ita.1",
+        "local": {
+          "nombre": "Parma",
+          "id": "115",
+          "posicion": 19,
+          "jugados": 8,
+          "victorias": 1,
+          "derrotas": 6,
+          "forma": "LLLWL",
+          "fuentes": [
+            "https://site.web.api.espn.com/apis/v2/sports/soccer/ita.1/standings",
+            "https://site.api.espn.com/apis/site/v2/sports/soccer/ita.1/teams/115/schedule?season=2026"
+          ],
+          "ultimo_partido": "2026-10-24T18:45:00+00:00"
+        },
+        "visitante": {
+          "nombre": "Udinese",
+          "id": "118",
+          "posicion": 17,
+          "jugados": 8,
+          "victorias": 1,
+          "derrotas": 6,
+          "forma": "LLLLL",
+          "fuentes": [
+            "https://site.web.api.espn.com/apis/v2/sports/soccer/ita.1/standings",
+            "https://site.api.espn.com/apis/site/v2/sports/soccer/ita.1/teams/118/schedule?season=2026"
+          ],
+          "ultimo_partido": "2026-10-25T19:45:00+00:00"
+        }
+      }
+    },
+    {
+      "hora": "18:30",
+      "fecha": "2026-10-28",
+      "deporte": "Fútbol",
+      "competicion": "Serie A Italiana",
+      "local": "Venezia FC",
+      "visitante": "Inter Milan",
+      "canales": [
+        "DAZN (Ver en directo)",
+        "Movistar Plus+ (M7): VER PARTIDO",
+        "Orange Fútbol 3 (109)",
+        "M+ Vamos 2 (51)"
+      ]
+    },
+    {
+      "hora": "19:00",
+      "fecha": "2026-10-28",
+      "deporte": "Fútbol",
+      "competicion": "Copa del Rey 1ª Ronda",
+      "local": "Coruxo",
+      "visitante": "Zamora",
+      "canales": [
+        "Canal por confirmar"
+      ]
+    },
+    {
+      "hora": "19:00",
+      "fecha": "2026-10-28",
+      "deporte": "Fútbol",
+      "competicion": "Copa del Rey 1ª Ronda",
+      "local": "Peña Sport",
+      "visitante": "Huesca",
+      "canales": [
+        "Aragón Play",
+        "Aragón TV"
+      ],
+      "contexto": {
+        "tipo": "copa",
+        "temporada": 2026,
+        "consultado": "2026-10-28T11:14:00.515316+01:00",
+        "competicion": "esp.copa_del_rey",
+        "local": {
+          "nombre": "Peña Sport",
+          "id": "7041",
+          "categoria": "Fuera de Primera y Segunda"
+        },
+        "visitante": {
+          "nombre": "Huesca",
+          "id": "5413",
+          "categoria": "Fuera de Primera y Segunda"
+        },
+        "copa": {
+          "partido_unico": true,
+          "contraste_primera": false,
+          "fuentes": [
+            "https://site.api.espn.com/apis/site/v2/sports/soccer/esp.copa_del_rey/scoreboard?dates=20261028&limit=100",
+            "https://site.web.api.espn.com/apis/v2/sports/soccer/esp.1/standings",
+            "https://www.ftf.es/pnfg/NNws_ShwNewDup?cod_primaria=3001822&cod_secundaria=3001822&codigo=1062147",
+            "https://site.web.api.espn.com/apis/v2/sports/soccer/esp.2/standings"
+          ],
+          "contraste_segunda": false,
+          "estado_categorias": "Primera y Segunda verificadas"
+        }
+      }
+    },
+    {
+      "hora": "19:00",
+      "fecha": "2026-10-28",
+      "deporte": "Fútbol",
+      "competicion": "Copa del Rey 1ª Ronda",
+      "local": "Poblense",
+      "visitante": "AD Ceuta",
+      "canales": [
+        "Canal por confirmar"
+      ]
+    },
+    {
+      "hora": "19:00",
+      "fecha": "2026-10-28",
+      "deporte": "Fútbol",
+      "competicion": "Copa del Rey 1ª Ronda",
+      "local": "Portugalete",
+      "visitante": "Real Unión",
+      "canales": [
+        "Canal por confirmar"
+      ],
+      "contexto": {
+        "tipo": "copa",
+        "temporada": 2026,
+        "consultado": "2026-10-28T11:14:00.515316+01:00",
+        "competicion": "esp.copa_del_rey",
+        "local": {
+          "nombre": "Portugalete",
+          "id": "5464",
+          "categoria": "Fuera de Primera y Segunda"
+        },
+        "visitante": {
+          "nombre": "Real Unión",
+          "id": "8678",
+          "categoria": "Fuera de Primera y Segunda"
+        },
+        "copa": {
+          "partido_unico": true,
+          "contraste_primera": false,
+          "fuentes": [
+            "https://site.api.espn.com/apis/site/v2/sports/soccer/esp.copa_del_rey/scoreboard?dates=20261028&limit=100",
+            "https://site.web.api.espn.com/apis/v2/sports/soccer/esp.1/standings",
+            "https://www.ftf.es/pnfg/NNws_ShwNewDup?cod_primaria=3001822&cod_secundaria=3001822&codigo=1062147",
+            "https://site.web.api.espn.com/apis/v2/sports/soccer/esp.2/standings"
+          ],
+          "contraste_segunda": false,
+          "estado_categorias": "Primera y Segunda verificadas"
+        }
+      }
+    },
+    {
+      "hora": "19:00",
+      "fecha": "2026-10-28",
+      "deporte": "Fútbol",
+      "competicion": "Copa del Rey 1ª Ronda",
+      "local": "CD Pamplona",
+      "visitante": "Eibar",
+      "canales": [
+        "Canal por confirmar"
+      ],
+      "contexto": {
+        "tipo": "copa",
+        "temporada": 2026,
+        "consultado": "2026-10-28T11:14:00.515316+01:00",
+        "competicion": "esp.copa_del_rey",
+        "local": {
+          "nombre": "CD Pamplona",
+          "id": "133835",
+          "categoria": "Fuera de Primera y Segunda"
+        },
+        "visitante": {
+          "nombre": "Eibar",
+          "id": "3752",
+          "categoria": "Segunda"
+        },
+        "copa": {
+          "partido_unico": true,
+          "contraste_primera": false,
+          "fuentes": [
+            "https://site.api.espn.com/apis/site/v2/sports/soccer/esp.copa_del_rey/scoreboard?dates=20261028&limit=100",
+            "https://site.web.api.espn.com/apis/v2/sports/soccer/esp.1/standings",
+            "https://www.ftf.es/pnfg/NNws_ShwNewDup?cod_primaria=3001822&cod_secundaria=3001822&codigo=1062147",
+            "https://site.web.api.espn.com/apis/v2/sports/soccer/esp.2/standings"
+          ],
+          "contraste_segunda": true,
+          "estado_categorias": "Primera y Segunda verificadas",
+          "forma_visitante": {
+            "nombre": "Eibar",
+            "id": "3752",
+            "posicion": 3,
+            "jugados": 11,
+            "victorias": 7,
+            "derrotas": 3,
+            "forma": "LDLWW",
+            "fuentes": [
+              "https://site.web.api.espn.com/apis/v2/sports/soccer/esp.2/standings",
+              "https://site.api.espn.com/apis/site/v2/sports/soccer/esp.2/teams/3752/schedule?season=2026"
+            ],
+            "ultimo_partido": "2026-10-24T12:00:00+00:00"
+          },
+          "estado_forma": "Historial y tabla coinciden"
+        }
+      }
+    },
+    {
+      "hora": "19:00",
+      "fecha": "2026-10-28",
+      "deporte": "Fútbol",
+      "competicion": "Copa del Rey 1ª Ronda",
+      "local": "Utebo",
+      "visitante": "Sabadell",
+      "canales": [
+        "Aragón Play"
+      ]
+    },
+    {
+      "hora": "19:00",
+      "fecha": "2026-10-28",
+      "deporte": "Fútbol",
+      "competicion": "Copa del Rey 1ª Ronda",
+      "local": "Tarancón",
+      "visitante": "Levante",
+      "canales": [
+        "M+ LALIGA 4 (M168 O417)",
+        "LaLiga TV M2"
+      ]
+    },
+    {
+      "hora": "19:00",
+      "fecha": "2026-10-28",
+      "deporte": "Fútbol",
+      "competicion": "Copa del Rey 1ª Ronda",
+      "local": "Anaitasuna CD",
+      "visitante": "Alavés",
+      "canales": [
+        "M+ LALIGA 3 (M167 O123)",
+        "LaLiga TV Bar"
+      ]
+    },
+    {
+      "hora": "19:00",
+      "fecha": "2026-10-28",
+      "deporte": "Baloncesto",
+      "competicion": "Euroliga Liga Regular",
+      "local": "Hapoel Tel Aviv BC",
+      "visitante": "Anadolu Efes Istanbul",
+      "canales": [
+        "M+ Baloncesto 3 (M194)"
+      ],
+      "contexto": {
+        "consultado": "2026-10-28T10:45:48.556196+01:00",
+        "temporada": 2026,
+        "competicion": "euro",
+        "local": {
+          "nombre": "Hapoel Tel Aviv BC",
+          "id": "HTA",
+          "posicion": 5,
+          "jugados": 7,
+          "victorias": 5,
+          "derrotas": 2,
+          "forma": "WWWLW",
+          "fuentes": [
+            "https://api-live.euroleague.net/v2/competitions/E/seasons/E2026/games?limit=1000",
+            "https://api-live.euroleague.net/v3/competitions/E/seasons/E2026/rounds/7/basicstandings"
+          ],
+          "ronda": 7,
+          "ultimo_partido": "2026-10-21T16:00:00+00:00"
+        },
+        "visitante": {
+          "nombre": "Anadolu Efes Istanbul",
+          "id": "IST",
+          "posicion": 13,
+          "jugados": 7,
+          "victorias": 3,
+          "derrotas": 4,
+          "forma": "WWLLL",
+          "fuentes": [
+            "https://api-live.euroleague.net/v2/competitions/E/seasons/E2026/games?limit=1000",
+            "https://api-live.euroleague.net/v3/competitions/E/seasons/E2026/rounds/7/basicstandings"
+          ],
+          "ronda": 7,
+          "ultimo_partido": "2026-10-22T17:30:00+00:00"
+        }
+      }
+    },
+    {
+      "hora": "19:30",
+      "fecha": "2026-10-28",
+      "deporte": "Tenis",
+      "competicion": "Torneo de Basilea 2ª Ronda",
+      "local": "H. Hurkacz",
+      "visitante": "H. Rune",
+      "canales": [
+        "ATP Tennis TV",
+        "M+ Deportes (63)"
+      ]
+    },
+    {
+      "hora": "20:00",
+      "fecha": "2026-10-28",
+      "deporte": "Tenis",
+      "competicion": "Torneo de Viena 2ª Ronda",
+      "local": "L. Tien",
+      "visitante": "A. De Miñaur",
+      "canales": [
+        "ATP Tennis TV",
+        "M+ Deportes 2 (64)"
+      ],
+      "contexto": {
+        "tipo": "tenis",
+        "competicion": "atp",
+        "temporada": 2026,
+        "consultado": "2026-10-28T10:45:48.556196+01:00",
+        "publicado": "2026-10-22T07:00:00+00:00",
+        "local": {
+          "nombre": "L. Tien",
+          "id": "10386",
+          "ranking": 18,
+          "edad": 20,
+          "pais": "USA"
+        },
+        "visitante": {
+          "nombre": "A. De Miñaur",
+          "id": "2651",
+          "ranking": 10,
+          "edad": 27,
+          "pais": "AUS"
+        },
+        "fuentes": [
+          "https://site.api.espn.com/apis/site/v2/sports/tennis/atp/rankings"
+        ]
+      }
+    },
+    {
+      "hora": "20:00",
+      "fecha": "2026-10-28",
+      "deporte": "Fútbol",
+      "competicion": "Copa del Rey 1ª Ronda",
+      "local": "Numancia",
+      "visitante": "Real Oviedo",
+      "canales": [
+        "TPA7 (Asturias)"
+      ],
+      "contexto": {
+        "tipo": "copa",
+        "temporada": 2026,
+        "consultado": "2026-10-28T11:14:00.515316+01:00",
+        "competicion": "esp.copa_del_rey",
+        "local": {
+          "nombre": "Numancia",
+          "id": "100",
+          "categoria": "Fuera de Primera y Segunda"
+        },
+        "visitante": {
+          "nombre": "Real Oviedo",
+          "id": "92",
+          "categoria": "Segunda"
+        },
+        "copa": {
+          "partido_unico": true,
+          "contraste_primera": false,
+          "fuentes": [
+            "https://site.api.espn.com/apis/site/v2/sports/soccer/esp.copa_del_rey/scoreboard?dates=20261028&limit=100",
+            "https://site.web.api.espn.com/apis/v2/sports/soccer/esp.1/standings",
+            "https://www.ftf.es/pnfg/NNws_ShwNewDup?cod_primaria=3001822&cod_secundaria=3001822&codigo=1062147",
+            "https://site.web.api.espn.com/apis/v2/sports/soccer/esp.2/standings"
+          ],
+          "contraste_segunda": true,
+          "estado_categorias": "Primera y Segunda verificadas",
+          "forma_visitante": {
+            "nombre": "Real Oviedo",
+            "id": "92",
+            "posicion": 9,
+            "jugados": 11,
+            "victorias": 5,
+            "derrotas": 3,
+            "forma": "DWWLW",
+            "fuentes": [
+              "https://site.web.api.espn.com/apis/v2/sports/soccer/esp.2/standings",
+              "https://site.api.espn.com/apis/site/v2/sports/soccer/esp.2/teams/92/schedule?season=2026"
+            ],
+            "ultimo_partido": "2026-10-24T19:00:00+00:00"
+          },
+          "estado_forma": "Historial y tabla coinciden"
+        }
+      }
+    },
+    {
+      "hora": "20:00",
+      "fecha": "2026-10-28",
+      "deporte": "Fútbol",
+      "competicion": "Copa del Rey 1ª Ronda",
+      "local": "Alcoyano",
+      "visitante": "Mallorca",
+      "canales": [
+        "À Punt (C. Valenciana)",
+        "IB3 (Baleares)"
+      ],
+      "contexto": {
+        "tipo": "copa",
+        "temporada": 2026,
+        "consultado": "2026-10-28T11:14:00.515316+01:00",
+        "competicion": "esp.copa_del_rey",
+        "local": {
+          "nombre": "Alcoyano",
+          "id": "6827",
+          "categoria": "Fuera de Primera y Segunda"
+        },
+        "visitante": {
+          "nombre": "Mallorca",
+          "id": "84",
+          "categoria": "Segunda"
+        },
+        "copa": {
+          "partido_unico": true,
+          "contraste_primera": false,
+          "fuentes": [
+            "https://site.api.espn.com/apis/site/v2/sports/soccer/esp.copa_del_rey/scoreboard?dates=20261028&limit=100",
+            "https://site.web.api.espn.com/apis/v2/sports/soccer/esp.1/standings",
+            "https://www.ftf.es/pnfg/NNws_ShwNewDup?cod_primaria=3001822&cod_secundaria=3001822&codigo=1062147",
+            "https://site.web.api.espn.com/apis/v2/sports/soccer/esp.2/standings"
+          ],
+          "contraste_segunda": true,
+          "estado_categorias": "Primera y Segunda verificadas",
+          "forma_visitante": {
+            "nombre": "Mallorca",
+            "id": "84",
+            "posicion": 7,
+            "jugados": 11,
+            "victorias": 5,
+            "derrotas": 2,
+            "forma": "DDWDL",
+            "fuentes": [
+              "https://site.web.api.espn.com/apis/v2/sports/soccer/esp.2/standings",
+              "https://site.api.espn.com/apis/site/v2/sports/soccer/esp.2/teams/84/schedule?season=2026"
+            ],
+            "ultimo_partido": "2026-10-24T14:15:00+00:00"
+          },
+          "estado_forma": "Historial y tabla coinciden"
+        }
+      }
+    },
+    {
+      "hora": "20:00",
+      "fecha": "2026-10-28",
+      "deporte": "Fútbol",
+      "competicion": "Copa del Rey 1ª Ronda",
+      "local": "Amorebieta",
+      "visitante": "UD Logroñés",
+      "canales": [
+        "Canal por confirmar"
+      ],
+      "contexto": {
+        "tipo": "copa",
+        "temporada": 2026,
+        "consultado": "2026-10-28T11:14:00.515316+01:00",
+        "competicion": "esp.copa_del_rey",
+        "local": {
+          "nombre": "Amorebieta",
+          "id": "12587",
+          "categoria": "Fuera de Primera y Segunda"
+        },
+        "visitante": {
+          "nombre": "UD Logroñés",
+          "id": "7206",
+          "categoria": "Fuera de Primera y Segunda"
+        },
+        "copa": {
+          "partido_unico": true,
+          "contraste_primera": false,
+          "fuentes": [
+            "https://site.api.espn.com/apis/site/v2/sports/soccer/esp.copa_del_rey/scoreboard?dates=20261028&limit=100",
+            "https://site.web.api.espn.com/apis/v2/sports/soccer/esp.1/standings",
+            "https://www.ftf.es/pnfg/NNws_ShwNewDup?cod_primaria=3001822&cod_secundaria=3001822&codigo=1062147",
+            "https://site.web.api.espn.com/apis/v2/sports/soccer/esp.2/standings"
+          ],
+          "contraste_segunda": false,
+          "estado_categorias": "Primera y Segunda verificadas"
+        }
+      }
+    },
+    {
+      "hora": "20:00",
+      "fecha": "2026-10-28",
+      "deporte": "Fútbol",
+      "competicion": "Copa del Rey 1ª Ronda",
+      "local": "Trival Valderas",
+      "visitante": "Leganés",
+      "canales": [
+        "Canal por confirmar"
+      ],
+      "contexto": {
+        "tipo": "copa",
+        "temporada": 2026,
+        "consultado": "2026-10-28T11:14:00.515316+01:00",
+        "competicion": "esp.copa_del_rey",
+        "local": {
+          "nombre": "Trival Valderas",
+          "id": "17573",
+          "categoria": "Fuera de Primera y Segunda"
+        },
+        "visitante": {
+          "nombre": "Leganés",
+          "id": "17534",
+          "categoria": "Segunda"
+        },
+        "copa": {
+          "partido_unico": true,
+          "contraste_primera": false,
+          "fuentes": [
+            "https://site.api.espn.com/apis/site/v2/sports/soccer/esp.copa_del_rey/scoreboard?dates=20261028&limit=100",
+            "https://site.web.api.espn.com/apis/v2/sports/soccer/esp.1/standings",
+            "https://www.ftf.es/pnfg/NNws_ShwNewDup?cod_primaria=3001822&cod_secundaria=3001822&codigo=1062147",
+            "https://site.web.api.espn.com/apis/v2/sports/soccer/esp.2/standings"
+          ],
+          "contraste_segunda": true,
+          "estado_categorias": "Primera y Segunda verificadas",
+          "forma_visitante": {
+            "nombre": "Leganés",
+            "id": "17534",
+            "posicion": 17,
+            "jugados": 11,
+            "victorias": 3,
+            "derrotas": 5,
+            "forma": "DLLLL",
+            "fuentes": [
+              "https://site.web.api.espn.com/apis/v2/sports/soccer/esp.2/standings",
+              "https://site.api.espn.com/apis/site/v2/sports/soccer/esp.2/teams/17534/schedule?season=2026"
+            ],
+            "ultimo_partido": "2026-10-24T14:15:00+00:00"
+          },
+          "estado_forma": "Historial y tabla coinciden"
+        }
+      }
+    },
+    {
+      "hora": "20:00",
+      "fecha": "2026-10-28",
+      "deporte": "Fútbol",
+      "competicion": "Copa del Rey 1ª Ronda",
+      "local": "CD Covadonga",
+      "visitante": "Real Valladolid",
+      "canales": [
+        "Canal por confirmar"
+      ]
+    },
+    {
+      "hora": "20:00",
+      "fecha": "2026-10-28",
+      "deporte": "Fútbol",
+      "competicion": "Copa del Rey 1ª Ronda",
+      "local": "CD Badajoz",
+      "visitante": "CD Tenerife",
+      "canales": [
+        "TV Canaria"
+      ]
+    },
+    {
+      "hora": "20:00",
+      "fecha": "2026-10-28",
+      "deporte": "Fútbol",
+      "competicion": "Copa del Rey 1ª Ronda",
+      "local": "Calvo Sotelo Puertollano",
+      "visitante": "Albacete",
+      "canales": [
+        "CMM (Castilla-LM)"
+      ]
+    },
+    {
+      "hora": "20:00",
+      "fecha": "2026-10-28",
+      "deporte": "Fútbol",
+      "competicion": "Copa del Rey 1ª Ronda",
+      "local": "CP Mijas Las Lagunas",
+      "visitante": "Real Jaén",
+      "canales": [
+        "Canal por confirmar"
+      ]
+    },
+    {
+      "hora": "20:00",
+      "fecha": "2026-10-28",
+      "deporte": "Baloncesto",
+      "competicion": "Euroliga Liga Regular",
+      "local": "ASVEL Lyon-Villeurbanne",
+      "visitante": "BC Partizan Beograd",
+      "canales": [
+        "M+ Baloncesto 5 (M196)"
+      ],
+      "contexto": {
+        "consultado": "2026-10-28T10:45:48.556196+01:00",
+        "temporada": 2026,
+        "competicion": "euro",
+        "local": {
+          "nombre": "ASVEL Lyon-Villeurbanne",
+          "id": "ASV",
+          "posicion": 17,
+          "jugados": 7,
+          "victorias": 2,
+          "derrotas": 5,
+          "forma": "LLLWL",
+          "fuentes": [
+            "https://api-live.euroleague.net/v2/competitions/E/seasons/E2026/games?limit=1000",
+            "https://api-live.euroleague.net/v3/competitions/E/seasons/E2026/rounds/7/basicstandings"
+          ],
+          "ronda": 7,
+          "ultimo_partido": "2026-10-23T17:00:00+00:00"
+        },
+        "visitante": {
+          "nombre": "BC Partizan Beograd",
+          "id": "PAR",
+          "posicion": 11,
+          "jugados": 7,
+          "victorias": 4,
+          "derrotas": 3,
+          "forma": "WLLLW",
+          "fuentes": [
+            "https://api-live.euroleague.net/v2/competitions/E/seasons/E2026/games?limit=1000",
+            "https://api-live.euroleague.net/v3/competitions/E/seasons/E2026/rounds/7/basicstandings"
+          ],
+          "ronda": 7,
+          "ultimo_partido": "2026-10-22T18:45:00+00:00"
+        }
+      }
+    },
+    {
+      "hora": "20:30",
+      "fecha": "2026-10-28",
+      "deporte": "Fútbol",
+      "competicion": "EFL Carabao Cup 1/8 de final",
+      "local": "Manchester City",
+      "visitante": "Brighton",
+      "canales": [
+        "* SIN TV EN DIRECTO *"
+      ]
+    },
+    {
+      "hora": "20:30",
+      "fecha": "2026-10-28",
+      "deporte": "Fútbol",
+      "competicion": "Copa del Rey 1ª Ronda",
+      "local": "Gimnástica Torrelavega",
+      "visitante": "UD Ourense",
+      "canales": [
+        "Canal por confirmar"
+      ],
+      "contexto": {
+        "tipo": "copa",
+        "temporada": 2026,
+        "consultado": "2026-10-28T11:14:00.515316+01:00",
+        "competicion": "esp.copa_del_rey",
+        "local": {
+          "nombre": "Gimnástica Torrelavega",
+          "id": "17570",
+          "categoria": "Fuera de Primera y Segunda"
+        },
+        "visitante": {
+          "nombre": "UD Ourense",
+          "id": "131474",
+          "categoria": "Fuera de Primera y Segunda"
+        },
+        "copa": {
+          "partido_unico": true,
+          "contraste_primera": false,
+          "fuentes": [
+            "https://site.api.espn.com/apis/site/v2/sports/soccer/esp.copa_del_rey/scoreboard?dates=20261028&limit=100",
+            "https://site.web.api.espn.com/apis/v2/sports/soccer/esp.1/standings",
+            "https://www.ftf.es/pnfg/NNws_ShwNewDup?cod_primaria=3001822&cod_secundaria=3001822&codigo=1062147",
+            "https://site.web.api.espn.com/apis/v2/sports/soccer/esp.2/standings"
+          ],
+          "contraste_segunda": false,
+          "estado_categorias": "Primera y Segunda verificadas"
+        }
+      }
+    },
+    {
+      "hora": "20:30",
+      "fecha": "2026-10-28",
+      "deporte": "Fútbol",
+      "competicion": "Copa del Rey 1ª Ronda",
+      "local": "CD Cieza",
+      "visitante": "Granada CF",
+      "canales": [
+        "Canal por confirmar"
+      ]
+    },
+    {
+      "hora": "20:30",
+      "fecha": "2026-10-28",
+      "deporte": "Fútbol",
+      "competicion": "Copa del Rey 1ª Ronda",
+      "local": "CD Minera",
+      "visitante": "FC Cartagena",
+      "canales": [
+        "Canal por confirmar"
+      ],
+      "contexto": {
+        "tipo": "copa",
+        "temporada": 2026,
+        "consultado": "2026-10-28T11:14:00.515316+01:00",
+        "competicion": "esp.copa_del_rey",
+        "local": {
+          "nombre": "CD Minera",
+          "id": "22437",
+          "categoria": "Fuera de Primera y Segunda"
+        },
+        "visitante": {
+          "nombre": "FC Cartagena",
+          "id": "5419",
+          "categoria": "Fuera de Primera y Segunda"
+        },
+        "copa": {
+          "partido_unico": true,
+          "contraste_primera": false,
+          "fuentes": [
+            "https://site.api.espn.com/apis/site/v2/sports/soccer/esp.copa_del_rey/scoreboard?dates=20261028&limit=100",
+            "https://site.web.api.espn.com/apis/v2/sports/soccer/esp.1/standings",
+            "https://www.ftf.es/pnfg/NNws_ShwNewDup?cod_primaria=3001822&cod_secundaria=3001822&codigo=1062147",
+            "https://site.web.api.espn.com/apis/v2/sports/soccer/esp.2/standings"
+          ],
+          "contraste_segunda": false,
+          "estado_categorias": "Primera y Segunda verificadas"
+        }
+      }
+    },
+    {
+      "hora": "20:30",
+      "fecha": "2026-10-28",
+      "deporte": "Fútbol",
+      "competicion": "Copa del Rey 1ª Ronda",
+      "local": "Reus FC Reddis",
+      "visitante": "Barakaldo",
+      "canales": [
+        "Canal por confirmar"
+      ],
+      "contexto": {
+        "tipo": "copa",
+        "temporada": 2026,
+        "consultado": "2026-10-28T11:14:00.515316+01:00",
+        "competicion": "esp.copa_del_rey",
+        "local": {
+          "nombre": "Reus FC Reddis",
+          "id": "131470",
+          "categoria": "Fuera de Primera y Segunda"
+        },
+        "visitante": {
+          "nombre": "Barakaldo",
+          "id": "5421",
+          "categoria": "Fuera de Primera y Segunda"
+        },
+        "copa": {
+          "partido_unico": true,
+          "contraste_primera": false,
+          "fuentes": [
+            "https://site.api.espn.com/apis/site/v2/sports/soccer/esp.copa_del_rey/scoreboard?dates=20261028&limit=100",
+            "https://site.web.api.espn.com/apis/v2/sports/soccer/esp.1/standings",
+            "https://www.ftf.es/pnfg/NNws_ShwNewDup?cod_primaria=3001822&cod_secundaria=3001822&codigo=1062147",
+            "https://site.web.api.espn.com/apis/v2/sports/soccer/esp.2/standings"
+          ],
+          "contraste_segunda": false,
+          "estado_categorias": "Primera y Segunda verificadas"
+        }
+      }
+    },
+    {
+      "hora": "20:30",
+      "fecha": "2026-10-28",
+      "deporte": "Baloncesto",
+      "competicion": "Euroliga Liga Regular",
+      "local": "Virtus Bologna",
+      "visitante": "Zalgiris Kaunas",
+      "canales": [
+        "M+ Baloncesto 4 (M195)"
+      ],
+      "contexto": {
+        "consultado": "2026-10-28T10:45:48.556196+01:00",
+        "temporada": 2026,
+        "competicion": "euro",
+        "local": {
+          "nombre": "Virtus Bologna",
+          "id": "VIR",
+          "posicion": 10,
+          "jugados": 7,
+          "victorias": 4,
+          "derrotas": 3,
+          "forma": "LWWWW",
+          "fuentes": [
+            "https://api-live.euroleague.net/v2/competitions/E/seasons/E2026/games?limit=1000",
+            "https://api-live.euroleague.net/v3/competitions/E/seasons/E2026/rounds/7/basicstandings"
+          ],
+          "ronda": 7,
+          "ultimo_partido": "2026-10-21T16:00:00+00:00"
+        },
+        "visitante": {
+          "nombre": "Zalgiris Kaunas",
+          "id": "ZAL",
+          "posicion": 12,
+          "jugados": 7,
+          "victorias": 3,
+          "derrotas": 4,
+          "forma": "WLLWL",
+          "fuentes": [
+            "https://api-live.euroleague.net/v2/competitions/E/seasons/E2026/games?limit=1000",
+            "https://api-live.euroleague.net/v3/competitions/E/seasons/E2026/rounds/7/basicstandings"
+          ],
+          "ronda": 7,
+          "ultimo_partido": "2026-10-23T17:00:00+00:00"
+        }
+      }
+    },
+    {
+      "hora": "20:45",
+      "fecha": "2026-10-28",
+      "deporte": "Fútbol",
+      "competicion": "EFL Carabao Cup 1/8 de final",
+      "local": "Fulham",
+      "visitante": "Crystal Palace",
+      "canales": [
+        "* SIN TV EN DIRECTO *"
+      ]
+    },
+    {
+      "hora": "20:45",
+      "fecha": "2026-10-28",
+      "deporte": "Fútbol",
+      "competicion": "EFL Carabao Cup 1/8 de final",
+      "local": "Bournemouth",
+      "visitante": "Aston Villa",
+      "canales": [
+        "* SIN TV EN DIRECTO *"
+      ]
+    },
+    {
+      "hora": "20:45",
+      "fecha": "2026-10-28",
+      "deporte": "Fútbol",
+      "competicion": "Serie A Italiana",
+      "local": "Genoa",
+      "visitante": "Juventus",
+      "canales": [
+        "DAZN (Ver en directo)"
+      ],
+      "contexto": {
+        "consultado": "2026-10-28T10:45:48.556196+01:00",
+        "temporada": 2026,
+        "competicion": "ita.1",
+        "local": {
+          "nombre": "Genoa",
+          "id": "3263",
+          "posicion": 16,
+          "jugados": 8,
+          "victorias": 2,
+          "derrotas": 5,
+          "forma": "WLWLD",
+          "fuentes": [
+            "https://site.web.api.espn.com/apis/v2/sports/soccer/ita.1/standings",
+            "https://site.api.espn.com/apis/site/v2/sports/soccer/ita.1/teams/3263/schedule?season=2026"
+          ],
+          "ultimo_partido": "2026-10-25T14:00:00+00:00"
+        },
+        "visitante": {
+          "nombre": "Juventus",
+          "id": "111",
+          "posicion": 7,
+          "jugados": 8,
+          "victorias": 4,
+          "derrotas": 2,
+          "forma": "WLDWL",
+          "fuentes": [
+            "https://site.web.api.espn.com/apis/v2/sports/soccer/ita.1/standings",
+            "https://site.api.espn.com/apis/site/v2/sports/soccer/ita.1/teams/111/schedule?season=2026"
+          ],
+          "ultimo_partido": "2026-10-25T17:00:00+00:00"
+        }
+      }
+    },
+    {
+      "hora": "20:45",
+      "fecha": "2026-10-28",
+      "deporte": "Fútbol",
+      "competicion": "Serie A Italiana",
+      "local": "Monza",
+      "visitante": "Napoli",
+      "canales": [
+        "DAZN (Ver en directo)"
+      ],
+      "contexto": {
+        "consultado": "2026-10-28T10:45:48.556196+01:00",
+        "temporada": 2026,
+        "competicion": "ita.1",
+        "local": {
+          "nombre": "Monza",
+          "id": "4007",
+          "posicion": 15,
+          "jugados": 8,
+          "victorias": 2,
+          "derrotas": 5,
+          "forma": "LWLWL",
+          "fuentes": [
+            "https://site.web.api.espn.com/apis/v2/sports/soccer/ita.1/standings",
+            "https://site.api.espn.com/apis/site/v2/sports/soccer/ita.1/teams/4007/schedule?season=2026"
+          ],
+          "ultimo_partido": "2026-10-23T18:45:00+00:00"
+        },
+        "visitante": {
+          "nombre": "Napoli",
+          "id": "114",
+          "posicion": 10,
+          "jugados": 8,
+          "victorias": 3,
+          "derrotas": 3,
+          "forma": "DLWDW",
+          "fuentes": [
+            "https://site.web.api.espn.com/apis/v2/sports/soccer/ita.1/standings",
+            "https://site.api.espn.com/apis/site/v2/sports/soccer/ita.1/teams/114/schedule?season=2026"
+          ],
+          "ultimo_partido": "2026-10-24T16:00:00+00:00"
+        }
+      }
+    },
+    {
+      "hora": "20:45",
+      "fecha": "2026-10-28",
+      "deporte": "Fútbol",
+      "competicion": "Copa de Alemania 2ª Ronda",
+      "local": "Bayer Leverkusen",
+      "visitante": "Nürnberg",
+      "canales": [
+        "OneFootball PPV",
+        "German Football YouTube"
+      ]
+    },
+    {
+      "hora": "20:45",
+      "fecha": "2026-10-28",
+      "deporte": "Fútbol",
+      "competicion": "Copa de Alemania 2ª Ronda",
+      "local": "FC Bayern",
+      "visitante": "1. FC Magdeburg",
+      "canales": [
+        "OneFootball PPV",
+        "Replay",
+        "German Football YouTube"
+      ]
+    },
+    {
+      "hora": "20:45",
+      "fecha": "2026-10-28",
+      "deporte": "Fútbol",
+      "competicion": "Copa de Alemania 2ª Ronda",
+      "local": "Hannover 96",
+      "visitante": "Kaiserslautern",
+      "canales": [
+        "OneFootball PPV"
+      ]
+    },
+    {
+      "hora": "20:45",
+      "fecha": "2026-10-28",
+      "deporte": "Fútbol",
+      "competicion": "Copa de Alemania 2ª Ronda",
+      "local": "Holstein Kiel",
+      "visitante": "Hoffenheim",
+      "canales": [
+        "OneFootball PPV"
+      ]
+    },
+    {
+      "hora": "21:00",
+      "fecha": "2026-10-28",
+      "deporte": "Fútbol",
+      "competicion": "EFL Carabao Cup 1/8 de final",
+      "local": "Liverpool",
+      "visitante": "Chelsea",
+      "canales": [
+        "* SIN TV EN DIRECTO *"
+      ]
+    },
+    {
+      "hora": "21:00",
+      "fecha": "2026-10-28",
+      "deporte": "Fútbol",
+      "competicion": "Copa del Rey 1ª Ronda",
+      "local": "Xerez",
+      "visitante": "Cádiz CF",
+      "canales": [
+        "FANPLAY TV"
+      ]
+    },
+    {
+      "hora": "21:00",
+      "fecha": "2026-10-28",
+      "deporte": "Fútbol",
+      "competicion": "Copa del Rey 1ª Ronda",
+      "local": "Salamanca UDS",
+      "visitante": "Celta",
+      "canales": [
+        "M+ LALIGA (M54 O110)",
+        "LaLiga TV M3"
+      ]
+    },
+    {
+      "hora": "21:00",
+      "fecha": "2026-10-28",
+      "deporte": "Fútbol",
+      "competicion": "Copa del Rey 1ª Ronda",
+      "local": "Navalcarnero",
+      "visitante": "Real Betis",
+      "canales": [
+        "Movistar Plus+ (M7): VER PARTIDO",
+        "M+ Liga de Campeones (M60 O115)",
+        "LaLiga TV Bar"
+      ],
+      "contexto": {
+        "tipo": "copa",
+        "temporada": 2026,
+        "consultado": "2026-10-28T11:14:00.515316+01:00",
+        "competicion": "esp.copa_del_rey",
+        "local": {
+          "nombre": "Navalcarnero",
+          "id": "19288",
+          "categoria": "Fuera de Primera y Segunda"
+        },
+        "visitante": {
+          "nombre": "Real Betis",
+          "id": "244",
+          "categoria": "Primera"
+        },
+        "copa": {
+          "partido_unico": true,
+          "contraste_primera": true,
+          "fuentes": [
+            "https://site.api.espn.com/apis/site/v2/sports/soccer/esp.copa_del_rey/scoreboard?dates=20261028&limit=100",
+            "https://site.web.api.espn.com/apis/v2/sports/soccer/esp.1/standings",
+            "https://www.ftf.es/pnfg/NNws_ShwNewDup?cod_primaria=3001822&cod_secundaria=3001822&codigo=1062147",
+            "https://site.web.api.espn.com/apis/v2/sports/soccer/esp.2/standings"
+          ],
+          "contraste_segunda": false,
+          "estado_categorias": "Primera y Segunda verificadas",
+          "forma_visitante": {
+            "nombre": "Real Betis",
+            "id": "244",
+            "posicion": 4,
+            "jugados": 10,
+            "victorias": 6,
+            "derrotas": 2,
+            "forma": "DLWDW",
+            "fuentes": [
+              "https://site.web.api.espn.com/apis/v2/sports/soccer/esp.1/standings",
+              "https://site.api.espn.com/apis/site/v2/sports/soccer/esp.1/teams/244/schedule?season=2026"
+            ],
+            "ultimo_partido": "2026-10-25T15:15:00+00:00"
+          },
+          "estado_forma": "Historial y tabla coinciden"
+        }
+      }
+    },
+    {
+      "hora": "21:00",
+      "fecha": "2026-10-28",
+      "deporte": "Fútbol",
+      "competicion": "Copa del Rey 1ª Ronda",
+      "local": "UE Tavernes",
+      "visitante": "Valencia CF",
+      "canales": [
+        "M+ LALIGA 2 (M57 O112)",
+        "LaLiga TV M2"
+      ]
+    },
+    {
+      "hora": "23:30",
+      "fecha": "2026-10-28",
+      "deporte": "Fútbol",
+      "competicion": "Serie A Brasil",
+      "local": "Fluminense",
+      "visitante": "Internacional",
+      "canales": [
+        "Fanatiz (Ver en directo)"
+      ]
+    },
+    {
+      "hora": "23:30",
+      "fecha": "2026-10-28",
+      "deporte": "Fútbol",
+      "competicion": "Serie A Brasil",
+      "local": "Santos",
+      "visitante": "Palmeiras",
+      "canales": [
+        "M+ Vamos (8 y 50)",
+        "M+ #Vamos Bar (307)",
+        "Fanatiz (Ver en directo)",
+        "M+ Liga de Campeones (M60 O115)"
+      ]
+    },
+    {
+      "hora": "23:30",
+      "fecha": "2026-10-28",
+      "deporte": "Fútbol",
+      "competicion": "Serie A Brasil",
+      "local": "RB Bragantino",
+      "visitante": "Chapecoense",
+      "canales": [
+        "Fanatiz (Ver en directo)"
+      ]
+    }
+  ]
+}

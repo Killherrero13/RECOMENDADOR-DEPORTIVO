@@ -44,7 +44,12 @@ class NBATests(unittest.TestCase):
             for secreto in ['103','102','127','89','score','winner','puntuacion']:
                 from bs4 import BeautifulSoup
                 contenido = BeautifulSoup(informe[medio], 'html.parser').get_text(' ') if medio != 'texto' else informe[medio]
-                self.assertNotIn(secreto,contenido)
+                # Las fechas compactas no son marcadores: buscar números completos.
+                if secreto.isdigit():
+                    import re
+                    self.assertIsNone(re.search(r'(?<!\d)' + re.escape(secreto) + r'(?!\d)', contenido))
+                else:
+                    self.assertNotIn(secreto,contenido)
         self.assertIn('NBA en diferido',informe['html'])
         self.assertIn('Puedes saltártelo',informe['texto'])
 

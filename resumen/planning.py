@@ -2,6 +2,7 @@
 from datetime import datetime
 from .horarios import intervalo
 from .config import MADRID_TZ
+from .calendario import enlace_calendario
 
 
 def nombre(e):
@@ -23,6 +24,10 @@ def crear_planning(eventos, seleccionados, clave):
     def agregar(e, tipo, a, b, detalle):
         bloques.append(dict(tipo=tipo, evento=nombre(e), desde=reloj(a, e), hasta=reloj(b, e),
                             detalle=detalle, inicio=a))
+        if 'inicio' in e:
+            enlace = enlace_calendario(e, datetime.fromtimestamp(a*60, MADRID_TZ),
+                                      datetime.fromtimestamp(b*60, MADRID_TZ), tramo=True)
+            if enlace: bloques[-1]['calendario_url'] = enlace
         ocupados.append((a, b))
 
     # Los solapamientos tolerados por el selector se convierten en un cambio explícito.
@@ -63,4 +68,6 @@ def crear_planning(eventos, seleccionados, clave):
 
 
 def lineas_planning(bloques):
-    return [f"{b['desde']}–{b['hasta']} · {b['tipo']} · {b['evento']}. {b['detalle']}" for b in bloques]
+    return [f"{b['desde']}–{b['hasta']} · {b['tipo']} · {b['evento']}. {b['detalle']}"
+            + ('\n  Añadir tramo a Google Calendar (elige Partidazos): ' + b['calendario_url'] if b.get('calendario_url') else '')
+            for b in bloques]

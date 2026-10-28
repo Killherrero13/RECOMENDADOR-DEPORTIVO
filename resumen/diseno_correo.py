@@ -32,6 +32,18 @@ def categoria_html(evento):
         return etiqueta('Categoría por confirmar', '#fff1db', '#744915')
     return ''
 
+def boton_calendario(evento=None, enlace=None, tramo=False):
+    from .calendario import enlace_calendario
+    url = enlace if enlace is not None else enlace_calendario(evento or {})
+    if not url:return ''
+    etiqueta = '📅 Añadir tramo recomendado' if tramo else '📅 Añadir partido completo'
+    return (f'<div style="margin-top:14px;"><a href="{texto(url)}" target="_blank" rel="noopener noreferrer" '
+            'style="display:inline-block;background:#ffffff;color:#174c85;border:1px solid #83a9d0;'
+            f'border-radius:8px;padding:10px 13px;text-decoration:none;font-size:13px;font-weight:bold;">{etiqueta}</a>'
+            '<div style="font-size:11px;line-height:1.5;margin-top:6px;">'
+            'En Google Calendar, elige <strong>Partidazos</strong> y pulsa Guardar.</div></div>')
+
+
 def nota_texto(evento):
     return f"{evento['score']:.1f}/10" if evento.get('escala') else f"{evento['score']:.1f} pts"
 
@@ -123,7 +135,7 @@ def tarjeta_evento(evento, destacado=False, franja=''):
             f'<p style="color:{tinta};font-size:13px;line-height:1.6;margin:16px 0 0;padding-top:12px;border-top:1px solid {"#3c536b" if destacado else "#edf1f5"};">'
             f'<strong>TV</strong><br>{canales_html(evento)}</p>'
             + (f'<p style="font-size:12px;line-height:1.6;color:{secundaria};margin:8px 0 0;">{texto(" · ".join([s for s in [fin, *estado] if s]))}</p>' if fin or estado else '')
-            + '</td></tr></table>')
+            + boton_calendario(evento) + '</td></tr></table>')
 
 def listado_completo(eventos):
     filas = []
@@ -140,7 +152,7 @@ def listado_completo(eventos):
                      f'<span style="font-size:11px;color:#1b6948;">{texto(nota_texto(e))} · {texto(e.get("nivel", ""))}</span> {categoria_html(e)}'
                      + (f'<br><span style="font-size:11px;color:#8a5217;">Visionado parcial hasta {e["fin_vision"]:%H:%M}</span>' if e.get('vision_parcial') else '')
                      + ('<br><span style="font-size:11px;color:#8a5217;">En curso</span>' if e.get('en_curso') else '')
-                     + desglose_html(e) + explicacion_html(e) + '</td></tr>')
+                     + desglose_html(e) + explicacion_html(e) + boton_calendario(e) + '</td></tr>')
     return ('<table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="color:#172b43;">'
             + ''.join(filas) + '</table>' if filas else '<p>No hay eventos que superen los filtros y la disponibilidad.</p>')
 
@@ -233,7 +245,8 @@ def crear_html(asunto, secciones, resultado, todos):
                                f'<td valign="top" style="padding:16px;background:{color};border-left:4px solid {acento};border-radius:0 10px 10px 0;overflow-wrap:anywhere;">'
                                f'{etiqueta(b["tipo"], "#153e43" if principal else "#bde3d7", "#ffffff" if principal else "#153e43")}'
                                f'<p style="font-size:16px;line-height:1.5;margin:10px 0 0;color:#153e43;"><strong>{texto(b["evento"])}</strong></p>'
-                               f'<p style="font-size:12px;line-height:1.65;margin:8px 0 0;color:#375a5d;">{texto(b["detalle"])}</p></td></tr></table>')
+                               f'<p style="font-size:12px;line-height:1.65;margin:8px 0 0;color:#375a5d;">{texto(b["detalle"])}</p>'
+                               + boton_calendario(enlace=b.get('calendario_url',''), tramo=True) + '</td></tr></table>')
             if not events.get('planning'):
                 bloques.append('<p style="color:#153e43;">Sin citas que reservar: deja el día libre.</p>')
             bloques.append('<p style="font-size:12px;color:#375a5d;line-height:1.6;">Los huecos quedan libres. Opciones voluntarias y finales estimados.</p>')

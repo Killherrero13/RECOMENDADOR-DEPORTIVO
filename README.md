@@ -637,3 +637,10 @@ Se verificaron los códigos oficiales de Efes (IST), Hapoel (HTA), ASVEL (ASV), 
 Al guardar el informe conectado se generan diagnostico.json y diagnostico.html. La instantánea incluye agenda relevante, datos de contexto utilizados, corte, desglose y huella del modelo/catálogos. No incluye correo personal, contraseñas, claves ni marcadores NBA. Se puede reproducir sin red con resumen.diagnostico.reproducir(snapshot), que rechaza versiones de modelo distintas. No almacena las respuestas completas de proveedores: conserva los datos que intervienen en la puntuación.
 
 GitHub conserva ambos diagnósticos como artefacto durante 14 días, incluso ante fallos parciales; un fallo de almacenamiento no bloquea el envío. No se adjuntan al correo diario. No se han modificado pesos, bases ni umbrales. La calidad conjunta, rivalidades y narrativa copera corresponden a las siguientes entregas.
+# Añadir eventos a Google Calendar
+
+Las tarjetas y el listado completo incluyen «Añadir partido completo». El planning incluye «Añadir tramo recomendado», con el intervalo concreto de visionado. Se abre Google Calendar con título, fecha, horas, canales y descripción; el usuario revisa y pulsa Guardar. Elegir **Partidazos** en el selector de calendario antes de guardar. El enlace documentado no garantiza preseleccionar un calendario secundario y no escribe directamente en la cuenta.
+
+Las horas se codifican en UTC con zona Europe/Madrid y el final se marca como estimado. No hay sincronización posterior de cambios, prevención de duplicados ni acceso a credenciales de Calendar. La NBA en diferido mantiene su bloque sin reservas automáticas. Los enlaces solo aparecen cuando hay una fecha válida.
+
+Referencia: [enlaces de creación preparados por Google](https://developers.google.com/workspace/calendar/api/concepts/inviting-attendees-to-events).

@@ -44,6 +44,10 @@ def linea_evento(event):
     razones = frases_explicacion(event)
     if razones:
         texto += '\n  Por qué: ' + ' · '.join(razones)
+    from .calendario import enlace_calendario
+    enlace = enlace_calendario(event)
+    if enlace:
+        texto += '\n  Añadir partido completo a Google Calendar (elige Partidazos antes de guardar): ' + enlace
     return texto
 
 def contenido(resultado):

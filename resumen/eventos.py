@@ -343,7 +343,8 @@ def recomendar_eventos(events, ahora=None, fecha=None):
         visitante = normalize_team_name(visitante)
     
     
-        if is_female(e) or not valid_time(e["hora"]):
+        # WNBA no es NBA: excluirla antes de cualquier filtro amplio de baloncesto.
+        if 'wnba' in comp or is_female(e) or not valid_time(e["hora"]):
             continue
         if not preparar_horario(e, fecha, ahora):
             continue

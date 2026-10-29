@@ -159,3 +159,6 @@ Se verificaron los códigos oficiales de Efes (IST), Hapoel (HTA), ASVEL (ASV), 
 Al guardar el informe conectado se generan diagnostico.json y diagnostico.html. La instantánea incluye agenda relevante, datos de contexto utilizados, corte, desglose y huella del modelo/catálogos. No incluye correo personal, contraseñas, claves ni marcadores NBA. Se puede reproducir sin red con resumen.diagnostico.reproducir(snapshot), que rechaza versiones de modelo distintas. No almacena las respuestas completas de proveedores: conserva los datos que intervienen en la puntuación.
 
 GitHub conserva ambos diagnósticos como artefacto durante 14 días, incluso ante fallos parciales; un fallo de almacenamiento no bloquea el envío. No se adjuntan al correo diario. No se han modificado pesos, bases ni umbrales. La calidad conjunta, rivalidades y narrativa copera corresponden a las siguientes entregas.
+# Exclusión expresa: WNBA
+
+Desde el 29/10/2026, excluir la WNBA de todos los eventos filtrados, recomendaciones, alternativas y planning, también finales. No se confunde con NBA ni se incrementa su prioridad por importancia competitiva. La NBA masculina y el bloque en diferido mantienen sus reglas.

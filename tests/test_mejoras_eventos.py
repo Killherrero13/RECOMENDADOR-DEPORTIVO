@@ -10,6 +10,14 @@ def evento(local='Equipo A', visitante='Equipo B', comp='LaLiga EA Sports', hora
             'deporte':deporte,'canales':['Movistar+']}
 
 class MejorasEventosTests(unittest.TestCase):
+    def test_wnba_se_excluye_incluso_final_y_nba_se_conserva(self):
+        from datetime import date
+        w=evento('Atlanta Dream','Golden State Valkyries',comp='WNBA Final',deporte='Baloncesto')
+        n=evento('Boston Celtics','Los Angeles Lakers',comp='NBA Liga Regular',deporte='Baloncesto')
+        r=recomendar_eventos([w,n],fecha=date(2026,10,29))
+        self.assertEqual([e['competicion'] for e in r['filtrados']],['NBA Liga Regular'])
+        self.assertNotIn('Atlanta Dream',str(r['plan']))
+
     def test_fases_especificas_e_ida_vuelta(self):
         for fase, esperado in [('Final',2.5),('Semifinal',2),('Semi-final',2),
                                 ('Cuartos de final',1.5),('Quarter-final',1.5),

@@ -104,6 +104,9 @@ def football_derby_bonus(event):
 def knockout_bonus(event):
     comp = event["competicion"].lower()
     bonus = 0
+    from .categorias import segunda_ronda_octavos
+    if segunda_ronda_octavos(event):
+        return 1.0
 
     if re.search(r'\bsemi[ -]?final', comp):
         bonus = 2.0
@@ -326,7 +329,7 @@ def build_daily_plan(events):
 
     return plan, selected
 
-def recomendar_eventos(events, ahora=None, fecha=None):
+def recomendar_eventos(events, ahora=None, fecha=None, preseleccion_tenis=False):
     # La copia evita añadir score/channel a los datos de entrada del llamante.
     events = deepcopy(events)
     if ahora is not None and ahora.tzinfo is None:
@@ -392,7 +395,11 @@ def recomendar_eventos(events, ahora=None, fecha=None):
     
         if deporte == "Tenis":
             categoria, _ = categoria_tenis(e)
+            from .contexto import valorar_contexto
+            jugadores = valorar_contexto(e).get('jugadores', {})
+            ranking_relevante = any(p['ranking'] <= 30 for p in jugadores.values())
             if (perfil_tenis(e['local']) or perfil_tenis(e['visitante'])
+                or (categoria is not None and (preseleccion_tenis or ranking_relevante))
                 or (categoria is not None and knockout_bonus(e) >= 2)):
                 filtered_events.append(e)
     for e in filtered_events:

@@ -22,8 +22,9 @@ def linea_evento(event):
     rivalidad = event.get('evaluacion_rivalidad', {})
     if rivalidad.get('estado') == 'verificada':
         texto += f" · {rivalidad['nombre']} (+{rivalidad['ajuste']:.2f}) · Verificado {rivalidad['verificado']} · Fuente: {rivalidad['fuente']}"
-    if contexto.get('estado') == 'validado':
-        texto += f" · Contexto {event['desglose'].get('contexto', 0):+.1f} · Consultado {contexto['consultado']} · Fuentes: " + ' '.join(contexto['fuentes'])
+    if contexto.get('estado') in ('validado','parcial'):
+        tipo_contexto = 'Datos ATP parciales' if contexto['estado'] == 'parcial' else 'Contexto'
+        texto += f" · {tipo_contexto} {event['desglose'].get('contexto', 0):+.1f} · Consultado {contexto['consultado']} · Fuentes: " + ' '.join(contexto['fuentes'])
         ronda = event.get('contexto', {}).get('local', {}).get('ronda')
         if ronda:
             texto += f" · Datos hasta jornada {ronda}"
@@ -33,6 +34,8 @@ def linea_evento(event):
         texto += f" · Categoría: {event['categoria_reconocida']}"
     elif event.get('deporte') == 'Tenis' and 'origen_categoria' in event:
         texto += ' · Categoría por confirmar (sin penalización por datos ausentes)'
+    if event.get('evaluacion_fase'):
+        texto += ' · ' + event['evaluacion_fase']['nombre'] + ' · Fuente: ' + event['evaluacion_fase']['fuente']
     if 'fin_estimado' in event:
         texto += f" · Fin estimado: {event['fin_estimado']:%d/%m %H:%M}"
     if event.get('en_curso'):

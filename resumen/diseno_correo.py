@@ -53,6 +53,10 @@ def desglose_html(evento):
     html = (f'<div style="font-size:12px;line-height:1.6;margin-top:8px;">'
             f'Interés deportivo {d["deportivo"]:.1f} · Afinidad {d["afinidad"]:+.1f}</div>')
     c = evento.get('evaluacion_contexto', {})
+    fase = evento.get('evaluacion_fase')
+    if fase:
+        html += etiqueta(fase['nombre'])
+        html += f'<div style="font-size:11px;line-height:1.6;"><a href="{texto(fase["fuente"])}" style="color:inherit;">Fuente del cuadro ATP</a></div>'
     if c.get('detalle_copa'):
         html += etiqueta(c['detalle_copa'], '#fae4ed', '#823658')
         html += (f'<div style="font-size:11px;line-height:1.6;">Contraste copero: +{c["contraste"]:.1f}'
@@ -64,8 +68,11 @@ def desglose_html(evento):
         html += (f'<div style="font-size:11px;line-height:1.6;">{texto(r["tipo"])} · '
                  f'Verificado {texto(r["verificado"])} · '
                  f'<a href="{texto(r["fuente"])}" style="color:inherit;">Fuente de la rivalidad</a></div>')
-    if c.get('estado') == 'validado' and d.get('contexto', 0):
-        html += etiqueta(f'Contexto validado {d.get("contexto", 0):+.1f}', '#dcefe9', '#205443')
+    if c.get('estado') in ('validado','parcial'):
+        label = 'Datos ATP parciales' if c['estado'] == 'parcial' else 'Contexto validado'
+        resumen_contexto = f'{label} {d["contexto"]:+.1f}' if d.get('contexto',0) else (
+            'Datos ATP parciales · sin ajuste' if c['estado'] == 'parcial' else 'Datos validados · sin ajuste')
+        html += etiqueta(resumen_contexto, '#dcefe9', '#205443')
         html += f'<div style="font-size:11px;line-height:1.6;">Consultado: {texto(c["consultado"][:16].replace("T", " "))}'
         ronda = evento.get('contexto', {}).get('local', {}).get('ronda')
         if ronda:

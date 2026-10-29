@@ -25,7 +25,7 @@ def marcar(evento, estado, motivo, **detalle):
 def version_modelo():
     h = hashlib.sha256()
     for nombre in ('puntuacion.py', 'calidad_cruce.py', 'rivalidades.py', 'calendario.py', 'planning.py', 'contexto.py', 'perfiles.py', 'preferencias_eventos.py',
-                   'contexto_fuentes.py', 'eventos.py', 'horarios.py', 'categorias.py', 'canales.py'):
+                   'contexto_fuentes.py', 'fuente_eventos.py', 'eventos.py', 'horarios.py', 'categorias.py', 'canales.py'):
         h.update(nombre.encode())
         h.update((ROOT/'resumen'/nombre).read_bytes().replace(b'\r\n', b'\n'))
     for p in sorted((ROOT/'data').glob('*.json')):
@@ -42,13 +42,15 @@ def serializar(valor):
 
 def preparar_diagnostico(eventos, ahora):
     campos = ('hora','fecha','deporte','competicion','local','visitante','descripcion','canales',
-              'contexto','diagnostico_contexto','score','prioridad','desglose','evaluacion_contexto','evaluacion_rivalidad',
+              'contexto','diagnostico_contexto','score','prioridad','desglose','evaluacion_contexto','evaluacion_rivalidad','evaluacion_fase',
               'motivos','inicio','fin_estimado','inicio_vision','fin_vision','vision_parcial')
     registros = [{k:e[k] for k in campos if k in e} for e in eventos.get('filtrados', [])]
     for e in registros:
         evaluacion = e.get('evaluacion_contexto', {})
         if evaluacion.get('estado') == 'validado':
             e['diagnostico_contexto'] = {**e.get('diagnostico_contexto', {}), 'estado':'validado', 'motivo':'con_ajuste' if e.get('desglose',{}).get('contexto') else 'validado_sin_ajuste'}
+        elif evaluacion.get('estado') == 'parcial':
+            e['diagnostico_contexto'] = {**e.get('diagnostico_contexto',{}), 'estado':'parcial', 'motivo':'participante_sin_datos'}
         elif e.get('contexto'):
             e['diagnostico_contexto'] = {**e.get('diagnostico_contexto', {}), 'estado':'sin_datos', 'motivo':evaluacion.get('estado','contexto_no_valido')}
     cubiertos = sum(e.get('evaluacion_contexto',{}).get('estado') == 'validado' for e in registros)

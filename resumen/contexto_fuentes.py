@@ -85,6 +85,14 @@ def alias_futbol(nombre):
                'ud llanera': 'llanera', 'at tordesillas': 'atletico tordesillas',
                'g segoviana': 'gimnastica segoviana', 'cultural d leonesa': 'cultural leonesa',
                'ud las palmas': 'las palmas', 'cf calamocha': 'calamocha', 'ce manresa': 'manresa', 'ud almeria': 'almeria'}
+    aliases.update({'us lecce':'lecce', 'cadiz cf':'cadiz', 'cd cieza':'cieza', 'granada cf':'granada',
+                    'cd castellon':'castellon', 'burgos cf':'burgos', 'cd covadonga':'covadonga',
+                    'ribadesella cf':'ribadesella', 'auriense cented':'auriense cented academy',
+                    'at baleares':'atletico baleares', 'ad ceuta':'ceuta', 'zamora cf':'zamora',
+                    'ud sanse':'san sebastian de los reyes', 'cd coria':'coria',
+                    'antequera cf':'antequera', 'aguilas fc':'aguilas',
+                    'cp mijas las lagunas':'mijas las lagunas', 'real jaen cf':'real jaen',
+                    'unionistas':'unionistas de salamanca'})
     return aliases.get(n, n)
 
 
@@ -270,19 +278,20 @@ def contextos_copa(items, ahora):
             if coincide(e['local'], local) and coincide(e['visitante'], visita):
                 inicio = datetime.fromisoformat(f"{dia}T{e['hora']}").replace(tzinfo=MADRID_TZ)
                 if abs(fecha_iso(p['date']) - inicio) <= timedelta(minutes=15):
-                    candidatos.append((local, visita))
+                    candidatos.append((local, visita, p.get('id')))
                 else:
                     marcar(e, 'sin_datos', 'horario_no_coincide')
         if len(candidatos) != 1:
             if candidatos: marcar(e, 'sin_datos', 'identidad_ambigua')
             continue
         marcar(e, 'validado', 'datos_validados')
-        local, visita = candidatos[0]
+        local, visita, id_partido = candidatos[0]
         contraste = str(local['id']) not in ids_primera and str(visita['id']) in ids_primera
         e['contexto'] = {'tipo': 'copa', 'temporada': 2026, 'consultado': ahora.isoformat(),
                          'competicion': 'esp.copa_del_rey',
                          'local': {'nombre': e['local'], 'id':str(local['id'])}, 'visitante': {'nombre': e['visitante'], 'id':str(visita['id'])},
                          'copa': {'partido_unico': True, 'contraste_primera': contraste,
+                                  'id_partido': id_partido, 'fecha_evento': dia,
                                   'fuentes': [url, tabla_url, REGLA_COPA_2026]}}
         cubiertos += 1
     completar_contextos_copa(items, ahora, ids_primera, tabla_url)
@@ -359,27 +368,39 @@ def contextos_tenis(items, ahora):
         if categoria is None:
             marcar(e, 'sin_datos', 'categoria_no_confirmada')
             continue
-        jugadores = []
+        jugadores = {}
+        estados = {}
         for k in ('local', 'visitante'):
-            candidatos = [r for r in ranks if normalizar(e[k]) in
+            # Alias documental exacto; no deducir identidades a partir del apellido.
+            nombre = {'jl struff':'jan lennard struff'}.get(normalizar(e[k]), normalizar(e[k]))
+            candidatos = [r for r in ranks if nombre in
                           {normalizar(r['athlete'].get(n, '')) for n in ('displayName', 'shortname', 'shortName', 'fullName')}]
             if len(candidatos) != 1:
-                marcar(e, 'sin_datos', 'identidad_ambigua' if candidatos else 'identidad_no_resuelta', participante=k)
-                break
+                estados[k] = 'identidad_ambigua' if candidatos else 'identidad_no_resuelta'
+                continue
             r = candidatos[0]
             if type(r.get('current')) is not int or not 1 <= r['current'] <= 1000:
-                marcar(e, 'sin_datos', 'ranking_no_valido', participante=k)
-                break
+                estados[k] = 'ranking_no_valido'
+                continue
             a = r['athlete']
-            jugadores.append({'nombre': e[k], 'id': str(a['id']), 'ranking': r['current'],
-                              'edad': a.get('age'), 'pais': a.get('citizenshipCountry')})
-        if len(jugadores) != 2 or jugadores[0]['id'] == jugadores[1]['id']:
+            if not a.get('id'):
+                estados[k] = 'identidad_no_resuelta'
+                continue
+            jugadores[k] = {'nombre': e[k], 'id': str(a['id']), 'ranking': r['current'],
+                              'edad': a.get('age'), 'pais': a.get('citizenshipCountry')}
+            estados[k] = 'validado'
+        if len(jugadores) == 2 and jugadores['local']['id'] == jugadores['visitante']['id']:
+            marcar(e, 'sin_datos', 'identidad_ambigua')
             continue
-        marcar(e, 'validado', 'datos_validados')
+        if not jugadores:
+            marcar(e, 'sin_datos', 'identidad_no_resuelta', participantes=estados)
+            continue
+        completo = len(jugadores) == 2
+        marcar(e, 'validado' if completo else 'parcial', 'datos_validados' if completo else 'participante_sin_datos', participantes=estados)
         e['contexto'] = {'tipo': 'tenis', 'competicion': 'atp', 'temporada': temporada(ahora),
                          'consultado': ahora.isoformat(), 'publicado': publicado.isoformat(),
-                         'local': jugadores[0], 'visitante': jugadores[1], 'fuentes': [url]}
-        cubiertos += 1
+                         **jugadores, 'fuentes': [url]}
+        cubiertos += int(completo)
     return cubiertos
 
 

@@ -24,10 +24,16 @@ def valorar_contexto(evento):
                 raise ValueError()
             if not timedelta(0) <= consulta - fecha_iso(c['publicado']) <= timedelta(days=10):
                 raise ValueError()
-            jugadores = [c['local'], c['visitante']]
-            for k, p in zip(('local', 'visitante'), jugadores):
+            individuales = {k:c[k] for k in ('local','visitante') if k in c}
+            for k, p in individuales.items():
                 if p['nombre'] != evento[k] or type(p['ranking']) is not int or not 1 <= p['ranking'] <= 1000:
                     raise ValueError()
+            if not individuales:
+                raise ValueError()
+            if len(individuales) == 1:
+                return {**vacio, 'estado':'parcial', 'jugadores':individuales, 'fuentes':c['fuentes'],
+                        'consultado':c['consultado'], 'publicado':c['publicado']}
+            jugadores = [individuales['local'], individuales['visitante']]
             ranking = sorted(p['ranking'] for p in jugadores)
             ajuste = .6 if ranking[1] <= 10 else .4 if ranking[0] <= 10 and ranking[1] <= 30 else .2 if ranking[1] <= 30 else 0
             motivos = []
@@ -39,7 +45,7 @@ def valorar_contexto(evento):
                         and p['ranking'] <= 100 and rival['ranking'] <= 10):
                     afinidad = .6
                     motivos.append('Contexto de afinidad: joven español del top-100 frente a un top-10')
-            return {'ajuste': ajuste, 'afinidad': afinidad, 'motivos': motivos, 'fuentes': c['fuentes'],
+            return {'ajuste': ajuste, 'afinidad': afinidad, 'motivos': motivos, 'fuentes': c['fuentes'], 'jugadores':individuales,
                     'estado': 'validado', 'consultado': c['consultado'], 'publicado': c['publicado']}
         if c.get('tipo') == 'copa':
             copa = c['copa']

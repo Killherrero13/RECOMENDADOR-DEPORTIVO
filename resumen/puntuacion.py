@@ -1,7 +1,7 @@
 """Escala personal estable /10; acceso y horario afectan al encaje, no a la nota."""
 import re
 
-from .categorias import categoria_tenis
+from .categorias import categoria_tenis, segunda_ronda_octavos, catalogo_tenis
 from .perfiles import identidad_basket, REFERENTES_EUROLIGA, REFERENTES_TENIS, perfil_tenis
 from .canales import plataforma_destacada
 from .contexto import valorar_contexto
@@ -60,6 +60,8 @@ def valorar(evento, local, visitante, competicion, afinidad_previa=0, derby=0, r
     cartel = 0.0
     afinidad = 0.0
     motivos = []
+    contexto = valorar_contexto(evento)
+    jerarquia = 0.0
     # El bonus de fase anterior distingue final, semifinal, cuartos y octavos.
     fase = {2.5:2.4, 2.0:1.6, 1.5:1.0, 1.0:0.6, 0.8:0.3}.get(ronda, 0)
     if sport == 'Fútbol':
@@ -102,9 +104,27 @@ def valorar(evento, local, visitante, competicion, afinidad_previa=0, derby=0, r
         base = {'Grand Slam':5.8,'Masters 1000':5.0,'ATP 500':4.4,'ATP 250':3.8}.get(categoria,3.2)
         perfiles = [perfil_tenis(p) for p in (local, visitante)]
         n = sum(p is not None for p in perfiles)
-        cartel = sum(1.2 if p == 'figura' else 0.5 if p == 'referente' else 0 for p in perfiles)
-        if n == 2:
+        cartel = sum(1.2 if p == 'figura' else 0.5 if p in ('referente','reconocido') else 0 for p in perfiles)
+        if n == 2 and 'reconocido' not in perfiles:
             cartel += 0.5
+        cartel_editorial = cartel
+        actuales = contexto.get('jugadores', {})
+        if actuales:
+            individuales = [max(1.2 if p == 'figura' else .5 if p in ('referente','reconocido') else 0,
+                               1.2 if actuales.get(k,{}).get('ranking',1001) <= 10 else
+                               .5 if actuales.get(k,{}).get('ranking',1001) <= 30 else 0)
+                            for k,p in zip(('local','visitante'), perfiles)]
+            pareja_fuerte = n == 2 and 'reconocido' not in perfiles or (
+                len(actuales) == 2 and all(p['ranking'] <= 30 for p in actuales.values()))
+            cartel = sum(individuales) + (.5 if all(individuales) and pareja_fuerte else 0)
+            jerarquia = round(cartel - cartel_editorial, 2)
+            # El ranking individual sustituye reconocimiento; no volver a pagar
+            # la misma evidencia como bonus independiente de ranking de ambos.
+            contexto = {**contexto, 'ajuste_ranking_original':contexto['ajuste'],
+                        'ajuste':round(max(0,contexto['ajuste']-jerarquia),2)}
+            if jerarquia:
+                ranking_visible = ', '.join(f"{p['nombre']} n.º {p['ranking']}" for p in actuales.values())
+                motivos.append('Jerarquía ATP validada: ' + ranking_visible)
         afinidad = max(0,afinidad_previa) * 0.28
         motivos.append(categoria or 'Categoría sin confirmar: valoración neutral')
         if 'figura' in perfiles: motivos.append('Figura del catálogo editorial de tenis')
@@ -122,14 +142,15 @@ def valorar(evento, local, visitante, competicion, afinidad_previa=0, derby=0, r
         motivos.append('Valoración neutral del deporte')
     if fase:
         motivos.append('Final' if ronda == 2.5 else 'Fase de eliminatoria')
-    contexto = valorar_contexto(evento)
+    fase_verificada = ({'nombre':'Octavos: cuadro de 32 confirmado', 'fuente':catalogo_tenis()['fuente']}
+                       if segunda_ronda_octavos(evento) else None)
     calidad = valorar_cruce(evento, contexto, cartel)
     rivalidad = valorar_rivalidad(evento)
     if rivalidad['ajuste']:
         motivos.append(f"{rivalidad['tipo']}: {rivalidad['nombre']}")
     motivos.extend(contexto['motivos'])
     motivos.extend(calidad['motivos'])
-    deportivo_basico = min(8.5, base + cartel + fase + rivalidad['ajuste'])
+    deportivo_basico = min(8.5, base + cartel - jerarquia + fase + rivalidad['ajuste'])
     afinidad_basica = max(-deportivo_basico, min(10-deportivo_basico, afinidad))
     nota_basica = round(max(0, min(10, deportivo_basico + afinidad_basica)), 1)
     afinidad += contexto.get('afinidad', 0)
@@ -142,7 +163,8 @@ def valorar(evento, local, visitante, competicion, afinidad_previa=0, derby=0, r
     return {'score':nota,'prioridad':round(nota+acceso+horario,2),'nivel':nivel_nota(nota),
             'desglose':{'base':base,'cartel':cartel,'fase':fase,'deportivo':deportivo,
                         'afinidad':afinidad,'acceso':acceso,'horario':horario,'contexto':round(nota-nota_basica,1),
-                        'calidad_cruce':calidad['ajuste'], 'rivalidad':rivalidad['ajuste']},
+                        'calidad_cruce':calidad['ajuste'], 'rivalidad':rivalidad['ajuste'], 'jerarquia_atp':jerarquia},
             'evaluacion_rivalidad':rivalidad,
+            'evaluacion_fase':fase_verificada,
             'evaluacion_contexto':contexto,
             'motivos':motivos, 'escala':'personal-10-v2'}

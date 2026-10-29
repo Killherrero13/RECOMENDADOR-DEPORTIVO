@@ -115,7 +115,7 @@ def generar_resultado_eventos(ahora=None):
         raise ErrorEventos('La fecha de consulta debe incluir zona horaria.')
     fecha = ahora.astimezone(MADRID_TZ).date()
     events, avisos = extraer_jornada(descargar_html(), fecha)
-    relevantes = recomendar_eventos(events, ahora=ahora, fecha=fecha)['filtrados']
+    relevantes = recomendar_eventos(events, ahora=ahora, fecha=fecha, preseleccion_tenis=True)['filtrados']
     hubo_contexto = False
     try:
         avisos_contexto = enriquecer_eventos(relevantes, ahora)

@@ -23,6 +23,12 @@ def identidad(evento, campo):
     nombre = normalizar(evento[campo])
     if evento['deporte'] == 'Baloncesto':
         return identidad_basket(nombre)
+    if nombre == 'xerez':
+        from .contexto import valorar_contexto
+        c = evento.get('contexto', {})
+        if (c.get('tipo') == 'copa' and c.get(campo, {}).get('id') == '3835'
+                and valorar_contexto(evento).get('estado') == 'validado'):
+            return 'xerez-cd'
     # La abreviatura Xerez solo queda resuelta para la ficha oficial contrastada.
     if (nombre == 'xerez' and evento.get('fecha') == '2026-10-28'
             and evento.get('hora') == '21:00'

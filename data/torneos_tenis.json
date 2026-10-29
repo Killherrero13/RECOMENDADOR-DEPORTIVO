@@ -31,8 +31,8 @@
     {"categoria": "ATP 500", "alias": ["mubadala citi", "torneo de washington"]},
     {"categoria": "ATP 500", "alias": ["kinoshita group", "japan open tennis"]},
     {"categoria": "ATP 500", "alias": ["china open", "torneo de pekin"]},
-    {"categoria": "ATP 500", "alias": ["basilea", "basel", "swiss indoors"]},
-    {"categoria": "ATP 500", "alias": ["viena", "vienna", "erste bank open"]},
+    {"categoria": "ATP 500", "alias": ["basilea", "basel", "swiss indoors"], "cuadro_individual": 32, "cuadro_verificado": "2026-10-29"},
+    {"categoria": "ATP 500", "alias": ["viena", "vienna", "erste bank open"], "cuadro_individual": 32, "cuadro_verificado": "2026-10-29"},
     {"categoria": "ATP 250", "alias": ["almaty", "almaty open"]},
     {"categoria": "ATP 250", "alias": ["bruselas", "brussels", "european open"]},
     {"categoria": "ATP 250", "alias": ["torneo de lyon", "grand prix auvergne"]}

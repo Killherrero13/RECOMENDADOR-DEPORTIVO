@@ -37,3 +37,16 @@ def categoria_tenis(evento):
 def bonus_categoria_tenis(evento):
     categoria, _ = categoria_tenis(evento)
     return {'Grand Slam':4, 'Masters 1000':3, 'ATP 500':2, 'ATP 250':1}.get(categoria, 0)
+
+
+def segunda_ronda_octavos(evento):
+    """Solo cuadros de individuales de 32 publicados para la edición concreta."""
+    if evento.get('deporte') != 'Tenis':return False
+    comp = normalizar(evento['competicion'])
+    if re.search(r'\b(?:dobles|doubles|qualifying|qualy|wta|challenger|itf|junior)\b', comp):return False
+    if not re.search(r'\b(?:2[ªaº]?\s*ronda|segunda ronda)\b',comp):return False
+    catalogo = catalogo_tenis()
+    if not evento.get('fecha') or int(evento['fecha'][:4]) != catalogo['temporada']:return False
+    return any(t.get('cuadro_individual') == 32 and
+               any(re.search(r'(?<!\w)' + re.escape(normalizar(a)) + r'(?!\w)',comp) for a in t['alias'])
+               for t in catalogo['torneos'])

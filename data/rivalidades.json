@@ -250,5 +250,17 @@
     "bonus": 0.36,
     "fuente": "https://www.bbc.co.uk/sport/football/46251074",
     "verificado": "2026-10-28"
+  },
+  {
+    "deporte": "Fútbol",
+    "equipos": [
+      "atletico mineiro",
+      "cruzeiro"
+    ],
+    "tipo": "Derbi local",
+    "nombre": "Clássico Mineiro",
+    "bonus": 0.6,
+    "fuente": "https://www.cbf.com.br/futebol-brasileiro/noticias/copa-brasil/a/classico-entre-cruzeiro-e-galo-inicia-quartas-de-final-da-copa-betano-do-brasil",
+    "verificado": "2026-10-29"
   }
 ]

@@ -36,6 +36,7 @@ ALIAS_BASKET = {
 REFERENTES_EUROLIGA = {'barcelona', 'real madrid', 'valencia', 'baskonia', 'fenerbahce',
                        'panathinaikos', 'milano', 'estrella roja', 'maccabi', 'bayern', 'olympiacos'}
 FIGURAS_TENIS = {'djokovic', 'alcaraz', 'sinner', 'zverev', 'medvedev'}
+RECONOCIDOS_TENIS = {'shapovalov', 'griekspoor', 'struff'}
 REFERENTES_TENIS = FIGURAS_TENIS | {'rublev', 'hurkacz', 'fritz', 'tsitsipas', 'rune',
                                   'ruud', 'de minaur', 'paul', 'khachanov', 'shelton',
                                   'tiafoe', 'musetti'}
@@ -52,4 +53,6 @@ def perfil_tenis(nombre):
         return 'figura'
     if any(re.search(r'(?<!\w)' + re.escape(p) + r'(?!\w)', normal) for p in REFERENTES_TENIS):
         return 'referente'
+    if any(re.search(r'(?<!\w)' + re.escape(p) + r'(?!\w)', normal) for p in RECONOCIDOS_TENIS):
+        return 'reconocido'
     return None

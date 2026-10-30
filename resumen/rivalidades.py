@@ -17,6 +17,14 @@ ALIAS = {
     'inter':'inter milan', 'internazionale':'inter milan',
     'cadiz cf':'cadiz', 'xerez cd':'xerez-cd', 'xerez c d':'xerez-cd',
 }
+ALIAS.update(json.loads((ROOT/'data/alias_rivalidades.json').read_text(encoding='utf-8')))
+
+
+def ambito_selecciones(evento):
+    comp = normalizar(evento.get('competicion', ''))
+    return any(t in comp for t in ('mundial', 'world cup', 'eurocopa', 'copa america',
+                                  'nations league', 'selecciones', 'international friendly',
+                                  'amistoso internacional', 'eliminatorias mundial', 'european qualifiers'))
 
 
 def identidad(evento, campo):
@@ -48,6 +56,8 @@ def valorar_rivalidad(evento):
         return vacio
     pareja = {identidad(evento, k) for k in ('local','visitante')}
     for r in REGISTRO:
+        if r.get('ambito') == 'selecciones' and not ambito_selecciones(evento):
+            continue
         if r['deporte'] == evento['deporte'] and pareja == set(r['equipos']):
             return {**r, 'ajuste': min(.6, r['bonus']), 'estado': 'verificada'}
     return vacio

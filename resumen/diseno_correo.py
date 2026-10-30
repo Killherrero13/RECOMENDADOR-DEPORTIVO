@@ -53,6 +53,10 @@ def desglose_html(evento):
     html = (f'<div style="font-size:12px;line-height:1.6;margin-top:8px;">'
             f'Interés deportivo {d["deportivo"]:.1f} · Afinidad {d["afinidad"]:+.1f}</div>')
     c = evento.get('evaluacion_contexto', {})
+    if c.get('fase_nba'):
+        html += etiqueta('NBA Cup · ' + c['fase_nba'] if evento.get('contexto', {}).get('copa') else 'NBA · liga regular', '#ffe4c7', '#82400d')
+    if c.get('moderacion_forma'):
+        html += etiqueta('Extra de forma moderado por desequilibrio del cruce', '#e8edf3', '#42546a')
     if d.get('preferencia_deporte'):
         from .puntuacion import umbral_plan
         html += etiqueta('Preferencia tenis −0,4 · incluida en afinidad')

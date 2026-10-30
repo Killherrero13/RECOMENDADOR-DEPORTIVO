@@ -36,7 +36,9 @@ ALIAS_BASKET = {
 REFERENTES_EUROLIGA = {'barcelona', 'real madrid', 'valencia', 'baskonia', 'fenerbahce',
                        'panathinaikos', 'milano', 'estrella roja', 'maccabi', 'bayern', 'olympiacos'}
 FIGURAS_TENIS = {'djokovic', 'alcaraz', 'sinner', 'zverev', 'medvedev'}
-RECONOCIDOS_TENIS = {'shapovalov', 'griekspoor', 'struff'}
+# Reconocimiento histórico moderado; no equivale a ranking o forma actuales.
+RECONOCIDOS_EUROLIGA = {'efes', 'partizan', 'zalgiris', 'virtus'}
+RECONOCIDOS_TENIS = {'shapovalov', 'griekspoor', 'struff', 'berrettini'}
 REFERENTES_TENIS = FIGURAS_TENIS | {'rublev', 'hurkacz', 'fritz', 'tsitsipas', 'rune',
                                   'ruud', 'de minaur', 'paul', 'khachanov', 'shelton',
                                   'tiafoe', 'musetti'}

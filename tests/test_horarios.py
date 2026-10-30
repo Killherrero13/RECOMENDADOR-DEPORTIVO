@@ -89,7 +89,8 @@ class HorariosTests(unittest.TestCase):
     @patch('resumen.fuente_eventos.descargar_html')
     def test_integracion_fuente_con_fecha_y_hora(self,descarga):
         descarga.return_value=tabla('24/10/2026',['12:00','23:00'])+tabla('25/10/2026',['00:00'])
-        result=generar_resultado_eventos(datetime(2026,10,24,20,tzinfo=MADRID_TZ))
+        with patch('resumen.fuente_eventos.enriquecer_eventos',return_value=[]):
+            result=generar_resultado_eventos(datetime(2026,10,24,20,tzinfo=MADRID_TZ))
         self.assertEqual([e['hora'] for e in result['filtrados']],['23:00','00:00'])
         self.assertFalse(result['avisos'])
 

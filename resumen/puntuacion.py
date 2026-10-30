@@ -2,7 +2,7 @@
 import re
 
 from .categorias import categoria_tenis, segunda_ronda_octavos, catalogo_tenis
-from .perfiles import identidad_basket, REFERENTES_EUROLIGA, REFERENTES_TENIS, perfil_tenis
+from .perfiles import identidad_basket, REFERENTES_EUROLIGA, RECONOCIDOS_EUROLIGA, REFERENTES_TENIS, perfil_tenis
 from .canales import plataforma_destacada
 from .contexto import valorar_contexto
 from .calidad_cruce import valorar_cruce
@@ -70,6 +70,9 @@ def valorar(evento, local, visitante, competicion, afinidad_previa=0, derby=0, r
     jerarquia = 0.0
     # El bonus de fase anterior distingue final, semifinal, cuartos y octavos.
     fase = {2.5:2.4, 2.0:1.6, 1.5:1.0, 1.0:0.6, 0.8:0.3}.get(ronda, 0)
+    if contexto.get('fase_nba'):
+        # Una fase confirmada no se premia dos veces con la ronda del título.
+        contexto['ajuste'] = max(0, contexto['ajuste'] - fase)
     if sport == 'Fútbol':
         base, motivo = base_futbol(competicion)
         motivos.append(motivo)
@@ -100,6 +103,11 @@ def valorar(evento, local, visitante, competicion, afinidad_previa=0, derby=0, r
             n = sum(e in referentes for e in equipos)
             if 'estudiantes' in local or 'estudiantes' in visitante:afinidad = 0.6
         cartel = 1.5 if n == 2 else 0.8 if n == 1 else 0
+        if any(x in competicion for x in ('euroliga', 'euroleague')):
+            reconocidos = sum(e in RECONOCIDOS_EUROLIGA for e in equipos)
+            cartel = min(1.5, cartel + .35 * reconocidos)
+            if reconocidos:
+                motivos.append('Reconocimiento histórico moderado de clubes europeos; no implica forma actual')
         afinidad += 0.1
         motivos.append('Baloncesto de interés')
         if n:

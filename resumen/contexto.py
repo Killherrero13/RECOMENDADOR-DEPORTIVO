@@ -19,6 +19,20 @@ def valorar_contexto(evento):
             return {**vacio, 'estado': 'datos fuera del corte temporal'}
         if c['temporada'] != temporada(inicio):
             return {**vacio, 'estado': 'otra temporada'}
+        if c.get('tipo') == 'nba':
+            if (evento['deporte'] != 'Baloncesto' or 'nba' not in normalizar(evento['competicion']).split()
+                    or c.get('competicion') != 'nba' or c.get('estado_partido') != 'pre'
+                    or not c.get('partido_id') or not c.get('fuentes')
+                    or fecha_iso(c['inicio']) <= consulta
+                    or abs(fecha_iso(c['inicio']) - inicio) > timedelta(minutes=15)
+                    or any(c[k]['nombre'] != evento[k] or not c[k].get('id') for k in ('local','visitante'))
+                    or c['local']['id'] == c['visitante']['id']):
+                raise ValueError()
+            fase = c.get('fase')
+            ajuste = {'grupos':.3, 'cuartos':.6, 'semifinal':.9, 'final':1.2}.get(fase, 0) if c.get('copa') is True else 0
+            return {'ajuste':ajuste, 'estado':'validado', 'fase_nba':fase,
+                    'motivos':[f'NBA Cup: {fase} confirmado por encuentro'] if ajuste else [],
+                    'fuentes':c['fuentes'], 'consultado':c['consultado']}
         if c.get('tipo') == 'tenis':
             if evento['deporte'] != 'Tenis' or c.get('competicion') != 'atp' or not c.get('fuentes'):
                 raise ValueError()
@@ -122,8 +136,20 @@ def valorar_contexto(evento):
                 candidatos.append((0.5, f"{e['nombre']}: tres victorias consecutivas"))
         # Las señales relacionadas compiten: no sumar posición, invicto y racha por separado.
         ajuste, motivo = max(candidatos, key=lambda x: x[0])
+        moderacion = 0.0
+        if evento['deporte'] == 'Fútbol':
+            fuerte, debil = sorted(equipos, key=lambda e: e['posicion'])
+            if (len(fuerte['forma']) == len(debil['forma']) == 5
+                    and fuerte['forma'].count('W') >= 4 and debil['forma'].count('L') >= 4
+                    and debil['posicion'] - fuerte['posicion'] >= 10):
+                # Moderar solo el extra contextual; nunca restar a la base ni por horario.
+                moderacion = round(max(0, ajuste - .6), 2)
+                ajuste = min(ajuste, .6)
+        motivos = ['Contexto: ' + motivo] if ajuste else []
+        if moderacion:
+            motivos.append('Extra de forma moderado: gran diferencia de posición y rachas opuestas en la misma liga')
         fuentes = list(dict.fromkeys(u for e in equipos for u in e['fuentes']))
-        return {'ajuste': min(1.5, ajuste), 'motivos': ['Contexto: ' + motivo] if ajuste else [],
+        return {'ajuste': min(1.5, ajuste), 'motivos': motivos, 'moderacion_forma': moderacion,
                 'fuentes': fuentes, 'estado': 'validado', 'consultado': c['consultado']}
     except (KeyError, ValueError, TypeError, AttributeError):
         return {**vacio, 'estado': 'contexto no válido'}

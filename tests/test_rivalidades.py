@@ -24,8 +24,9 @@ class RivalidadesTests(unittest.TestCase):
             a,b=r['equipos']
             # ID interno de Xerez tiene su nombre público exacto.
             a='Xerez CD' if a == 'xerez-cd' else a
-            self.assertEqual(valorar_rivalidad(evento(a,b,r['deporte']))['ajuste'],r['bonus'])
-            self.assertEqual(valorar_rivalidad(evento(b,a,r['deporte']))['ajuste'],r['bonus'])
+            comp='Eurocopa' if r.get('ambito') == 'selecciones' else 'Copa del Rey'
+            self.assertEqual(valorar_rivalidad(evento(a,b,r['deporte'],comp))['ajuste'],r['bonus'])
+            self.assertEqual(valorar_rivalidad(evento(b,a,r['deporte'],comp))['ajuste'],r['bonus'])
 
     def test_xerez_abreviado_solo_en_ficha_confirmada(self):
         e=evento('Xerez','Cádiz CF')

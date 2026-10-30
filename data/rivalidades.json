@@ -9,7 +9,9 @@
     "nombre": "El Clásico",
     "bonus": 0.6,
     "fuente": "https://www.laliga.com/en-ES/partidazos",
-    "verificado": "2026-10-28"
+    "verificado": "2026-10-28",
+    "ambito": "clubes",
+    "region": "España"
   },
   {
     "deporte": "Fútbol",
@@ -21,7 +23,9 @@
     "nombre": "Derbi de Madrid",
     "bonus": 0.48,
     "fuente": "https://www.laliga.com/en-ES/partidazos",
-    "verificado": "2026-10-28"
+    "verificado": "2026-10-28",
+    "ambito": "clubes",
+    "region": "España"
   },
   {
     "deporte": "Fútbol",
@@ -33,7 +37,9 @@
     "nombre": "Atlético–Barcelona",
     "bonus": 0.42,
     "fuente": "https://www.laliga.com/en-ES/partidazos",
-    "verificado": "2026-10-28"
+    "verificado": "2026-10-28",
+    "ambito": "clubes",
+    "region": "España"
   },
   {
     "deporte": "Fútbol",
@@ -45,7 +51,9 @@
     "nombre": "Derbi sevillano",
     "bonus": 0.45,
     "fuente": "https://www.laliga.com/en-ES/partidazos",
-    "verificado": "2026-10-28"
+    "verificado": "2026-10-28",
+    "ambito": "clubes",
+    "region": "España"
   },
   {
     "deporte": "Fútbol",
@@ -57,7 +65,9 @@
     "nombre": "Derbi vasco",
     "bonus": 0.42,
     "fuente": "https://www.laliga.com/en-ES/partidazos",
-    "verificado": "2026-10-28"
+    "verificado": "2026-10-28",
+    "ambito": "clubes",
+    "region": "España"
   },
   {
     "deporte": "Fútbol",
@@ -69,7 +79,9 @@
     "nombre": "Derbi del norte de Londres",
     "bonus": 0.45,
     "fuente": "https://www.premierleague.com/en/news/2172660",
-    "verificado": "2026-10-28"
+    "verificado": "2026-10-28",
+    "ambito": "clubes",
+    "region": "Inglaterra"
   },
   {
     "deporte": "Fútbol",
@@ -81,7 +93,9 @@
     "nombre": "Derbi de Manchester",
     "bonus": 0.48,
     "fuente": "https://www.premierleague.com/en/news/2172660",
-    "verificado": "2026-10-28"
+    "verificado": "2026-10-28",
+    "ambito": "clubes",
+    "region": "Inglaterra"
   },
   {
     "deporte": "Fútbol",
@@ -93,7 +107,9 @@
     "nombre": "Derbi de Merseyside",
     "bonus": 0.51,
     "fuente": "https://www.premierleague.com/en/news/2172660",
-    "verificado": "2026-10-28"
+    "verificado": "2026-10-28",
+    "ambito": "clubes",
+    "region": "Inglaterra"
   },
   {
     "deporte": "Fútbol",
@@ -105,7 +121,9 @@
     "nombre": "Der Klassiker",
     "bonus": 0.54,
     "fuente": "https://www.bundesliga.com/en/bundesliga/news/biggest-soccer-derbies-in-germany-klassiker-revierderby-oldest-rivalries-7578",
-    "verificado": "2026-10-28"
+    "verificado": "2026-10-28",
+    "ambito": "clubes",
+    "region": "Alemania"
   },
   {
     "deporte": "Fútbol",
@@ -117,7 +135,9 @@
     "nombre": "Revierderby",
     "bonus": 0.45,
     "fuente": "https://www.bundesliga.com/en/bundesliga/news/biggest-soccer-derbies-in-germany-klassiker-revierderby-oldest-rivalries-7578",
-    "verificado": "2026-10-28"
+    "verificado": "2026-10-28",
+    "ambito": "clubes",
+    "region": "Alemania"
   },
   {
     "deporte": "Fútbol",
@@ -129,7 +149,9 @@
     "nombre": "Nordderby",
     "bonus": 0.42,
     "fuente": "https://www.bundesliga.com/en/bundesliga/news/biggest-soccer-derbies-in-germany-klassiker-revierderby-oldest-rivalries-7578",
-    "verificado": "2026-10-28"
+    "verificado": "2026-10-28",
+    "ambito": "clubes",
+    "region": "Alemania"
   },
   {
     "deporte": "Fútbol",
@@ -141,7 +163,9 @@
     "nombre": "Derby d’Italia",
     "bonus": 0.45,
     "fuente": "https://www.legaseriea.it/serie-a/news/inter-juventus-2025-2026-formazioni-risultato",
-    "verificado": "2026-10-28"
+    "verificado": "2026-10-28",
+    "ambito": "clubes",
+    "region": "Italia"
   },
   {
     "deporte": "Fútbol",
@@ -153,7 +177,9 @@
     "nombre": "Derbi gaditano",
     "bonus": 0.6,
     "fuente": "https://www.rfaf.es/pnfg/NNws_ShwNewDup?cod_primaria=140&cod_secundaria=140&codigo=63805",
-    "verificado": "2026-10-28"
+    "verificado": "2026-10-28",
+    "ambito": "clubes",
+    "region": "España"
   },
   {
     "deporte": "Baloncesto",
@@ -165,7 +191,9 @@
     "nombre": "Clásico de baloncesto",
     "bonus": 0.6,
     "fuente": "https://mediacentre.euroleague.net/en/app/2/communication/communication/preview/24407",
-    "verificado": "2026-10-28"
+    "verificado": "2026-10-28",
+    "ambito": "clubes",
+    "region": "Baloncesto"
   },
   {
     "deporte": "Baloncesto",
@@ -177,7 +205,9 @@
     "nombre": "Derbi griego",
     "bonus": 0.6,
     "fuente": "https://mediacentre.euroleague.net/en/app/2/communication/communication/preview/24407",
-    "verificado": "2026-10-28"
+    "verificado": "2026-10-28",
+    "ambito": "clubes",
+    "region": "Baloncesto"
   },
   {
     "deporte": "Baloncesto",
@@ -189,7 +219,9 @@
     "nombre": "Derbi de Belgrado",
     "bonus": 0.6,
     "fuente": "https://mediacentre.euroleague.net/en/app/2/communication/communication/preview/24407",
-    "verificado": "2026-10-28"
+    "verificado": "2026-10-28",
+    "ambito": "clubes",
+    "region": "Baloncesto"
   },
   {
     "deporte": "Baloncesto",
@@ -201,7 +233,9 @@
     "nombre": "Derbi de Tel Aviv",
     "bonus": 0.4,
     "fuente": "https://mediacentre.euroleague.net/en/app/2/communication/communication/preview/24407",
-    "verificado": "2026-10-28"
+    "verificado": "2026-10-28",
+    "ambito": "clubes",
+    "region": "Baloncesto"
   },
   {
     "deporte": "Fútbol",
@@ -213,7 +247,9 @@
     "nombre": "Derby della Madonnina",
     "bonus": 0.54,
     "fuente": "https://www.inter.it/en/news/inter-ac-milan-origins-heroes-records-guide-derby",
-    "verificado": "2026-10-28"
+    "verificado": "2026-10-28",
+    "ambito": "clubes",
+    "region": "Italia"
   },
   {
     "deporte": "Fútbol",
@@ -225,7 +261,9 @@
     "nombre": "Derbi de Roma",
     "bonus": 0.48,
     "fuente": "https://www.asroma.com/en/club/history/a-brief-history-of-as-roma",
-    "verificado": "2026-10-28"
+    "verificado": "2026-10-28",
+    "ambito": "clubes",
+    "region": "Italia"
   },
   {
     "deporte": "Fútbol",
@@ -237,7 +275,9 @@
     "nombre": "Le Classique",
     "bonus": 0.51,
     "fuente": "https://ligue1.com/fr/articles/l1_article_5867-",
-    "verificado": "2026-10-28"
+    "verificado": "2026-10-28",
+    "ambito": "clubes",
+    "region": "Francia"
   },
   {
     "deporte": "Fútbol",
@@ -249,7 +289,9 @@
     "nombre": "Second City derby",
     "bonus": 0.36,
     "fuente": "https://www.bbc.co.uk/sport/football/46251074",
-    "verificado": "2026-10-28"
+    "verificado": "2026-10-28",
+    "ambito": "clubes",
+    "region": "Inglaterra"
   },
   {
     "deporte": "Fútbol",
@@ -261,6 +303,344 @@
     "nombre": "Clássico Mineiro",
     "bonus": 0.6,
     "fuente": "https://www.cbf.com.br/futebol-brasileiro/noticias/copa-brasil/a/classico-entre-cruzeiro-e-galo-inicia-quartas-de-final-da-copa-betano-do-brasil",
-    "verificado": "2026-10-29"
+    "verificado": "2026-10-29",
+    "ambito": "clubes",
+    "region": "Brasil"
+  },
+  {
+    "deporte": "Fútbol",
+    "equipos": [
+      "fc barcelona",
+      "espanyol"
+    ],
+    "tipo": "Derbi local",
+    "nombre": "Derbi de Barcelona",
+    "bonus": 0.45,
+    "fuente": "https://www.laliga.com/partidazos/el-derbi-de-barcelona",
+    "verificado": "2026-10-30",
+    "region": "España",
+    "ambito": "clubes"
+  },
+  {
+    "deporte": "Fútbol",
+    "equipos": [
+      "celta",
+      "deportivo la coruna"
+    ],
+    "tipo": "Derbi local",
+    "nombre": "Derbi gallego",
+    "bonus": 0.45,
+    "fuente": "https://www.laliga.com/noticias/ya-se-conoce-el-calendario-al-completo-de-laliga-ea-sports-2026-27",
+    "verificado": "2026-10-30",
+    "region": "España",
+    "ambito": "clubes"
+  },
+  {
+    "deporte": "Fútbol",
+    "equipos": [
+      "valencia",
+      "levante"
+    ],
+    "tipo": "Derbi local",
+    "nombre": "Derbi de Valencia",
+    "bonus": 0.4,
+    "fuente": "https://www.laliga.com/noticias/la-igualdad-reina-en-valencia",
+    "verificado": "2026-10-30",
+    "region": "España",
+    "ambito": "clubes"
+  },
+  {
+    "deporte": "Fútbol",
+    "equipos": [
+      "newcastle",
+      "sunderland"
+    ],
+    "tipo": "Derbi local",
+    "nombre": "Tyne–Wear derby",
+    "bonus": 0.5,
+    "fuente": "https://www.premierleague.com/en/news/4324743/what-are-the-dates-of-every-202526-derby-match",
+    "verificado": "2026-10-30",
+    "region": "Inglaterra",
+    "ambito": "clubes"
+  },
+  {
+    "deporte": "Fútbol",
+    "equipos": [
+      "brighton",
+      "crystal palace"
+    ],
+    "tipo": "Rivalidad histórica",
+    "nombre": "Rivalidad Brighton–Crystal Palace",
+    "bonus": 0.4,
+    "fuente": "https://www.premierleague.com/en/news/4324743/what-are-the-dates-of-every-202526-derby-match",
+    "verificado": "2026-10-30",
+    "region": "Inglaterra",
+    "ambito": "clubes"
+  },
+  {
+    "deporte": "Fútbol",
+    "equipos": [
+      "liverpool",
+      "manchester united"
+    ],
+    "tipo": "Rivalidad histórica",
+    "nombre": "Rivalidad Liverpool–Manchester United",
+    "bonus": 0.55,
+    "fuente": "https://www.liverpoolfc.com/news/first-team/239702-watch-now-on-demand-a-tale-of-two-cities",
+    "verificado": "2026-10-30",
+    "region": "Inglaterra",
+    "ambito": "clubes"
+  },
+  {
+    "deporte": "Fútbol",
+    "equipos": [
+      "bayern munich",
+      "borussia monchengladbach"
+    ],
+    "tipo": "Rivalidad histórica",
+    "nombre": "Klassiker histórico Bayern–Gladbach",
+    "bonus": 0.4,
+    "fuente": "https://www.bundesliga.com/en/bundesliga/news/biggest-soccer-derbies-in-germany-klassiker-revierderby-oldest-rivalries-7578",
+    "verificado": "2026-10-30",
+    "region": "Alemania",
+    "ambito": "clubes"
+  },
+  {
+    "deporte": "Fútbol",
+    "equipos": [
+      "stuttgart",
+      "karlsruhe"
+    ],
+    "tipo": "Derbi local",
+    "nombre": "Derbi Baden–Suabia",
+    "bonus": 0.4,
+    "fuente": "https://www.bundesliga.com/en/bundesliga/news/biggest-soccer-derbies-in-germany-klassiker-revierderby-oldest-rivalries-7578",
+    "verificado": "2026-10-30",
+    "region": "Alemania",
+    "ambito": "clubes"
+  },
+  {
+    "deporte": "Fútbol",
+    "equipos": [
+      "fc koln",
+      "borussia monchengladbach"
+    ],
+    "tipo": "Derbi local",
+    "nombre": "Derbi del Rin: Colonia–Gladbach",
+    "bonus": 0.45,
+    "fuente": "https://www.bundesliga.com/en/bundesliga/news/rhine-derbies-explained-borussia-monchengladbach-cologne-bayer-leverkusen-17674",
+    "verificado": "2026-10-30",
+    "region": "Alemania",
+    "ambito": "clubes"
+  },
+  {
+    "deporte": "Fútbol",
+    "equipos": [
+      "fc koln",
+      "bayer leverkusen"
+    ],
+    "tipo": "Derbi local",
+    "nombre": "Derbi del Rin: Colonia–Leverkusen",
+    "bonus": 0.35,
+    "fuente": "https://www.bundesliga.com/en/bundesliga/news/rhine-derbies-explained-borussia-monchengladbach-cologne-bayer-leverkusen-17674",
+    "verificado": "2026-10-30",
+    "region": "Alemania",
+    "ambito": "clubes"
+  },
+  {
+    "deporte": "Fútbol",
+    "equipos": [
+      "borussia monchengladbach",
+      "bayer leverkusen"
+    ],
+    "tipo": "Derbi local",
+    "nombre": "Derbi del Rin: Gladbach–Leverkusen",
+    "bonus": 0.3,
+    "fuente": "https://www.bundesliga.com/en/bundesliga/news/rhine-derbies-explained-borussia-monchengladbach-cologne-bayer-leverkusen-17674",
+    "verificado": "2026-10-30",
+    "region": "Alemania",
+    "ambito": "clubes"
+  },
+  {
+    "deporte": "Fútbol",
+    "equipos": [
+      "juventus",
+      "torino"
+    ],
+    "tipo": "Derbi local",
+    "nombre": "Derby della Mole",
+    "bonus": 0.45,
+    "fuente": "https://www.juventus.com/it/news/articoli/juventus-torino-vivi-il-derby-della-mole-all-allianz-stadium",
+    "verificado": "2026-10-30",
+    "region": "Italia",
+    "ambito": "clubes"
+  },
+  {
+    "deporte": "Fútbol",
+    "equipos": [
+      "genoa",
+      "sampdoria"
+    ],
+    "tipo": "Derbi local",
+    "nombre": "Derby della Lanterna",
+    "bonus": 0.5,
+    "fuente": "https://www.sampdoria.it/news/archivio/2015/11/03/almanacco-blucerchiato-il-3-novembre-1946-il-primo-derby-dice-sampdoria/",
+    "verificado": "2026-10-30",
+    "region": "Italia",
+    "ambito": "clubes"
+  },
+  {
+    "deporte": "Fútbol",
+    "equipos": [
+      "lille",
+      "lens"
+    ],
+    "tipo": "Derbi local",
+    "nombre": "Derby du Nord",
+    "bonus": 0.6,
+    "fuente": "https://www.rclens.fr/fr/losc-lille-rc-lens",
+    "verificado": "2026-10-30",
+    "region": "Francia",
+    "ambito": "clubes"
+  },
+  {
+    "deporte": "Fútbol",
+    "equipos": [
+      "lyon",
+      "saint etienne"
+    ],
+    "tipo": "Derbi local",
+    "nombre": "Le Derby: Lyon–Saint-Étienne",
+    "bonus": 0.5,
+    "fuente": "https://ligue1.com/en/articles/l1_article_1216-history-lyon-vs-saint-etienne-le-derby",
+    "verificado": "2026-10-30",
+    "region": "Francia",
+    "ambito": "clubes"
+  },
+  {
+    "deporte": "Fútbol",
+    "equipos": [
+      "nice",
+      "monaco"
+    ],
+    "tipo": "Derbi local",
+    "nombre": "Derbi de la Costa Azul",
+    "bonus": 0.4,
+    "fuente": "https://www.asmonaco.com/fr/news/revis-les-six-derbies-qui-ont-marque-lhistoire",
+    "verificado": "2026-10-30",
+    "region": "Francia",
+    "ambito": "clubes"
+  },
+  {
+    "deporte": "Fútbol",
+    "equipos": [
+      "benfica",
+      "porto"
+    ],
+    "tipo": "Rivalidad histórica",
+    "nombre": "O Clássico",
+    "bonus": 0.5,
+    "fuente": "https://www.uefa.com/news/0220-0e906b50025d-46c52645001b-1000--snap-shot-when-benfica-beat-mourinho-s-porto/",
+    "verificado": "2026-10-30",
+    "region": "Portugal",
+    "ambito": "clubes"
+  },
+  {
+    "deporte": "Fútbol",
+    "equipos": [
+      "argentina",
+      "brasil"
+    ],
+    "tipo": "Rivalidad histórica",
+    "nombre": "Clásico Argentina–Brasil",
+    "bonus": 0.6,
+    "fuente": "https://www.fifa.com/en/articles/one-step-closer-brazil-argentina-fifa-world-cup-semi-final-qatar-2022-messi-neymar",
+    "verificado": "2026-10-30",
+    "region": "Selecciones",
+    "ambito": "selecciones"
+  },
+  {
+    "deporte": "Fútbol",
+    "equipos": [
+      "inglaterra",
+      "escocia"
+    ],
+    "tipo": "Rivalidad histórica",
+    "nombre": "Inglaterra–Escocia",
+    "bonus": 0.45,
+    "fuente": "https://inside.fifa.com/news/auld-enemies-prepare-battle-again-2151451",
+    "verificado": "2026-10-30",
+    "region": "Selecciones",
+    "ambito": "selecciones"
+  },
+  {
+    "deporte": "Fútbol",
+    "equipos": [
+      "inglaterra",
+      "argentina"
+    ],
+    "tipo": "Rivalidad histórica",
+    "nombre": "Inglaterra–Argentina",
+    "bonus": 0.5,
+    "fuente": "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/articles/england-argentina-previous-meetings?searchOverlay=1",
+    "verificado": "2026-10-30",
+    "region": "Selecciones",
+    "ambito": "selecciones"
+  },
+  {
+    "deporte": "Fútbol",
+    "equipos": [
+      "real oviedo",
+      "sporting gijon"
+    ],
+    "tipo": "Derbi local",
+    "nombre": "Derbi asturiano",
+    "bonus": 0.45,
+    "fuente": "https://www.realoviedo.es/noticias/real-oviedo-y-sporting-jugaran-su-partido-numero-119",
+    "verificado": "2026-10-30",
+    "region": "España",
+    "ambito": "clubes"
+  },
+  {
+    "deporte": "Fútbol",
+    "equipos": [
+      "las palmas",
+      "tenerife"
+    ],
+    "tipo": "Derbi local",
+    "nombre": "Derbi canario",
+    "bonus": 0.4,
+    "fuente": "https://www.udlaspalmas.es/noticias/ud-las-palmas-vs-cd-tenerife-el-derbi-canario-ya-tiene-fecha",
+    "verificado": "2026-10-30",
+    "region": "España",
+    "ambito": "clubes"
+  },
+  {
+    "deporte": "Fútbol",
+    "equipos": [
+      "celtic",
+      "rangers"
+    ],
+    "tipo": "Derbi local",
+    "nombre": "Old Firm",
+    "bonus": 0.55,
+    "fuente": "https://inside.fifa.com/en/news/old-firm-enduring-appeal-1023776",
+    "verificado": "2026-10-30",
+    "region": "Escocia",
+    "ambito": "clubes"
+  },
+  {
+    "deporte": "Fútbol",
+    "equipos": [
+      "alemania",
+      "paises bajos"
+    ],
+    "tipo": "Rivalidad histórica",
+    "nombre": "Alemania–Países Bajos",
+    "bonus": 0.5,
+    "fuente": "https://inside.fifa.com/tournaments/mens/worldcup/1990italy/news/worldcupathome-germany-v-netherlands-1990-3071466",
+    "verificado": "2026-10-30",
+    "region": "Selecciones",
+    "ambito": "selecciones"
   }
 ]

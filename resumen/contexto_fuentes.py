@@ -5,6 +5,7 @@ from datetime import datetime, timedelta, timezone
 import requests
 import threading
 import time
+import re
 
 from .config import MADRID_TZ
 from .perfiles import normalizar, identidad_basket, CODIGOS_EUROLIGA
@@ -404,6 +405,59 @@ def contextos_tenis(items, ahora):
     return cubiertos
 
 
+def contextos_nba(items, ahora):
+    """Solo metadatos prospectivos; nunca conservar resultados o estadísticas."""
+    fechas = {}
+    for e in items:
+        inicio = datetime.fromisoformat(f"{e['fecha']}T{e['hora']}").replace(tzinfo=MADRID_TZ)
+        fechas.setdefault(inicio.astimezone(timezone.utc).strftime('%Y%m%d'), []).append(e)
+    cubiertos = 0
+    for dia, eventos in fechas.items():
+        url = f'https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard?dates={dia}&limit=100'
+        datos = descargar_json(url)
+        for e in eventos:
+            inicio = datetime.fromisoformat(f"{e['fecha']}T{e['hora']}").replace(tzinfo=MADRID_TZ)
+            candidatos = []
+            for ficha in datos.get('events', []):
+                for partido in ficha.get('competitions', []):
+                    if partido.get('status', ficha.get('status', {})).get('type', {}).get('state') != 'pre':
+                        continue
+                    try:
+                        inicio_fuente = fecha_iso(partido.get('date') or ficha.get('date'))
+                    except (ValueError, TypeError, AttributeError):
+                        continue
+                    if inicio_fuente <= ahora or abs(inicio_fuente - inicio) > timedelta(minutes=15):
+                        continue
+                    equipos = {}
+                    for lado, rol in (('local', 'home'), ('visitante', 'away')):
+                        opciones = [t['team'] for t in partido.get('competitors', [])
+                                    if t.get('homeAway') == rol and normalizar(e[lado]) in
+                                    {normalizar(t.get('team', {}).get(k, '')) for k in ('displayName', 'shortDisplayName', 'name')}]
+                        if len(opciones) == 1 and opciones[0].get('id'):
+                            equipos[lado] = {'nombre': e[lado], 'id': str(opciones[0]['id'])}
+                    if len(equipos) != 2 or equipos['local']['id'] == equipos['visitante']['id']:
+                        continue
+                    notas = ' '.join(str(n.get('headline') or '') for n in (partido.get('notes') or []))
+                    texto = normalizar(notas)
+                    es_copa = bool(re.search(r'\bnba cup\b', texto))
+                    fase = ('grupos' if 'group play' in texto else
+                            'cuartos' if 'quarterfinal' in texto or 'quarter final' in texto else
+                            'semifinal' if 'semifinal' in texto or 'semi final' in texto else
+                            'final' if re.search(r'\b(?:final|championship)\b', texto) else 'sin confirmar') if es_copa else 'liga regular'
+                    if ficha.get('id'):
+                        candidatos.append({'tipo': 'nba', 'competicion': 'nba', 'temporada': temporada(ahora),
+                                           'consultado': ahora.isoformat(), 'inicio': inicio_fuente.isoformat(),
+                                           'partido_id': str(ficha['id']), 'estado_partido': 'pre',
+                                           'copa': es_copa, 'fase': fase, **equipos, 'fuentes': [url]})
+            if len(candidatos) == 1:
+                e['contexto'] = candidatos[0]
+                marcar(e, 'validado', 'datos_validados')
+                cubiertos += 1
+            else:
+                marcar(e, 'sin_datos', 'identidad_ambigua' if candidatos else 'partido_no_confirmado')
+    return cubiertos
+
+
 def enriquecer_eventos(eventos, ahora):
     """Añade contexto solo a encuentros futuros; no sustituye ni bloquea la agenda."""
     if ahora.tzinfo is None:
@@ -428,6 +482,8 @@ def enriquecer_eventos(eventos, ahora):
             liga = 'copa'
         if e.get('deporte') == 'Baloncesto' and any(t in normalizar(e['competicion']) for t in ('euroliga', 'euroleague')):
             liga = 'euro'
+        if e.get('deporte') == 'Baloncesto' and re.search(r'\bnba\b', normalizar(e['competicion'])):
+            liga = 'nba'
         if liga:
             marcar(e, 'pendiente', 'pendiente')
             grupos.setdefault(liga, []).append(e)
@@ -443,6 +499,8 @@ def enriquecer_eventos(eventos, ahora):
                 return contextos_tenis(items, ahora)
             if liga == 'copa':
                 return contextos_copa(items, ahora)
+            if liga == 'nba':
+                return contextos_nba(items, ahora)
             datos = tabla_euroliga(nombres, ahora) if liga == 'euro' else tabla_futbol(liga, nombres, ahora)
         except (ErrorContexto, KeyError, ValueError, TypeError, IndexError, StopIteration) as error:
             for e in items: marcar(e, 'sin_datos', getattr(error, 'codigo', 'formato_no_valido'))
@@ -467,5 +525,5 @@ def enriquecer_eventos(eventos, ahora):
     elegibles = sum(len(items) for items in grupos.values())
     return [f'Contexto deportivo validado en {cubiertos}/{elegibles} encuentros futuros de las ligas cubiertas. '
             'En el resto se mantiene la nota básica. Cobertura actual: ligas principales de fútbol, Euroliga '
-            'y contraste de categorías en primera ronda de Copa del Rey 2026/27, además de ranking ATP. '
+            'y contraste de categorías en primera ronda de Copa del Rey 2026/27, ranking ATP y fase de NBA Cup. '
             'Las competiciones o jugadores sin datos conservan su valoración básica.']

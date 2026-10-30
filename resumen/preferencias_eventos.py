@@ -50,10 +50,10 @@ NBA_TEAM_AFFINITY = {
     "pistons": 0.00,
     "jazz": 0.00,
     "trail blazers": 0.00,
-    "thunder": -0.45,
-    "knicks": -0.40,
-    "heat": -0.40,
-    "76ers": -0.35
+    "thunder": 0.00,
+    "knicks": 0.00,
+    "heat": 0.00,
+    "76ers": 0.00
 }
 
 FOOTBALL_TEAM_AFFINITY = {

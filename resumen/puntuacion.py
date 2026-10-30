@@ -9,6 +9,8 @@ from .calidad_cruce import valorar_cruce
 from .rivalidades import valorar_rivalidad
 
 UMBRAL_PLAN = 6.5
+UMBRAL_PLAN_TENIS = 7.5
+PREFERENCIA_TENIS = -0.4
 UMBRAL_ALTERNATIVAS = 4.5
 FAVORITOS_FUTBOL = {'atletico madrid', 'aston villa'}
 REFERENTES_FUTBOL = {
@@ -19,6 +21,10 @@ REFERENTES_FUTBOL = {
 }
 REFERENTES_NBA = {'lakers','warriors','celtics','nuggets','suns','clippers'}
 REFERENTES_ACB = {'barcelona','real madrid','valencia','joventut','gran canaria','baskonia'}
+
+
+def umbral_plan(evento):
+    return UMBRAL_PLAN_TENIS if evento.get('deporte') == 'Tenis' else UMBRAL_PLAN
 
 
 def coincide(alias, nombre):
@@ -126,6 +132,8 @@ def valorar(evento, local, visitante, competicion, afinidad_previa=0, derby=0, r
                 ranking_visible = ', '.join(f"{p['nombre']} n.º {p['ranking']}" for p in actuales.values())
                 motivos.append('Jerarquía ATP validada: ' + ranking_visible)
         afinidad = max(0,afinidad_previa) * 0.28
+        afinidad += PREFERENCIA_TENIS
+        motivos.append('Preferencia personal: tenis secundario; solo grandes citas en el plan')
         motivos.append(categoria or 'Categoría sin confirmar: valoración neutral')
         if 'figura' in perfiles: motivos.append('Figura del catálogo editorial de tenis')
         if n == 2: motivos.append('Ambos jugadores tienen perfil reconocido; se valora también al rival')
@@ -141,7 +149,7 @@ def valorar(evento, local, visitante, competicion, afinidad_previa=0, derby=0, r
         base = 3.0
         motivos.append('Valoración neutral del deporte')
     if fase:
-        motivos.append('Final' if ronda == 2.5 else 'Fase de eliminatoria')
+        motivos.append({2.5:'Final',2.0:'Semifinal',1.5:'Cuartos de final',1.0:'Octavos de final',.8:'Dieciseisavos de final'}.get(ronda,'Fase de eliminatoria'))
     fase_verificada = ({'nombre':'Octavos: cuadro de 32 confirmado', 'fuente':catalogo_tenis()['fuente']}
                        if segunda_ronda_octavos(evento) else None)
     calidad = valorar_cruce(evento, contexto, cartel)
@@ -163,7 +171,8 @@ def valorar(evento, local, visitante, competicion, afinidad_previa=0, derby=0, r
     return {'score':nota,'prioridad':round(nota+acceso+horario,2),'nivel':nivel_nota(nota),
             'desglose':{'base':base,'cartel':cartel,'fase':fase,'deportivo':deportivo,
                         'afinidad':afinidad,'acceso':acceso,'horario':horario,'contexto':round(nota-nota_basica,1),
-                        'calidad_cruce':calidad['ajuste'], 'rivalidad':rivalidad['ajuste'], 'jerarquia_atp':jerarquia},
+                        'calidad_cruce':calidad['ajuste'], 'rivalidad':rivalidad['ajuste'], 'jerarquia_atp':jerarquia,
+                        'preferencia_deporte':PREFERENCIA_TENIS if sport == 'Tenis' else 0},
             'evaluacion_rivalidad':rivalidad,
             'evaluacion_fase':fase_verificada,
             'evaluacion_contexto':contexto,

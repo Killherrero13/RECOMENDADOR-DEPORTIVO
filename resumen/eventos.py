@@ -8,7 +8,7 @@ import unicodedata
 from .config import MADRID_TZ
 from .horarios import intervalo, orden_inicio, preparar_horario
 from .categorias import categoria_tenis, bonus_categoria_tenis
-from .puntuacion import valorar, UMBRAL_PLAN, UMBRAL_ALTERNATIVAS
+from .puntuacion import valorar, UMBRAL_PLAN, UMBRAL_ALTERNATIVAS, umbral_plan
 
 from .preferencias_eventos import (
     EVENT_DURATION,
@@ -108,13 +108,13 @@ def knockout_bonus(event):
     if segunda_ronda_octavos(event):
         return 1.0
 
-    if re.search(r'\bsemi[ -]?final', comp):
+    if re.search(r'\bsemi[ -]?final|(?<!\d)1\s*/\s*2\b', comp):
         bonus = 2.0
-    elif any(x in comp for x in ["cuartos", "quarter"]):
+    elif any(x in comp for x in ["cuartos", "quarter"]) or re.search(r'(?<!\d)1\s*/\s*4\b|\bqf\b', comp):
         bonus = 1.5
-    elif any(x in comp for x in ["octavos", "round of 16", "1/8"]):
+    elif any(x in comp for x in ["octavos", "round of 16"]) or re.search(r'(?<!\d)1\s*/\s*8\b', comp):
         bonus = 1.0
-    elif any(x in comp for x in ["1/16", "round of 32"]):
+    elif 'round of 32' in comp or re.search(r'(?<!\d)1\s*/\s*16\b', comp):
         bonus = 0.8
     elif re.search(r'\bfinal(?:es)?\b', comp):
         bonus = 2.5
@@ -264,7 +264,7 @@ def build_daily_plan(events):
     # --------------------------------------------------
     top_events = [
         e for e in events
-        if e["score"] >= UMBRAL_PLAN
+        if e["score"] >= umbral_plan(e)
     ]
 
     if not top_events:
@@ -282,7 +282,7 @@ def build_daily_plan(events):
             continue
 
         # Umbral mínimo
-        if e["score"] < UMBRAL_PLAN:
+        if e["score"] < umbral_plan(e):
             continue
 
         # Solapamiento real

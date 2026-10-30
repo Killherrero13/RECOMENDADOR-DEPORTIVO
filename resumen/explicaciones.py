@@ -1,7 +1,7 @@
 """Motivos verificables del interés y del lugar de cada evento en el plan."""
 from .horarios import intervalo
 from .canales import plataforma_destacada
-from .puntuacion import UMBRAL_PLAN
+from .puntuacion import UMBRAL_PLAN, umbral_plan
 from .preferencias_eventos import MAX_OVERLAP
 
 
@@ -21,8 +21,9 @@ def explicar_agenda(eventos, plan, clave):
             razones.append('Horario de madrugada: encaja peor con tu descanso.')
         if clave(e) in seleccion:
             papel = 'Elegido para tu plan por su interés y encaje.'
-        elif e['score'] < UMBRAL_PLAN:
-            papel = 'Opción secundaria: no alcanza el umbral del plan (6,5/10).'
+        elif e['score'] < umbral_plan(e):
+            umbral = f"{umbral_plan(e):.1f}".replace('.', ',')
+            papel = f'Opción secundaria: no alcanza el umbral del plan ({umbral}/10).'
         else:
             inicio, fin = intervalo(e)
             conflictos = []

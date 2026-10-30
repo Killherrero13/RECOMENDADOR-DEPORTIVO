@@ -33,7 +33,7 @@ class PerfilesTests(unittest.TestCase):
         uno=evento('Jugador sin perfil','A. Rublev')
         self.assertGreater(evaluar_evento(fuerte)['score'],evaluar_evento(sin_perfil)['score'])
         self.assertGreater(evaluar_evento(dos)['score'],evaluar_evento(uno)['score'])
-        self.assertEqual(evaluar_evento(evento('H. Hurkacz','Z. Bergs'))['score'],4.9)
+        self.assertEqual(evaluar_evento(evento('H. Hurkacz','Z. Bergs'))['score'],4.5)
         self.assertIsNone(perfil_tenis('Jugador Paulson'))
         self.assertIsNone(perfil_tenis('M. Landaluce'))
 

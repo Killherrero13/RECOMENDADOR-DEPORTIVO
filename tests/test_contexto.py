@@ -200,7 +200,7 @@ class ContextoTests(unittest.TestCase):
         c=valorar_contexto(e)
         self.assertEqual(c['ajuste'],0)
         self.assertEqual(c['afinidad'],.6)
-        self.assertEqual(evaluar_evento(e)['desglose']['afinidad'],.6)
+        self.assertEqual(evaluar_evento(e)['desglose']['afinidad'],.2)
         e['contexto']['publicado']='2026-10-01T07:00Z'
         self.assertEqual(valorar_contexto(e)['ajuste'],0)
         self.assertNotIn('afinidad',valorar_contexto(e))

@@ -16,6 +16,8 @@ def linea_evento(event):
     if event.get('desglose'):
         d = event['desglose']
         texto += f" · Interés deportivo {d['deportivo']:.1f} · Afinidad {d['afinidad']:+.1f}"
+        if d.get('preferencia_deporte'):
+            texto += ' · Preferencia tenis −0,4 (incluida en afinidad); plan desde 7,5/10'
     contexto = event.get('evaluacion_contexto', {})
     if contexto.get('detalle_copa'):
         texto += f" · Copa: {contexto['detalle_copa']} · Contraste +{contexto['contraste']:.1f} · Racha desfavorable +{contexto['vulnerabilidad']:.1f}"

@@ -53,6 +53,11 @@ def desglose_html(evento):
     html = (f'<div style="font-size:12px;line-height:1.6;margin-top:8px;">'
             f'Interés deportivo {d["deportivo"]:.1f} · Afinidad {d["afinidad"]:+.1f}</div>')
     c = evento.get('evaluacion_contexto', {})
+    if d.get('preferencia_deporte'):
+        from .puntuacion import umbral_plan
+        html += etiqueta('Preferencia tenis −0,4 · incluida en afinidad')
+        minimo = f'{umbral_plan(evento):.1f}'.replace('.', ',')
+        html += f'<div style="font-size:11px;line-height:1.6;">Plan principal de tenis a partir de {minimo}/10.</div>'
     fase = evento.get('evaluacion_fase')
     if fase:
         html += etiqueta(fase['nombre'])

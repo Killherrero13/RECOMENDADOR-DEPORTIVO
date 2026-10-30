@@ -30,7 +30,8 @@ class Feedback29Tests(unittest.TestCase):
         self.assertEqual(r['evaluacion_contexto']['estado'],'parcial')
         self.assertEqual(r['desglose']['calidad_cruce'],0)
         self.assertEqual(r['desglose']['jerarquia_atp'],.7)
-        self.assertAlmostEqual(r['score'],6.2)
+        self.assertAlmostEqual(r['score'],5.8)
+        self.assertAlmostEqual(r['desglose']['deportivo'],6.2)
         s=preparar_diagnostico({'filtrados':[{**e,**r}]},datetime(2026,10,29,8,tzinfo=MADRID_TZ))
         self.assertEqual(s['cobertura']['parciales'],1)
 

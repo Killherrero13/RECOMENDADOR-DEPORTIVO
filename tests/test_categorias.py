@@ -29,16 +29,17 @@ class CategoriasTests(unittest.TestCase):
         self.assertIsNone(categoria_tenis(tenis('Torneo desconocido Premio 500 euros'))[0])
 
     def test_categoria_desconocida_y_afinidad_ausente_son_neutrales(self):
-        self.assertEqual(calculate_score(tenis()),4.9)
-        self.assertEqual(calculate_score(tenis('Torneo desconocido')),3.7)
-        self.assertEqual(calculate_score(tenis('Torneo desconocido',local='C. Alcaraz')),5.1)
+        self.assertEqual(calculate_score(tenis()),4.5)
+        self.assertEqual(calculate_score(tenis('Torneo desconocido')),3.3)
+        self.assertEqual(calculate_score(tenis('Torneo desconocido',local='C. Alcaraz')),4.7)
 
     def test_final_con_jugadores_fuera_de_lista_no_se_pierde(self):
         final=tenis('Torneo de Viena Final',local='Jugador A',visitante='Jugador B')
         final['canales']=['DAZN']
         result=recomendar_eventos([final],fecha=date(2026,10,26))
         self.assertEqual(len(result['filtrados']),1)
-        self.assertEqual(result['plan']['imprescindible']['score'],6.8)
+        self.assertEqual(result['filtrados'][0]['score'],6.4)
+        self.assertEqual(result['plan'],{})
         self.assertEqual(recomendar_eventos([tenis('Torneo de Viena 1ª Ronda',local='Jugador A',visitante='Jugador B')],fecha=date(2026,10,26))['filtrados'],[])
 
     def test_liga_sin_regla_tiene_base_neutral(self):

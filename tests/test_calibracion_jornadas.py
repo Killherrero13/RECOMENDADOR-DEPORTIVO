@@ -10,6 +10,7 @@ from resumen.eventos import recomendar_eventos, evaluar_evento
 from resumen.horarios import intervalo, orden_inicio
 from resumen.diagnostico import preparar_diagnostico, reproducir
 from resumen.config import MADRID_TZ
+from resumen.puntuacion import umbral_plan
 
 
 class CalibracionJornadasTests(unittest.TestCase):
@@ -29,7 +30,7 @@ class CalibracionJornadasTests(unittest.TestCase):
             self.assertEqual(len(entrada['eventos']),len(r['filtrados']))
 
     def test_controles_no_se_inflan(self):
-        controles={('T. Fritz','R. Hijikata'):4.9,('Parma','Udinese'):5.5,
+        controles={('T. Fritz','R. Hijikata'):4.5,('Parma','Udinese'):5.5,
                    ('Calamocha','CE Europa'):4.7}
         observados={}
         for _,_,r in self.jornadas:
@@ -43,7 +44,7 @@ class CalibracionJornadasTests(unittest.TestCase):
             seleccion=r['seleccionados']
             self.assertLessEqual(len(seleccion),4)
             for i,e in enumerate(seleccion):
-                self.assertGreaterEqual(e['score'],6.5)
+                self.assertGreaterEqual(e['score'],umbral_plan(e))
                 a,b=intervalo(e)
                 self.assertGreaterEqual(b-a,30)
                 for otro in seleccion[i+1:]:

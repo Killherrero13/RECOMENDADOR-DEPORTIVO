@@ -162,3 +162,7 @@ GitHub conserva ambos diagnósticos como artefacto durante 14 días, incluso ant
 # Exclusión expresa: WNBA
 
 Desde el 29/10/2026, excluir la WNBA de todos los eventos filtrados, recomendaciones, alternativas y planning, también finales. No se confunde con NBA ni se incrementa su prioridad por importancia competitiva. La NBA masculina y el bloque en diferido mantienen sus reglas.
+
+## Tenis como prioridad secundaria · 30/10/2026
+
+El tenis gusta, pero queda detrás de fútbol y baloncesto. Ajuste personal de −0,4 incluido en afinidad, sin alterar el interés deportivo. Para entrar en las citas principales necesita 7,5/10; el umbral general de los otros deportes sigue en 6,5. Los partidos menores pueden permanecer en el listado y las opciones secundarias. No se limita el número de encuentros de tenis con un cupo fijo: si hay varios grandes partidos, compiten por interés y encaje respetando solapamientos.
